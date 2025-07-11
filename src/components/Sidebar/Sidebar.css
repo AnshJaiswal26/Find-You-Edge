@@ -1,0 +1,175 @@
+.sidebar {
+  width: 240px;
+  background-color: #fafcff;
+  color: #676767;
+  height: 100%;
+  position: fixed;
+  padding: 10px 10px 0px 10px;
+  top: 0;
+  left: -300px;
+  transition: left 0.3s ease;
+  font-family: inherit;
+  border-right: 2px solid rgb(229, 229, 229);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.dark-theme .sidebar {
+  background-color: #12181e;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #1c252e;
+}
+
+.sidebar-open .sidebar {
+  left: 0;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  text-align: center;
+  border-bottom: 1px solid rgb(194, 194, 194);
+  border-top: 1px solid rgb(194, 194, 194);
+  margin-top: 10px;
+  padding: 5px 5px;
+}
+
+.sidebar-profile h3 {
+  font-family: "Trebuchet MS";
+}
+
+.dark-theme .sidebar-profile {
+  border-bottom: 1px solid #1c252e;
+  border-top: 1px solid #1c252e;
+}
+
+.sidebar-profile:hover {
+  transition: ease 0.3;
+  background-color: rgba(237, 244, 246, 0.477);
+}
+
+.dark-theme .sidebar-profile:hover {
+  transition: ease 0.3;
+  background-color: #1c252e;
+}
+
+.sidebar-profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sidebar-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-menu-button {
+  background: none;
+  text-decoration: none;
+  border: none;
+  color: #676767;
+  margin-bottom: 15px;
+  font-size: 16px;
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #fafcff;
+  transition: background-color ease 0.1s;
+}
+
+.dark-theme .sidebar-menu-button {
+  color: #dbdbdb;
+  border: 1px solid #12181e;
+}
+
+/* Menu Button Hover */
+.sidebar-menu-button.active {
+  background-color: #aedcf078;
+  text-decoration: none;
+  color: #29384c;
+  border: 1px solid #aedcf078;
+  border-radius: 10px;
+  transition: ease 0.2s;
+  pointer-events: none;
+}
+
+.dark-theme .sidebar-menu-button.active {
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+  border-radius: 10px;
+  color: #ffffff;
+  transition: ease 0.2s;
+  pointer-events: none;
+}
+
+.sidebar-menu-button:hover {
+  background-color: #c5d5e135;
+  text-decoration: none;
+  border: 1px solid #d4e0e935;
+  border-radius: 10px;
+  transition: ease 0.1s;
+}
+
+.dark-theme .sidebar-menu-button:hover {
+  background-color: #1c252e;
+  border: 1px solid #12181e;
+  color: #ffffff;
+}
+
+.sidebar-custom-features {
+  color: #676767;
+  border-top: 1px solid rgb(158, 158, 158);
+  margin-left: 10px;
+  padding-top: 10px;
+}
+
+.dark-theme .sidebar-custom-features {
+  color: #b0b0b0;
+  border-top: 1px solid #1c252e;
+}
+
+.sidebar-close-button {
+  background: none;
+  text-decoration: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  padding-top: 4px;
+  border-radius: 60px;
+  height: 31px;
+  margin-top: 14px;
+}
+
+.sidebar-close-bar-icon {
+  position: relative;
+  width: 20px;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-close-button:hover {
+  background-color: #eeeeee;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-icons {
+  width: 30px;
+  margin-right: 5px;
+}
+
+.sidebar-customize-icons {
+  position: relative;
+  width: 15px;
+  left: -15px;
+  top: 5px;
+}

@@ -1,0 +1,710 @@
+.settings-container {
+  box-sizing: border-box;
+  overflow: hidden;
+  height: 100vh;
+  width: 100%;
+  background-color: #fafcff;
+  transition: margin-left 0.4s ease, width 0.4s ease;
+}
+
+.settings-header {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  background-color: #393939;
+  background-color: #ffffff;
+  background-color: #ffffff;
+  background-color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  padding: 15px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.settings-heading {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  margin-left: 60px;
+  background-color: inherit;
+  gap: 10px;
+}
+
+.settings-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.settings-close-button {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 38px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.settings-close-button:hover {
+  color: #f44336;
+}
+
+.settings-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.settings-bar {
+  box-sizing: border-box;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  gap: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.settings-bar button {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 10px;
+  border: none;
+  text-align: left;
+  background-color: inherit;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+}
+
+.settings-bar button:hover {
+  background-color: #ededed;
+  color: #060606;
+}
+
+.settings-bar button:active {
+  background-color: #dee2e6;
+}
+
+.settings-bar button.active {
+  background-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.settings-bar button.active:hover {
+  background-color: #0056b3;
+}
+
+.settings-content-container {
+  display: flex;
+  box-sizing: border-box;
+  border: none;
+  width: 100%;
+  height: 88vh;
+  padding: 20px;
+  background-color: #fafcff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 20px; /* Reduced padding */
+  margin: 10px auto; /* Reduced margin */
+  width: 100%; /* Slightly smaller width */
+}
+
+.settings-section h4 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6d6d6d;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.settings-content {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 15px; /* Reduced gap between sections */
+}
+
+.settings-setup-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.settings-setup-actions img {
+  width: 18px;
+  height: 18px;
+}
+
+.settings-setup-actions button:hover img {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+.settings-section .settings-setup-input {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Risk Management Section */
+.settings-risk-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.settings-risk-field label {
+  font-size: 14px; /* Reduced font size */
+  font-weight: bold;
+  color: #475569;
+  margin-bottom: 6px; /* Reduced margin */
+}
+
+.settings-risk-input {
+  width: 100%;
+  padding: 8px 12px; /* Reduced padding */
+  font-size: 13px; /* Reduced font size */
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  color: #334155;
+}
+
+.settings-risk-input:focus {
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.settings-risk-summary {
+  margin-top: 20px;
+  font-size: 13px; /* Reduced font size */
+  padding: 12px; /* Reduced padding */
+  color: #555;
+}
+
+.settings-risk-summary p {
+  margin: 5px 0;
+}
+
+/* Performance Goal Tracking Section */
+.settings-goal-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.settings-goal-field label {
+  font-size: 14px; /* Reduced font size */
+  font-weight: bold;
+  color: #475569;
+  margin-bottom: 6px; /* Reduced margin */
+}
+
+.settings-goal-input {
+  width: 100%;
+  padding: 8px 12px; /* Reduced padding */
+  font-size: 13px; /* Reduced font size */
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  color: #334155;
+}
+
+.settings-goal-input:focus {
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.settings-goal-summary {
+  margin-top: 20px;
+  font-size: 13px; /* Reduced font size */
+  padding: 12px; /* Reduced padding */
+  color: #555;
+}
+
+.settings-goal-summary p {
+  margin: 5px 0;
+}
+
+.settings-reset-goals-button {
+  display: inline-block;
+  padding: 8px 16px; /* Reduced padding */
+  font-size: 14px; /* Reduced font size */
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.settings-reset-goals-button:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* API Integration Section */
+.settings-broker-selection {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: -15px;
+}
+
+.settings-broker-option {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px; /* Reduced padding */
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  margin-bottom: 26px; /* Reduced margin */
+}
+
+.settings-broker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-broker-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.settings-broker-logo {
+  width: 40px; /* Reduced size */
+  height: 40px; /* Reduced size */
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.settings-broker-logo img {
+  width: 40px; /* Reduced size */
+  height: 40px; /* Reduced size */
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.settings-broker-verification {
+  position: relative;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-verification-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+  padding: 0 5px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.settings-verification-close:hover {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.settings-broker-input {
+  flex: 1;
+  padding: 8px 12px; /* Reduced padding */
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px; /* Reduced font size */
+  color: #334155;
+}
+
+.settings-broker-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.settings-broker-option .settings-broker-div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 55px;
+}
+
+.settings-broker-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.settings-broker-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 18px; /* Reduced font size */
+  margin: 0;
+}
+
+.settings-broker-status.not-verified {
+  font-size: 14px; /* Reduced font size */
+  color: #b30000;
+  padding: 0px 5px;
+  border-radius: 3px;
+  background-color: #fbcaca;
+  margin-top: 4px;
+}
+
+.settings-broker-status.connected {
+  font-size: 14px; /* Reduced font size */
+  color: #0c8137;
+  background-color: #cafbca;
+  padding: 0px 5px;
+  border-radius: 3px;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.settings-broker-connect {
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: inherit;
+  color: #3b82f6;
+  transition: all 0.3s ease;
+}
+
+.settings-broker-connect.connected {
+  color: #22c55e;
+  font-size: 16px;
+}
+
+.settings-api-table td input {
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 10px 15px;
+  width: 100%;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.settings-api-table td input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  background: #ffffff;
+}
+
+.settings-verify-button {
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(145deg, #3b82f6, #2563eb);
+  border: none;
+}
+
+.settings-verify-button:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+  background-color: #15589b;
+  transition: background-color 0.3s ease;
+}
+
+.settings-verify-button.error {
+  background: linear-gradient(145deg, #ef4444, #dc2626);
+}
+
+.settings-api-integration .settings-broker-logo {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.settings-api-icon img {
+  width: 20px;
+  height: 20px;
+}
+
+.settings-api-message span {
+  text-align: left;
+}
+
+.settings-api-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.settings-api-actions img {
+  width: 16px;
+  height: 16px;
+}
+
+.settings-api-actions button:hover img {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+.settings-verify-button img {
+  margin-left: 5px;
+  width: 16px;
+  height: 16px;
+}
+
+.settings-delete-api-button img {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.settings-delete-api-button img:hover {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.settings-api-input-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.settings-modal-overlay-confirmation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.settings-modal-confirmation {
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  padding: 25px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  width: 500px;
+}
+
+.settings-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* In Demat and Capital Section */
+.settings-in-demat-capital-field {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.settings-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings-input-wrapper {
+  display: flex;
+  width: 97%;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-input-wrapper label {
+  font-size: 14px; /* Reduced font size */
+  color: #475569;
+  font-weight: 500;
+  margin-bottom: 6px; /* Reduced margin */
+}
+
+.settings-input-wrapper input,
+.settings-input-wrapper select {
+  padding: 8px 12px; /* Reduced padding */
+  background-color: #fafcff;
+  border: 1px solid #b4d2ff;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 13px; /* Reduced font size */
+  outline: none;
+  color: #334155;
+  transition: all 0.3s ease;
+}
+
+.settings-input-wrapper select {
+  width: 106%;
+}
+
+.settings-input-wrapper select:focus,
+.settings-input-wrapper input:focus {
+  border-color: #b4d2ff;
+  background-color: #fff;
+}
+
+.settings-input-wrapper input[readonly] {
+  background-color: #f0f0f0;
+  color: #666;
+  cursor: not-allowed;
+  width: 93%;
+}
+
+.settings-button-group {
+  text-align: right;
+}
+
+.settings-risk-label {
+  background-color: antiquewhite;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: middle;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
+.settings-risk-label-calc {
+  background-color: rgb(215, 244, 250);
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: middle;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
+.settings-risk-label-calc label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #686868;
+}
+
+.settings-risk-label label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #686868;
+}
+
+.settings-view-more {
+  position: absolute;
+  padding: 6px 10px 4px 10px;
+  right: 35px;
+  margin-top: 0px;
+  width: 110px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #878787;
+  background: #faf4ef;
+  border: 1px solid #f9dbbd;
+  box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 60px;
+  border-bottom-right-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.settings-broker-view-more {
+  text-align: right;
+}
+
+.settings-view-more:hover {
+  color: #7c7c7c;
+  text-decoration: none;
+}
+
+.settings-broker-details {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition: all 0.15s ease-in-out;
+}
+
+.settings-broker-details.visible {
+  max-height: 200px;
+  opacity: 1;
+  padding: 15px;
+  transform: translateY(0);
+}
+
+.settings-broker-details p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.settings-broker-details span {
+  color: #333;
+  font-weight: 500;
+}

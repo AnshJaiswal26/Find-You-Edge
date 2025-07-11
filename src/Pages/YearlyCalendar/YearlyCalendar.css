@@ -1,0 +1,415 @@
+.yearly-calendar-main-div {
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.calendar-and-popup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: "Trebuchet MS";
+  gap: 20px;
+  background-color: #fafcff;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 40px;
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;
+  transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out,
+    padding 0.3s ease-in-out;
+}
+
+.sidebar-open .calendar-and-popup-container {
+  width: calc(100% - 260px);
+  margin-left: 260px;
+  padding: 20px 25px;
+  gap: 15px;
+}
+
+.calendar-wrapper {
+  flex: 1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-width: 200px;
+  border-radius: 10px;
+}
+
+.sidebar-open .calendar-wrapper {
+  overflow-x: auto;
+}
+
+.calendar-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.calendar-header button {
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.calendar-header button:hover {
+  background-color: #d6d6d6;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin: 10px 0px 0px 0px;
+  height: 100%;
+  width: 100%;
+  gap: 10px;
+  box-sizing: border-box;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.calendar-header-cell {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #999;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 8px;
+  background-color: #f7fbff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: font-size 0.3s ease, padding 0.3s ease;
+}
+
+.sidebar-open .calendar-header-cell {
+  font-size: 12px;
+  padding: 6px;
+  transition: font-size 0.3s ease, padding 0.3s ease;
+}
+
+.calendar-row {
+  display: contents;
+}
+
+.calendar-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  transition: box-shadow 0.3s ease, transform 0.2s ease, width 0.3s ease,
+    height 0.3s ease;
+  cursor: pointer;
+}
+
+.sidebar-open .calendar-cell {
+  height: 50px;
+  width: 50px;
+}
+
+.calendar-cell:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  background-color: #e6f7ff;
+  border: 1px solid #b3e5fc;
+}
+
+.calendar-cell.profit {
+  background-color: #d4edda;
+  color: #155724;
+}
+.calendar-cell.profit:hover {
+  border: 1px solid #155724;
+}
+
+.calendar-cell.loss {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.calendar-cell.loss:hover {
+  border: 1px solid #721c24;
+}
+
+.calendar-cell.grey {
+  background-color: #e2e3e5;
+  color: #6c757d;
+}
+
+.calendar-cell.today {
+  background-color: #fff3cd;
+  font-weight: bold;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+.calendar-cell.today:hover {
+  border: 1px solid #856404;
+}
+
+.popup-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 20px;
+}
+
+.popup-summary {
+  background-color: #fff7f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-width: 360px;
+  box-sizing: border-box;
+  text-align: left;
+  position: relative;
+  overflow-x: auto;
+  transition: padding 0.3s ease;
+}
+
+.sidebar-open .popup-summary {
+  padding: 15px;
+}
+
+.popup-summary h3 {
+  margin: 0px 0px 5px 0px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  transition: font-size 0.3s ease;
+}
+
+.popup-summary .pnl-amount {
+  font-size: 28px;
+  font-weight: bold;
+  color: #d9534f;
+  margin: 10px 0;
+}
+
+.for-month {
+  color: #848484;
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  box-sizing: border-box;
+  padding: 13px 0px;
+  border-top: 1px solid #f0e6e6;
+  border-bottom: 1px solid #f0e6e6;
+}
+
+.summary-stats div {
+  text-align: center;
+  flex: 1;
+}
+
+.summary-stats div:not(:last-child) {
+  border-right: 1px solid #f0e6e6;
+}
+
+.summary-stats .trading-days p:first-child {
+  color: #752aa3;
+}
+.summary-stats .traded-on p:first-child {
+  color: #beb33b;
+}
+.summary-stats .in-profit-days p:first-child {
+  color: #60b63b;
+}
+.summary-stats .winning-streak p:first-child {
+  color: #2850c6;
+}
+
+.summary-stats p:first-child {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.summary-stats p {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
+
+.most-profitable-days {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.most-profitable-days h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.most-profitable-days .profitable-day-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.most-profitable-days .profitable-day-row div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.most-profitable-days img {
+  width: 12px;
+  height: 12px;
+  rotate: 90deg;
+}
+
+.most-profitable-days .pnl-negative {
+  color: #d32f2f;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.popup-overview {
+  background-color: #fff7f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-width: 360px;
+  text-align: left;
+  transition: padding 0.3s ease;
+}
+
+.sidebar-open .popup-overview {
+  padding: 15px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header span {
+  font-size: 18px;
+  padding: 2px;
+  font-weight: bold;
+}
+
+.popup-header .overview-month {
+  color: #333;
+}
+
+.popup-overview .pnl-amount {
+  font-weight: bold;
+  color: #d9534f;
+}
+.popup-overview .trade-overview {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+.popup-overview .trade-overview h4 {
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-overview .trade-overview img {
+  width: 30px;
+  height: 30px;
+}
+
+.popup-overview .trade-overview-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-overview .trade-overview-details .trade-detail-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-overview p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.trade-detail-column .negative {
+  color: #d9534f;
+}
+
+.popup-footer {
+  margin-top: 15px;
+  border-top: 1px solid #f0e6e6;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-footer p {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.view-button {
+  background-color: #ffc107;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-button:hover {
+  background-color: #e0a800;
+}

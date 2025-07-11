@@ -1,0 +1,179 @@
+.dark-theme {
+  background-color: #12181e;
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+  background: #2c2c2c;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: #9f9f9f;
+  border-radius: 5px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #686868;
+}
+
+.dark-theme .apexcharts-xaxistooltip-bottom {
+  background-color: #141a21 !important;
+  color: #fff !important;
+  border: 1px solid rgb(38, 40, 47) !important;
+  box-shadow: none !important;
+}
+.dark-theme .apexcharts-xaxistooltip-bottom :before {
+  border-bottom-color: #141a21 !important;
+}
+.dark-theme .apexcharts-xaxistooltip-bottom :after {
+  border-bottom-color: rgb(173, 173, 173) !important;
+}
+.dark-theme .apexcharts-tooltip {
+  background-color: #141a21 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dark-theme .apexcharts-tooltip-title {
+  text-align: center;
+  color: #919eab !important;
+  background-color: #28323d !important;
+  border: none !important;
+  font-weight: bold !important;
+}
+
+.dark-theme .dashboard {
+  background-color: #12181e;
+}
+
+.dark-theme .dashboard h3 {
+  color: #ffffff;
+}
+
+.dark-theme .main-content {
+  background-color: #12181e;
+}
+
+.dark-theme .dashboard-heading {
+  background-color: #1c252e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .dashboard-heading:hover {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .dashboard-heading p,
+.dark-theme .dashboard-heading h2 {
+  color: #ffffff;
+}
+
+.dark-theme .stat-card {
+  background-color: #1c252e;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.1);
+  border: 1px solid #1c252e;
+}
+
+.dark-theme .stat-card h3 {
+  color: #ffffff;
+}
+
+.dark-theme .stat-card p {
+  color: #ffffff;
+}
+
+.dark-theme .stat-card:hover {
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme .total-trades-container {
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+}
+
+.dark-theme .setup-pie-chart-legend,
+.dark-theme .win-lose-rate-chart-legend,
+.dark-theme .cumulative-profit-chart-legend,
+.dark-theme .last-week-performance-chart-legend,
+.dark-theme .pie-chart-legend,
+.dark-theme .bar-value-percentage .bar-value,
+.dark-theme .bar-label {
+  color: #ffffff;
+}
+
+.dark-theme .bar {
+  background-color: #252e37;
+}
+
+.dark-theme .setup-pie-chart-section,
+.dark-theme .setup-bar-chart-section,
+.dark-theme .last-week-performance-chart,
+.dark-theme .last-week-performance-table {
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+}
+
+.dark-theme .last-week-trade-table {
+  color: #ffffff;
+}
+
+.dark-theme .last-week-trade-table th {
+  background-color: #28323d;
+  color: #ffffff;
+}
+
+.dark-theme .last-week-trade-table td {
+  border-bottom: 1px dashed #333e47;
+}
+
+.dark-theme .badge-profit {
+  background-color: #00ff5910;
+}
+.dark-theme .badge-loss {
+  background-color: #ff00000a;
+}
+
+.dark-theme .capital-graph-container {
+  color: #ffffff;
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+}
+
+.dark-theme .prev-button.disabled,
+.dark-theme .next-button.disabled {
+  background-color: #2c3f4d;
+  color: #9b9b9b;
+}
+
+.dark-theme .rr-performance-bar-chart-container {
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+  color: #ffffff;
+}
+
+.dark-theme .win-lose-rate-chart {
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+  color: #ffffff;
+}
+
+.dark-theme .win-lose-rate-chart button {
+  color: #ffffff;
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+}
+
+.dark-theme .win-lose-rate-chart .selected {
+  border: 1px solid #ffffff;
+  background-color: #323b45;
+}
+
+.dark-theme .win-lose-rate-chart .timeframe-button {
+  background-color: #323b45;
+}
+
+.dark-theme .line-graph-cumulative-container {
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+  color: #ffffff;
+}

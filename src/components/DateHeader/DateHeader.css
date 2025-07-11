@@ -1,0 +1,69 @@
+.date-header {
+  width: 100%;
+  background-color: #eaf2fc;
+  border: 1px solid #a4c8ff;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  color: #656565;
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  font-family: "Trebuchet MS";
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 10px 35px;
+  transition: margin-left 0.4s ease, width 0.4s ease;
+}
+
+.dark-theme .date-header {
+  background-color: #1c252e;
+  border: 1px solid #374450;
+  border-top: none;
+  color: #ffffff;
+}
+
+.date-header input,
+select {
+  border: 1px solid #cccccc;
+  outline: none;
+  border-radius: 5px;
+  padding: 5px;
+  width: 100px;
+}
+
+.dark-theme .date-header input,
+.dark-theme select {
+  background-color: #1c252e;
+  color: #ffffff;
+  border: 1px solid #747474;
+}
+
+.formatted-date {
+  padding: 4px 11px;
+  height: 32px;
+  display: flex;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  width: 125px;
+  border: none;
+  font-weight: bold;
+  color: #656565;
+  background-color: #ffffff;
+  align-items: center;
+  font-size: 14px;
+}
+
+.dark-theme .formatted-date {
+  color: #ffffff;
+  background-color: #1c252e;
+  border: 1px solid #747474 !important;
+}
+
+.date-header input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.dark-theme .date-header input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}

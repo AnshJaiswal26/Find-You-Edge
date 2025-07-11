@@ -1,0 +1,659 @@
+body {
+  margin: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: #d5d5d5;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8b8b8b;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #636363;
+}
+
+.apexcharts-xaxistooltip-bottom {
+  background-color: rgb(255, 255, 255) !important;
+  color: #000 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgb(226, 226, 226) !important;
+  padding: 10px 12px !important;
+  font-size: 12px !important;
+  box-shadow: 0px 0px 43px rgba(0, 0, 0, 0.2) !important;
+}
+.apexcharts-xaxistooltip-bottom :before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -15px;
+  border-width: 8px;
+  transform: translateX(-50%);
+  left: 50%;
+  background: transparent;
+  border-bottom-color: rgb(255, 255, 255) !important;
+  border-style: solid;
+  border-color: transparent transparent transparent transparent;
+}
+.apexcharts-xaxistooltip-bottom :after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: -16px;
+  border-width: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+  border-bottom-color: rgb(173, 173, 173) !important;
+  opacity: 0.2;
+  border-style: solid;
+  border-color: transparent transparent transparent transparent;
+}
+.apexcharts-tooltip {
+  background-color: rgb(255, 255, 255) !important;
+  color: #000 !important;
+  border: none !important;
+  box-shadow: 0px 0px 43px rgba(0, 0, 0, 0.2) !important;
+}
+
+.apexcharts-tooltip-title {
+  text-align: center;
+  color: #34495e !important;
+  background-color: rgb(236, 240, 244) !important;
+  border: none !important;
+  font-weight: bold !important;
+}
+
+:root {
+  --radial-bar-track-color: #f3f6f9;
+}
+
+.dark-theme {
+  --radial-bar-track-color: #252e37;
+}
+.apexcharts-radialbar .apexcharts-radialbar-track {
+  stroke: var(--radial-bar-track-color) !important;
+}
+
+:root {
+  --radial-bar-text-color: #34495e;
+}
+
+.dark-theme {
+  --radial-bar-text-color: #ffffff;
+}
+
+.apexcharts-pie .apexcharts-text,
+.apexcharts-radialbar .apexcharts-text {
+  fill: var(--radial-bar-text-color);
+}
+
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  font-family: "Trebuchet MS";
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.dashboard h3 {
+  color: #34495e;
+}
+
+.menu-toggle img {
+  width: 20px;
+  cursor: pointer;
+}
+
+.main-content {
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  padding: 20px;
+  margin-left: 0;
+  background-color: #fafcff;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  height: 100%;
+  width: 100%;
+  max-width: 1440px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.sidebar-open .main-content {
+  width: calc(100% - 260px);
+  margin-left: 260px;
+}
+
+.dashboard-icon {
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+.dashboard-heading {
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  justify-content: left;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: transform 0.4s ease, box-shadow 0.9s ease;
+}
+
+.dashboard-heading:hover {
+  transition: transform 0.4s ease, box-shadow 0.9s ease;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-heading p,
+.dashboard-heading h2 {
+  color: #3d4753;
+}
+
+.dashboard-heading p {
+  margin-top: -10px;
+  font-size: 14px;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.sidebar-open .stats {
+  gap: 15px;
+}
+
+.stat-card {
+  flex: 1;
+  height: 100px;
+  background-color: white;
+  min-width: 230px;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  border: 1px solid #dde5ec;
+  gap: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, width 0.3s ease,
+    height 0.3s ease, font-size 0.3s ease, padding 0.3s ease;
+}
+
+.stat-card img {
+  width: 65px;
+  height: 65px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.stat-card h3 {
+  font-size: 16px;
+  margin: 0;
+  color: #6c757d;
+  transition: transform 0.3 ease, box-shadow 0.3s ease, width 0.3s ease,
+    height 0.3s ease, font-size 0.3s ease;
+}
+
+.stat-card p {
+  font-size: 30px;
+  font-weight: bold;
+  color: #343a40;
+  margin: 5px 0 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, width 0.3s ease,
+    height 0.3s ease, font-size 0.3s ease;
+}
+
+.stat-card .of {
+  font-size: 14px;
+  color: #a7a7a7;
+  font-weight: 200;
+  margin-top: 5px;
+  margin-left: 5px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, width 0.3s ease,
+    height 0.3s ease, font-size 0.3s ease;
+}
+
+.stat-card span {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.top-charts-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.total-trades-container {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 15px 20px 15px;
+  min-width: 270px;
+  box-sizing: border-box;
+  border-radius: 15px;
+  background-color: #ffffff;
+  border: 1px solid #dde5ec;
+  box-shadow: 0 2px 22px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.pie-chart-and-percentage-bars-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.pie-chart-and-legend-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/*legends*/
+.setup-pie-chart-legend,
+.win-lose-rate-chart-legend,
+.cumulative-profit-chart-legend,
+.last-week-performance-chart-legend,
+.pie-chart-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #34495e;
+}
+
+.win-lose-rate-chart-legend,
+.cumulative-profit-chart-legend,
+.last-week-performance-chart-legend {
+  justify-content: flex-start;
+}
+
+.last-week-performance-chart-legend {
+  margin-left: 20px;
+}
+
+.legend-indicator {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.percentage-bars-container {
+  flex: 2;
+  display: flex;
+  min-width: 150px;
+  flex-direction: column;
+  gap: 25px;
+  padding: 0px 20px 20px 20px;
+  box-sizing: border-box;
+}
+
+.percentage-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.bar-container {
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.bar-label {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #34495e;
+}
+
+.bar-value-percentage .bar-value {
+  font-size: 14px;
+  color: #34495e;
+  text-align: left;
+}
+
+.bar-value-percentage .percentage {
+  font-size: 14px;
+  color: #7d7d7d;
+  text-align: left;
+}
+
+.bar {
+  flex: 3;
+  height: 14px;
+  background-color: #f1f4f7;
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px;
+}
+
+.bar-fill {
+  height: 100%;
+  font-size: 13px;
+}
+
+.streak-and-setup-pie-chart-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+  gap: 20px;
+}
+
+.setup-pie-chart-section {
+  height: auto;
+  flex: 1;
+  background-color: inherit; /* White background */
+  min-width: 270px;
+  text-align: left;
+  box-sizing: border-box;
+  border-radius: 15px;
+  padding: 15px 20px 20px 20px;
+  background-color: #ffffff;
+  border: 1px solid #dde5ec;
+  box-shadow: 0 2px 22px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+  overflow: visible;
+}
+
+.setup-bar-chart-section {
+  height: auto;
+  flex: 2;
+  overflow: hidden;
+  min-width: 270px;
+  flex-shrink: 0;
+  background-color: inherit; /* White background */
+  text-align: left;
+  box-sizing: border-box;
+  border-radius: 15px;
+  padding: 15px 20px;
+  background-color: #ffffff;
+  border: 1px solid #dde5ec;
+  box-shadow: 0 2px 22px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.last-week-performance-chart-and-table {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  height: auto;
+  gap: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  background-color: inherit;
+}
+
+.last-week-performance-chart {
+  height: auto;
+  width: 100%;
+  flex: 1;
+  border-radius: 16px;
+  min-width: 270px;
+  color: #34495e;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #ffffff; /* White background for audience metrics */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dde5ec;
+}
+
+.total-amount {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px 0px 20px;
+  box-sizing: border-box;
+}
+
+.last-week-performance-table {
+  height: fit-content;
+  width: 100%;
+  flex: 1;
+  min-width: 270px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dde5ec;
+  overflow: hidden;
+}
+.last-week-performance-table h3 {
+  padding: 15px 20px 15px 20px;
+}
+
+.last-week-trade-table {
+  width: 100%;
+  height: auto;
+  border-collapse: collapse;
+  color: #34495e;
+}
+
+.last-week-trade-table th {
+  background-color: #f4f6f8;
+  color: #828282;
+  padding: 20px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.last-week-trade-table td {
+  padding: 20px;
+  text-align: left;
+  border-bottom: 1px dashed #ddd;
+}
+
+.last-week-trades-table td {
+  color: #2c3e50;
+  font-weight: bold;
+  border-bottom: 1px solid #e9ecee;
+}
+
+.badge {
+  font-size: 14px;
+  font-weight: 550;
+}
+.badge-profit {
+  background: #e6f7ec;
+  color: #05ab72;
+  border: 1px solid #05ab72;
+  border-radius: 50px;
+  padding: 3px 6px;
+}
+.badge-loss {
+  background: #fdeaea;
+  color: #fe5a5a;
+  border: 1px solid #fe5a5a;
+  border-radius: 50px;
+  padding: 3px 6px;
+}
+
+.capital-rr-graph-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  height: auto;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.capital-graph-container {
+  height: auto;
+  min-width: 270px;
+  overflow: hidden;
+  width: 100%;
+  flex: 1;
+  border-radius: 16px;
+  padding: 15px 20px 0px 20px;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: #34495e;
+  background-color: #ffffff;
+  border: 1px solid #dde5ec;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.capital-graph-container h3 {
+  text-align: left;
+  font-size: 18px;
+  color: #34495e;
+}
+
+.prev-button,
+.next-button,
+.show-button {
+  background-color: #05ab72;
+  border: none;
+  padding: 4px 6px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: "14px";
+}
+
+.prev-button:hover,
+.next-button:hover,
+.show-button:hover {
+  background-color: #038457;
+}
+
+.prev-button.disabled,
+.next-button.disabled {
+  background-color: #e5e5e5;
+  color: #9b9b9b;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 3px;
+  cursor: not-allowed;
+}
+
+.rr-performance-bar-chart-container h3 {
+  text-align: left;
+  font-size: 18px;
+  color: #34495e;
+}
+
+.rr-performance-bar-chart-container {
+  height: auto;
+  min-width: 270px;
+  overflow: hidden;
+  width: 100%;
+  flex: 1;
+  border-radius: 10px;
+  padding: 15px 20px 0px 20px;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: #34495e;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dde5ec;
+  text-align: center;
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.win-lose-cumulative-container {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.win-lose-rate-chart {
+  height: auto;
+  overflow: hidden;
+  min-width: 270px;
+  width: 100%;
+  flex: 1;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 1px solid #dde5ec;
+  padding: 15px 20px 0px 20px;
+  color: #34495e;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.win-lose-rate-chart button {
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  color: #34495e;
+  background-color: #dfdfdf;
+  border: 1px solid #dfdfdf;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.win-lose-rate-chart .selected {
+  border: 1px solid #000;
+}
+
+.line-graph-cumulative-container {
+  height: auto;
+  min-width: 270px;
+  overflow: hidden;
+  width: 100%;
+  flex: 1;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 1px solid #dde5ec;
+  padding: 15px 20px 0px 20px;
+  color: #34495e;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+color {
+  color: #0095ff;
+}

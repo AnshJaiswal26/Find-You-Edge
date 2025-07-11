@@ -1,0 +1,110 @@
+.edge-main-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  font-family: "Trebuchet MS";
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.dark-theme .edge-main-div {
+  background-color: #12181e;
+}
+
+.edge-container {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  box-sizing: border-box;
+  background-color: #fafcff;
+  padding: 10px 30px 25px 30px;
+  max-width: 1740px;
+  box-sizing: border-box;
+  transition: margin-left 0.4s ease, width 0.4s ease;
+}
+
+.sidebar-open .edge-container {
+  width: calc(100% - 260px);
+  margin-left: 260px;
+}
+
+.dark-theme .edge-container {
+  background-color: #12181e;
+}
+
+.edge-heading-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fafcff;
+  font-weight: bold;
+}
+
+.dark-theme .edge-heading-container {
+  background-color: #12181e;
+}
+
+.edge-heading-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.edge-heading {
+  font-weight: bold;
+  color: #6a6a6a;
+}
+
+.dark-theme .edge-heading {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.edge-button-container {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.edge-add-entry-button,
+.edge-text-buttons {
+  margin-left: 0%;
+  background-color: inherit;
+  color: #a5a5a5;
+  border: 1px solid #a5a5a5;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.edge-add-entry-button:hover,
+.edge-text-buttons:hover {
+  color: #525252;
+  background-color: #eef5fe;
+  border: 1px solid #b1d0ff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark-theme .edge-add-entry-button:hover,
+.dark-theme .edge-text-buttons:hover {
+  color: #e8e8e8;
+  background-color: #1c252e;
+}
+
+.edge-modal h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}

@@ -1,0 +1,159 @@
+.dark-theme .yearly-calendar-main-div {
+  background-color: #12181e;
+}
+
+.dark-theme .calendar-and-popup-container {
+  background-color: #12181e;
+}
+
+.dark-theme .calendar-wrapper {
+  background-color: #1c252e;
+}
+
+.dark-theme .calendar-header {
+  background-color: #12181e;
+  color: #ffffff;
+}
+
+.dark-theme .calendar-header button {
+  background-color: #1c252e;
+  color: #ffffff;
+}
+
+.dark-theme .calendar-header button:hover {
+  background-color: #4f6276;
+}
+
+.dark-theme .calendar-header h2 {
+  color: #ffffff;
+}
+
+.dark-theme .calendar {
+  background-color: #12181e;
+  border: 1px solid #12181e;
+}
+
+.dark-theme .calendar-header-cell {
+  color: #ffffff;
+  background-color: #1c252e;
+  border: 1px solid #1c252e;
+}
+
+.dark-theme .calendar-cell {
+  background-color: #1c252e;
+  color: #ffffff;
+  border: 1px solid #1c252e;
+}
+
+.dark-theme .calendar-cell:hover {
+  background-color: #295062;
+  border: 1px solid #1e7aa5;
+  box-shadow: 0 4px 8px rgba(196, 196, 196, 0.2);
+}
+
+.dark-theme .calendar-cell.profit {
+  background-color: #05ab72;
+  color: #d9fff2;
+  border: 1px solid #05ab72;
+}
+.dark-theme .calendar-cell.profit:hover {
+  border: 1px solid #005135;
+}
+.dark-theme .calendar-cell.loss {
+  background-color: #ff6b6b;
+  color: #ffe6e6;
+  border: 1px solid #ff6b6b;
+}
+
+.dark-theme .calendar-cell.loss:hover {
+  border: 1px solid #790000;
+}
+
+.dark-theme .calendar-cell.grey {
+  background-color: #e2e3e5;
+  color: #6c757d;
+}
+
+.dark-theme .calendar-cell.today {
+  background-color: #ffd24c;
+  color: #856404;
+  border: 1px solid #ffd24c;
+}
+.dark-theme .calendar-cell.today:hover {
+  border: 1px solid #856404;
+}
+
+.dark-theme .popup-summary {
+  background-color: #1c252e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .popup-summary h3 {
+  margin: 0px 0px 5px 0px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  transition: font-size 0.3s ease;
+}
+
+.dark-theme .popup-summary .pnl-amount {
+  color: #ff6b6b;
+}
+
+.dark-theme .for-month {
+  color: #ffffff;
+}
+
+.dark-theme .summary-stats .trading-days p:first-child {
+  color: #c76dff;
+}
+.dark-theme .summary-stats .traded-on p:first-child {
+  color: #fff157;
+}
+.dark-theme .summary-stats .in-profit-days p:first-child {
+  color: #84ff4f;
+}
+.dark-theme .summary-stats .winning-streak p:first-child {
+  color: #4f7bff;
+}
+
+.dark-theme .summary-stats p {
+  color: #d7d7d7;
+}
+
+.dark-theme .most-profitable-days {
+  color: #d7d7d7;
+}
+
+.dark-theme .most-profitable-days .pnl-negative {
+  color: #ff6b6b;
+}
+
+.dark-theme .popup-overview {
+  background-color: #1c252e;
+}
+
+.dark-theme .popup-overview .pnl-amount {
+  color: #ff6b6b;
+}
+
+.dark-theme .popup-header .overview-month,
+.dark-theme .popup-overview .trade-overview h4 {
+  color: #ffffff;
+}
+
+.dark-theme .popup-overview p {
+  color: #d7d7d7;
+}
+
+.dark-theme .trade-detail-column .negative {
+  color: #ff6b6b;
+}
+
+.dark-theme .popup-footer {
+  border-top: 1px solid #646464;
+}
+
+.dark-theme .popup-footer p {
+  color: #929292;
+}

@@ -1,0 +1,209 @@
+.trading-journal-main-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  font-family: "Trebuchet MS";
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.dark-theme .trading-journal-main-div {
+  background-color: #12181e;
+}
+
+.trade-journal-container {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  box-sizing: border-box;
+  background-color: #fafcff;
+  padding: 10px 30px 25px 30px;
+  max-width: 1740px;
+  box-sizing: border-box;
+  transition: margin-left 0.4s ease, width 0.4s ease;
+}
+
+.sidebar-open .trade-journal-container {
+  width: calc(100% - 260px);
+  margin-left: 260px;
+}
+
+.dark-theme .trade-journal-container {
+  background-color: #12181e;
+}
+
+.trade-journal-heading-summary-container {
+  text-align: center;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.trade-journal-heading-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fafcff;
+  padding: 0;
+  font-weight: bold;
+}
+
+.dark-theme .trade-journal-heading-container {
+  background-color: #12181e;
+}
+
+.trade-journal-heading-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.trade-journal-heading {
+  font-weight: bold;
+  color: #6a6a6a;
+}
+
+.dark-theme .trade-journal-heading {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.trade-journal-summary {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #dde5ec;
+  background-color: white;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 30px 10px;
+  position: relative;
+  box-sizing: border-box;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dark-theme .trade-journal-summary {
+  border: 1px solid #1c252e;
+  background-color: #1c252e;
+}
+
+.dark-theme .trade-journal-summary img {
+  filter: invert(0.7);
+}
+
+.trade-journal-summary-item {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 10px;
+  color: #6a6a6a;
+  font-size: 16px;
+}
+
+.dark-theme .trade-journal-summary-item {
+  color: #ffffff;
+}
+
+.exchange-icon {
+  margin-left: 5px;
+  width: 15px;
+  cursor: pointer;
+}
+
+.trade-journal-summary .trade-journal-positive {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 16px;
+  color: #05ab72;
+}
+
+.trade-journal-summary .trade-journal-negative {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 16px;
+  color: #ff6262;
+}
+
+.trade-journal-charges {
+  color: rgb(28, 162, 206);
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  gap: 10px;
+}
+
+.trade-journal-summary .trade-journal-total {
+  color: #656565;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 16px;
+}
+
+.dark-theme .trade-journal-summary .trade-journal-total {
+  color: #ffffff;
+}
+
+.trade-journal-bigger-value span {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 12px;
+  color: #d61313;
+}
+
+.trade-journal-button-container {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.trade-journal-add-entry-button,
+.trade-journal-text-buttons {
+  margin-left: 0%;
+  background-color: inherit;
+  color: #a5a5a5;
+  border: 1px solid #a5a5a5;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trade-journal-add-entry-button:hover,
+.trade-journal-text-buttons:hover {
+  color: #525252;
+  background-color: #eef5fe;
+  border: 1px solid #b1d0ff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark-theme .trade-journal-add-entry-button:hover,
+.dark-theme .trade-journal-text-buttons:hover {
+  color: #e8e8e8;
+  background-color: #1c252e;
+}
+
+.trade-journal-modal h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}

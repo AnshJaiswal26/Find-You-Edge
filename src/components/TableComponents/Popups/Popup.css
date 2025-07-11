@@ -1,0 +1,439 @@
+/*Delete Modal*/
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.delete-modal {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: white;
+  box-sizing: border-box;
+  padding: 10px 20px 20px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  gap: 30px;
+  overflow-y: auto;
+}
+
+.dark-theme .delete-modal {
+  background-color: rgba(20, 26, 33, 0.8);
+  color: white;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.delete-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Filter Modal*/
+.modal-overlay-filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-filter {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-height: 80%;
+  border-radius: 7px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dark-theme .modal-filter {
+  background-color: rgba(20, 26, 33, 0.8);
+  color: white;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.modal-filter h3 {
+  margin: 0;
+  padding: 5px 0px 10px 0px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.dark-theme .close-button {
+  color: #ffffff;
+}
+
+.close-button:hover {
+  color: #f44336;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filter-group {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.dark-theme .filter-group label {
+  color: #ffffff;
+}
+
+.filter-group input,
+.filter-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.dark-theme .filter-group input {
+  background-color: inherit;
+  color: #fff;
+}
+
+.dark-theme .filter-group select {
+  background-color: #12181e;
+  color: #fff;
+}
+
+.dark-theme .filter-group input::-webkit-calendar-picker-indicator,
+.dark-theme .filter-group select::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.filter-container select,
+.filter-container input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/*Add Column Modal*/
+.add-column-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.add-column-modal {
+  position: relative;
+  background-color: white;
+  padding: 0px 20px;
+  padding-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  max-height: 60%;
+  overflow-y: auto;
+}
+
+.add-column-enhanced-modal {
+  width: 400px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .add-column-enhanced-modal {
+  background-color: rgba(20, 26, 33, 0.8);
+  color: white;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.add-column-modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.add-column-error-message {
+  color: #ff4d4d;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.add-column-form-group {
+  margin-bottom: 15px;
+}
+
+.add-column-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.add-column-form-input,
+.add-column-form-select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.dark-theme .add-column-form-input {
+  background-color: inherit;
+  color: #fff;
+  border: 1px solid #ffffff;
+}
+
+.dark-theme .add-column-form-select {
+  background-color: #12181e;
+  color: #fff;
+  border: 1px solid #ffffff;
+}
+
+.add-column-option-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.add-column-option-input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.add-column-form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/*Edit Dropdown Modal Overlay*/
+.edit-dropdown-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.edit-dropdown-modal {
+  position: relative;
+  background-color: white;
+  padding: 0px 20px;
+  padding-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  max-height: 60%;
+  overflow-y: auto;
+}
+
+.edit-dropdown-enhanced-modal {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  max-height: 80%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  overflow-y: auto;
+}
+
+.dark-theme .edit-dropdown-enhanced-modal {
+  background-color: rgba(20, 26, 33, 0.8);
+  color: white;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.edit-dropdown-modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.dark-theme .edit-dropdown-modal-title {
+  color: #ffffff;
+}
+
+.edit-dropdown-dropdown-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-dropdown-dropdown-option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edit-dropdown-dropdown-option-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.edit-dropdown-dropdown-option-input {
+  background-color: inherit;
+  border: 1px solid #ffffff;
+  color: white;
+}
+
+.edit-dropdown-remove-option-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-dropdown-remove-option-button:hover {
+  background-color: #d32f2f;
+}
+
+.edit-dropdown-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/*Delete Column Modal*/
+.delete-column-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.delete-column-modal {
+  position: relative;
+  background-color: white;
+  padding: 0px 20px;
+  padding-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  max-height: 60%;
+  overflow-y: auto;
+}
+
+.dark-theme .delete-column-modal {
+  background-color: rgba(20, 26, 33, 0.8);
+  color: white;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.delete-column-form-group {
+  margin-bottom: 15px;
+}
+
+.delete-column-form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.delete-column-form-group select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.dark-theme .delete-column-form-group select {
+  background-color: #12181e;
+}
+
+.delete-column-form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.delete-column-delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-column-delete-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.dark-theme .delete-column-delete-button:disabled {
+  background: #38414a;
+  color: #999;
+  border: 1px solid #38414a;
+}

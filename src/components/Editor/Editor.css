@@ -1,0 +1,337 @@
+.editor-dashboard-editor {
+  display: flex;
+  box-sizing: border-box;
+  padding: 15px 15px 15px 15px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  box-shadow: 0px 2px 8px rgba(133, 133, 133, 0.1);
+  position: sticky;
+  font-family: "Trebuchet MS";
+  justify-content: space-between;
+  overflow: auto;
+  top: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.dark-theme .editor-dashboard-editor {
+  backdrop-filter: blur(5px);
+  background-color: #1c252ea4;
+  box-shadow: 0px 2px 8px rgba(45, 59, 68, 0.116);
+  border: none;
+}
+
+.editor-menu-toggle img {
+  width: 20px;
+  cursor: pointer;
+}
+
+.editor-close-button {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.dark-theme .editor-close-button {
+  color: #ffffff;
+}
+
+.editor-close-button:hover {
+  color: #f44336;
+  transition: color 0.3s ease;
+}
+
+.editor-modal-overlay-filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.editor-modal-filter {
+  position: relative;
+  background-color: #ffffff;
+  padding: 25px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  width: 450px;
+  max-width: 90%;
+  max-height: 85%;
+  border-radius: 10px;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease-in-out;
+}
+.dark-theme .editor-modal-filter {
+  background-color: rgba(20, 26, 33, 0.8);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.editor-modal-filter h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.dark-theme .editor-modal-filter h3 {
+  color: #ffffff;
+}
+
+.editor-filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dark-theme .editor-filter-options option {
+  background-color: rgb(20, 26, 33);
+  backdrop-filter: blur(8px);
+}
+
+.editor-filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-filter-group label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.dark-theme .editor-filter-group label {
+  color: #ffffff;
+}
+
+.editor-filter-group input,
+.editor-filter-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.dark-theme .editor-filter-group input,
+.dark-theme .editor-filter-group select {
+  background-color: inherit;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.editor-filter-group input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+.dark-theme
+  .editor-filter-group
+  input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.editor-filter-group input:focus,
+.editor-filter-group select:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+.dark-theme .editor-filter-group input:focus,
+.dark-theme .editor-filter-group select:focus {
+  border-color: #ffffff;
+  outline: none;
+}
+
+.editor-filter-group-row {
+  display: flex;
+  gap: 15px;
+}
+
+.editor-filter-group {
+  flex: 1;
+}
+
+.editor-date-range-dropdown {
+  width: 100%;
+}
+
+.editor-modal-filter-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.editor-clear-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.editor-clear-button:hover {
+  background-color: #d32f2f;
+  transform: scale(1.05);
+}
+
+.editor-filter-apply-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.editor-filter-apply-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.editor-change-name-input {
+  width: 50%;
+}
+
+.editor-avtar-save-button {
+  margin-left: 20px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.editor-filter-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 30px;
+  color: #464646;
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0);
+  transition: transform 0.2s ease;
+}
+
+.dark-theme .editor-filter-button {
+  border: 1px solid rgba(20, 26, 33, 0);
+  color: #fbfbfb;
+  background-color: rgba(20, 26, 33, 0);
+}
+
+.editor-filter-button.active,
+.editor-filter-button:hover {
+  color: #000000;
+  align-items: center;
+  font-weight: bold;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.652);
+  border: 1px solid rgb(0, 0, 0);
+  transition: transform 0.2s ease;
+}
+
+.dark-theme .editor-filter-button.active,
+.dark-theme .editor-filter-button:hover {
+  color: #ffffff;
+  background-color: #1c252ea2;
+  border: 1px solid #ffffff;
+}
+
+.editor-filter-button img {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.editor-editor-actions-1,
+.editor-editor-actions-2 {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+  align-items: center;
+  justify-content: flex;
+  margin-left: auto;
+}
+
+.editor-editor-actions-2 {
+  justify-content: flex-end;
+}
+
+.editor-icon {
+  width: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.editor-icon:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.dark-theme .editor-icon {
+  filter: invert(1);
+}
+
+.editor-profile-pic {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.editor-user-name {
+  font-size: 16px;
+  margin-right: 20px;
+  font-weight: bold;
+  color: #464646;
+}
+
+.dark-theme .editor-user-name {
+  color: #ffffff;
+}
+
+.editor-button {
+  background: none;
+  text-align: center;
+  border: none;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: normal;
+  border-radius: 6px;
+  height: 34px;
+  width: 36px;
+}
+
+.editor-button:hover {
+  background: rgb(236, 236, 236);
+}
+
+.dark-theme .editor-button:hover {
+  background: #27333f;
+}
