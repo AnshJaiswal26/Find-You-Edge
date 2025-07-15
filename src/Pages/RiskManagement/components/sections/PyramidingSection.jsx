@@ -1,27 +1,25 @@
 import React from "react";
-import { handleSpecialCases } from "./function";
-import InputNote from "../../../components/InputTooltip/InputNote";
-import Button from "../../../components/Button/Button";
+import { useRiskCalculator, useNote } from "../../context/context";
+import InputNote from "../../../../components/InputTooltip/InputNote";
+import Button from "../../../../components/Button/Button";
+import { handleSpecialCases } from "../../utils/utils";
+import { useInputChange } from "../../hooks/useInputChange";
 
-function PyramidingSection({
-  section,
-  showNote,
-  handleChange,
-  update,
-  getterMap,
-}) {
+export default function PyramidingSection() {
+  console.log("Pyramiding...");
+  const { stopLoss, pyramiding, updateRiskCalculator } = useRiskCalculator();
+  const { note } = useNote();
+  const { handleChange } = useInputChange();
+
   const handleLayerChange = (direction) => {
-    const currentLayer = section.currentLayer;
-    const totalLayers = section.table.rows.length;
+    const currentLayer = pyramiding.currentLayer;
+    const totalLayers = pyramiding.table.rows.length;
     if (direction === "next" && currentLayer < totalLayers - 1) {
-      update("section", { currentLayer: currentLayer + 1 });
+      updateRiskCalculator("pyramiding", { currentLayer: currentLayer + 1 });
     } else if (direction === "prev" && currentLayer > 0) {
-      update("section", { currentLayer: currentLayer - 1 });
+      updateRiskCalculator("pyramiding", { currentLayer: currentLayer - 1 });
     }
   };
-
-  const target = getterMap["target"];
-  const stopLoss = getterMap["stopLoss"];
 
   return (
     <div style={{ display: "flex", gap: "15px" }}>
@@ -42,7 +40,7 @@ function PyramidingSection({
                 onClick={() => handleLayerChange("prev")}
                 alt=""
               />
-              <span>{section.currentLayer + 1}</span>
+              <span>{pyramiding.currentLayer + 1}</span>
 
               <img
                 src="Icons/others/right-arrow.png"
@@ -60,7 +58,7 @@ function PyramidingSection({
               className="risk-input"
               style={{ fontSize: "14px", padding: "8px" }}
               onChange={(e) =>
-                update("section", {
+                updateRiskCalculator("pyramiding", {
                   riskIncrement: e.target.value,
                 })
               }
@@ -74,7 +72,9 @@ function PyramidingSection({
             <input
               className="risk-input"
               type="text"
-              value={section.table.rows[section.currentLayer].riskPerLayer}
+              value={
+                pyramiding.table.rows[pyramiding.currentLayer].riskPerLayer
+              }
               readOnly
             />
           </div>
@@ -84,11 +84,13 @@ function PyramidingSection({
               className="risk-input"
               type={"text"}
               value={
-                section.table.rows[section.currentLayer].addQty === 0
+                pyramiding.table.rows[pyramiding.currentLayer].addQty === 0
                   ? stopLoss.qty
-                  : section.table.rows[section.currentLayer].addQty
+                  : pyramiding.table.rows[pyramiding.currentLayer].addQty
               }
-              onChange={(e) => handleChange(section, "addQty", e.target.value)}
+              onChange={(e) => {
+                handleChange(pyramiding, "addQty", e.target.value);
+              }}
               min={0}
             />
           </div>
@@ -98,23 +100,24 @@ function PyramidingSection({
               <input
                 className="risk-input"
                 value={
-                  section.at === "priceAchieved"
-                    ? section.table.rows[section.currentLayer].priceAchieved ===
-                      0
+                  pyramiding.at === "priceAchieved"
+                    ? pyramiding.table.rows[pyramiding.currentLayer]
+                        .priceAchieved === 0
                       ? stopLoss.buyPrice
-                      : section.table.rows[section.currentLayer].priceAchieved
-                    : section.table.rows[section.currentLayer].rrAchieved
+                      : pyramiding.table.rows[pyramiding.currentLayer]
+                          .priceAchieved
+                    : pyramiding.table.rows[pyramiding.currentLayer].rrAchieved
                 }
-                onChange={(e) =>
-                  handleChange(section, section.at, e.target.value)
-                }
+                onChange={(e) => {
+                  handleChange(pyramiding, pyramiding.at, e.target.value);
+                }}
                 onBlur={(e) =>
                   handleSpecialCases(
-                    section,
-                    section.at,
+                    pyramiding,
+                    pyramiding.at,
                     e.target.value,
                     true,
-                    update
+                    updateRiskCalculator
                   )
                 }
                 type="text"
@@ -124,7 +127,7 @@ function PyramidingSection({
             <InputNote
               message="Please enter Entry Price or Risk/Reward ratio before specifying Quantity"
               down={false}
-              show={showNote[section.name].achieved}
+              show={note[pyramiding.name].achieved}
               style={{ bottom: "45px" }}
             />
           </div>
@@ -140,5 +143,3 @@ function PyramidingSection({
     </div>
   );
 }
-
-export default PyramidingSection;

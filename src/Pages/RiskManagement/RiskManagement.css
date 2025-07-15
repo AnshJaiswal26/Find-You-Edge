@@ -13,8 +13,8 @@
 }
 
 .sidebar-open .risk-management-container {
-  width: calc(100% - 260px);
-  margin-left: 260px;
+  width: calc(100% - 230px);
+  margin-left: 230px;
 }
 
 .dark-theme .risk-management-container {
@@ -46,6 +46,7 @@
 }
 
 .tab {
+  position: relative;
   display: flex;
   gap: 10px;
   padding: 5px;
@@ -92,6 +93,7 @@
   flex-direction: column;
   gap: 10px;
   z-index: 0;
+  min-width: 220px;
 }
 
 .dark-theme .calculator-sections {
