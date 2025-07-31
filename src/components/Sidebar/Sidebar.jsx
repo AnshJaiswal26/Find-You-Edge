@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
-import { useUI } from "../../context/Context";
+import { useUI } from "../../context/UIContext";
 
-function Sidebar({ pageActive }) {
+export default function Sidebar({ pageActive }) {
   console.log("Sidebar...");
 
   const navigate = useNavigate();
@@ -110,5 +110,3 @@ function Sidebar({ pageActive }) {
     </div>
   );
 }
-
-export default Sidebar;

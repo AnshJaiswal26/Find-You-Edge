@@ -9,7 +9,7 @@ import {
 
 export const TransactionContext = createContext();
 
-export function TransactionContextProvider({ children }) {
+export default function TransactionContextProvider({ children }) {
   const [transaction, setTransaction] = useState({
     buyPrice: 0,
     sellPrice: 0,

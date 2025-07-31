@@ -1,8 +1,7 @@
-import { useNote } from "../../context/context";
-import { useTradeSummary } from "../../hooks/useTradeSummary";
-import { formatINR } from "../../utils/utils";
-import Button from "../../../../components/Button/Button";
-import { useChargesLogic } from "../../hooks/useChargeLogic";
+import { Button } from "@components";
+import { useNote } from "@RM/context";
+import { useTradeSummary, useChargesLogic } from "@RM/hooks";
+import { formatINR, safe } from "@RM/utils";
 
 export default function ChargesSummarySection() {
   console.log("ChargesSummarySection...");
@@ -13,7 +12,7 @@ export default function ChargesSummarySection() {
         <div className="transaction-summary-title">Charges Summary</div>
         <div className="flex gap10">
           <label className="risk-label" style={{ fontSize: "20px" }}>
-            Charges in Calculator
+            Charges
           </label>
           <ToggleChargesButtons />
         </div>
@@ -68,7 +67,7 @@ function ChargesSummaryList() {
     { label: "Total Tax & Charges", value: charges.total },
     {
       label: "Points to Breakeven (No Profit No Loss)",
-      value: "+" + breakevenPts,
+      value: "+" + safe(breakevenPts, 2),
     },
   ];
   return (

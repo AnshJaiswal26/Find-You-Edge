@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import "./styles/utilities.css";
 import Dashboard from "./pages/DashBoard/Dashboard";
 import Edge from "./pages/Edge/Edge";
 import CustomJournal from "./pages/CustomRecords/CustomJournal";
@@ -11,7 +12,7 @@ import Settings from "./pages/Settings/Settings";
 import Backtest from "./pages/CustomRecords/backtest";
 import Mistakes from "./pages/Mistakes/Mistakes";
 import RiskManagement from "./pages/RiskManagement/RiskManagement";
-import { UIContextProvider } from "./context/Context";
+import { UIContextProvider } from "./context/UIContext";
 function App() {
   return (
     <UIContextProvider>

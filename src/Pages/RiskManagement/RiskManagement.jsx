@@ -1,12 +1,11 @@
 import "./RiskManagement.css";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Editor from "../../components/Editor/Editor";
-import Settings from "./components/popups/SettingsPopup";
+import { PageContainer } from "@layout";
 import {
   CapitalInputContainer,
   SummaryContainer,
   CalculatorAndPositionsContainer,
-} from "./components/containers/containers";
+  Settings,
+} from "@RM/components";
 import {
   SettingsContextProvider,
   TransactionContextProvider,
@@ -15,25 +14,20 @@ import {
   RiskCalculatorContextProvider,
   TabContextProvider,
   NotificationContextProvider,
-} from "./context/context";
+} from "@RM/context";
 
 function RiskManagementWithoutContext() {
   return (
-    <div>
-      <Editor />
-      <Sidebar pageActive={"riskmanagement"} />
-
-      <div className="risk-management-container">
-        <Settings />
-        <div className="flex gap20 wrap">
-          <div className="flex column gap20 flex-1">
-            <CapitalInputContainer />
-            <SummaryContainer />
-          </div>
-          <CalculatorAndPositionsContainer />
+    <PageContainer pageActive={"riskmanagement"}>
+      <Settings />
+      <div className="flex gap20 wrap">
+        <div className="flex column gap20 flex-1">
+          <CapitalInputContainer />
+          <SummaryContainer />
         </div>
+        <CalculatorAndPositionsContainer />
       </div>
-    </div>
+    </PageContainer>
   );
 }
 

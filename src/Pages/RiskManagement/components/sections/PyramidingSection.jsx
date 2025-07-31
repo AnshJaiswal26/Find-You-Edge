@@ -1,15 +1,14 @@
 import React from "react";
-import { useRiskCalculator, useNote } from "../../context/context";
-import InputNote from "../../../../components/InputTooltip/InputNote";
-import Button from "../../../../components/Button/Button";
-import { handleSpecialCases } from "../../utils/utils";
-import { useInputChange } from "../../hooks/useInputChange";
+import { Button } from "@components";
+import { useRiskCalculator, useNote } from "@RM/context";
+import { useInputChange, useInputValidator } from "@RM/hooks";
 
 export default function PyramidingSection() {
   console.log("Pyramiding...");
   const { stopLoss, pyramiding, updateRiskCalculator } = useRiskCalculator();
   const { note } = useNote();
-  const { handleChange } = useInputChange();
+  const handleChange = useInputChange();
+  const handleSpecialCases = useInputValidator();
 
   const handleLayerChange = (direction) => {
     const currentLayer = pyramiding.currentLayer;
@@ -25,7 +24,7 @@ export default function PyramidingSection() {
     <div style={{ display: "flex", gap: "15px" }}>
       <div className="calculator-sections" style={{ "--grid-width": "100px" }}>
         <div className="section-heading">
-          <span className={"element"}>Pyramiding</span>
+          <span className="">Pyramiding</span>
         </div>
 
         <div className="risk-input-row">
@@ -124,12 +123,12 @@ export default function PyramidingSection() {
                 min={0}
               />
             </div>
-            <InputNote
+            {/* <InputNote
               message="Please enter Entry Price or Risk/Reward ratio before specifying Quantity"
               down={false}
               show={note[pyramiding.name].achieved}
               style={{ bottom: "45px" }}
-            />
+            /> */}
           </div>
         </div>
         <div className="footer-buttons">

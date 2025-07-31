@@ -10,80 +10,112 @@ import {
 
 const NoteContext = createContext();
 
-export function NoteContextProvider({ children }) {
-  const timeOutRefs = useRef({});
-  const showNoteRef = useRef({});
-
+export default function NoteContextProvider({ children }) {
   const [note, setNote] = useState({
     riskReward: { ratio: false },
     capital: { current: false },
-    target: {
+    calculator: {
+      buyPriceNeg: false,
+      sellPriceNeg: false,
       buyPrice: false,
       sellPrice: false,
       qty: false,
       pts: false,
       amount: false,
       percent: false,
-      greater: false,
+    },
+    target: {
+      buyPriceNeg: false,
+      sellPriceNeg: false,
+      buyPriceLesser: false,
+      sellPriceGreater: false,
+      buyPrice: false,
+      sellPrice: false,
+      qty: false,
+      pts: false,
+      amount: false,
+      percent: false,
     },
     stopLoss: {
+      buyPriceNeg: false,
+      sellPriceNeg: false,
+      buyPriceGreater: false,
+      sellPriceLesser: false,
       buyPrice: false,
       sellPrice: false,
       qty: false,
       pts: false,
       amount: false,
       percent: false,
-      less: false,
     },
     pyramiding: {
       achieved: false,
     },
   });
-  const timeOut = useCallback((section, field, duration = 3000) => {
-    const key = `${section}_${field}`;
-    console.log("timeOut Triggered... for " + key);
 
-    if (timeOutRefs.current[key]) {
-      console.log(`timeOut (Already Processing.. for ${key}`);
-      return;
-    }
+  const keyFields = useMemo(
+    () => ["buyPrice", "sellPrice", "qty", "pts", "amount", "percent"],
+    []
+  );
 
-    const show = (prop) => {
-      setNote((prev) => ({
-        ...prev,
-        [section]: {
-          ...note[section],
-          [field]: prop,
-        },
-      }));
-    };
+  const getFilteredNotes = useCallback(
+    (prev) =>
+      keyFields.reduce((acc, k) => {
+        if (prev[k]) acc[k] = false;
+        return acc;
+      }, {}),
+    [keyFields]
+  );
 
-    show(true);
-    timeOutRefs.current[key] = setTimeout(() => {
-      show(false);
-      delete timeOutRefs.current[key];
-    }, duration);
-  }, []);
-
-  const showNote = useCallback((section, field, isVisible = false) => {
-    const key = `${section}_${field}`;
-    console.log("showNote Triggered... for " + key);
-
+  const showNote = useCallback((section, field, isVisible = true) => {
     setNote((prev) => {
-      showNoteRef.current[key] = isVisible;
+      const current = prev[section][field];
+
+      if ((current && isVisible) || (!current && !isVisible)) return prev;
+
       return {
         ...prev,
         [section]: {
-          ...note[section],
+          ...prev[section],
           [field]: isVisible,
         },
       };
     });
   }, []);
 
+  const showNoteInBatch = useCallback(
+    (section, updates) => {
+      setNote((prev) => {
+        const currentSection = prev[section];
+
+        const filtered = {
+          ...(currentSection.buyPriceNeg || currentSection.sellPriceNeg
+            ? getFilteredNotes(currentSection)
+            : {}),
+          ...updates,
+        };
+
+        const diff = Object.entries(filtered).reduce((acc, [key, val]) => {
+          if (currentSection[key] !== val) acc[key] = val;
+          return acc;
+        }, {});
+
+        const merged = { ...currentSection, ...diff };
+
+        if (Object.keys(diff).length === 0) return prev;
+
+        return {
+          ...prev,
+          [section]: merged,
+        };
+      });
+    },
+    [getFilteredNotes]
+  );
+
   const value = useMemo(
-    () => ({ note, timeOut, showNote }),
-    [note, timeOut, showNote]
+    () => ({ note, showNote, showNoteInBatch }),
+    [note, showNote, showNoteInBatch]
   );
 
   return <NoteContext.Provider value={value}>{children}</NoteContext.Provider>;

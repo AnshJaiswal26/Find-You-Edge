@@ -1,5 +1,5 @@
 import "./Popup.css";
-import Button from "../../Button/Button";
+import { Button } from "@components";
 
 const Filter = ({
   filters,

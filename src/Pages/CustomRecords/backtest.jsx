@@ -7,7 +7,7 @@ import DeleteColumnModal from "../../components/TableComponents/Popups/delete-co
 import DeleteConfirmationPopup from "../../components/TableComponents/Popups/Delete-Confirmation-Popup";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Editor from "../../components/Editor/Editor";
-import Button from "../../components/Button/Button";
+import { Button } from "@components";
 
 function Backtest() {
   const [trades, setTrades] = useState([]); // Start with empty trades array

@@ -1,0 +1,83 @@
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+}
+
+.popup-message {
+  position: absolute;
+  color: white;
+  padding: 13px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 448px;
+  width: 100%;
+  transform: translateY(0%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.popup-message.animate-in {
+  transform: translateY(100%);
+  opacity: 1;
+}
+
+.popup-success {
+  background: linear-gradient(to right, #10b981, #059669);
+}
+
+.popup-error {
+  background: linear-gradient(to right, #ef4444, #ff5d78);
+}
+
+.popup-warning {
+  background: linear-gradient(to right, #eab308, #ffcb5b);
+}
+
+.popup-info {
+  background: linear-gradient(to right, #3b82f6, #6389f1);
+}
+
+.popup-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.popup-text {
+  flex: 1;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 0;
+}
+
+.popup-close {
+  flex-shrink: 0;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.popup-close-icon {
+  width: 16px;
+  height: 16px;
+}

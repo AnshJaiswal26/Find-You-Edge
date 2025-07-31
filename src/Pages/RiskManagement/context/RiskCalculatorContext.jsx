@@ -1,15 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
-import {
-  createContext,
-  useContext,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
+import { createContext, useContext, useState, useMemo } from "react";
+import { set } from "@RM/utils";
 
 export const RiskCalculatorContext = createContext();
 
-export function RiskCalculatorContextProvider({ children }) {
+export default function RiskCalculatorContextProvider({ children }) {
   const [capital, setCapital] = useState({
     name: "capital",
     current: 0,
@@ -32,8 +27,16 @@ export function RiskCalculatorContextProvider({ children }) {
     amount: 0,
     percent: 0,
     color: "green",
-    labels: ["Target (Pts)", "Target (₹)", "Target (%)"],
+    labels: ["Target Points", "Target (₹)", "Target (%)"],
     prevVal: 0,
+    flash: {
+      buyPrice: false,
+      sellPrice: false,
+      qty: false,
+      pts: false,
+      amount: false,
+      percent: false,
+    },
   });
 
   const [stopLoss, setStopLoss] = useState({
@@ -45,8 +48,16 @@ export function RiskCalculatorContextProvider({ children }) {
     amount: 0,
     percent: 0,
     color: "red",
-    labels: ["SL (Pts)", "SL (₹)", "SL (%)"],
+    labels: ["SL Points", "SL (₹)", "SL (%)"],
     prevVal: 0,
+    flash: {
+      buyPrice: false,
+      sellPrice: false,
+      qty: false,
+      pts: false,
+      amount: false,
+      percent: false,
+    },
   });
 
   const [pyramiding, setPyramiding] = useState({
@@ -91,32 +102,7 @@ export function RiskCalculatorContextProvider({ children }) {
     []
   );
 
-  const updateRiskCalculator = useCallback(
-    (section, updates) => {
-      if (updates === 0) {
-        const updatedToZero = {};
-        setterMap[section]((prev) => {
-          const keys = [
-            "buyPrice",
-            "sellPrice",
-            "qty",
-            "pts",
-            "amount",
-            "percent",
-          ];
-          keys.forEach((key) => {
-            updatedToZero[key] = 0;
-          });
-          return { ...prev, ...updatedToZero };
-        });
-        return;
-      }
-      setterMap[section]((prev) => {
-        return { ...prev, ...updates };
-      });
-    },
-    [setterMap]
-  );
+  const updateRiskCalculator = useMemo(() => set(setterMap), [setterMap]);
 
   const value = useMemo(
     () => ({

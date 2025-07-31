@@ -1,15 +1,16 @@
+import { Container } from "@layout";
 import {
   ChargesSummarySection,
   TransactionSummarySection,
-} from "../sections/sections";
+} from "@RM/components";
 
 export function SummaryContainer() {
   console.log("SummaryContainer...");
 
   return (
-    <div className="containers">
+    <Container>
       <TransactionSummarySection />
       <ChargesSummarySection />
-    </div>
+    </Container>
   );
 }

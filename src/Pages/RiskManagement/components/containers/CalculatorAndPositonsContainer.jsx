@@ -1,16 +1,18 @@
-import { useTab, useNotification } from "../../context/context";
+import { PopupMessage, TabSwitcher } from "@components";
 import {
   RiskRewardCalculatorContainer,
   CurrentPositionsContainer,
   NormalCalculatorContainer,
-} from "./containers";
-
-import Message from "../../../../components/Messages/msg";
+} from "@RM/components";
+import { useTab, useNotification } from "@RM/context";
 
 export function CalculatorAndPositionsContainer() {
   console.log("CalculatorAndPositionsContainer...");
   return (
-    <div style={{ flex: 1, minWidth: "360px", position: "relative" }}>
+    <div
+      className={"tab-calculator-container"}
+      style={{ flex: 1.1, minWidth: "360px", position: "relative" }}
+    >
       <Messages />
       <TabContainer />
     </div>
@@ -18,12 +20,28 @@ export function CalculatorAndPositionsContainer() {
 }
 
 function Messages() {
-  const { msg } = useNotification();
+  const { msg, showMsg } = useNotification();
 
   return (
     <>
-      <Message text={"Charges Added"} show={msg.charges.added} />
-      <Message text={"Charges Removed"} show={msg.charges.removed} />
+      <PopupMessage
+        key={`added-${msg.charges.added.id}`}
+        message="Charges Added"
+        type="success"
+        duration={1200}
+        isVisible={msg.charges.added.isVisible}
+        onClose={() => showMsg("charges", "added", false)}
+        showCloseButton={false}
+      />
+      <PopupMessage
+        key={`removed-${msg.charges.removed.id}`}
+        message="Charges Removed"
+        type="success"
+        duration={1200}
+        isVisible={msg.charges.removed.isVisible}
+        onClose={() => showMsg("charges", "removed", false)}
+        showCloseButton={false}
+      />
     </>
   );
 }
@@ -52,17 +70,11 @@ function TabContainer() {
 
   return (
     <>
-      <div className="tab">
-        {tabs.map(({ key, label }) => (
-          <div
-            key={key}
-            className={`element ${currentTab === key ? "selected" : ""}`}
-            onClick={() => setCurrentTab(key)}
-          >
-            {label}
-          </div>
-        ))}
-      </div>
+      <TabSwitcher
+        tabs={tabs}
+        currentTab={currentTab}
+        onClick={(key) => setCurrentTab(key)}
+      />
       {getSelectedCalculator(currentTab)}
     </>
   );

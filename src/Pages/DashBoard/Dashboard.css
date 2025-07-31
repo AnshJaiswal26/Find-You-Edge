@@ -39,7 +39,7 @@ body {
   transform: translateX(-50%);
   left: 50%;
   background: transparent;
-  border-bottom-color: rgb(255, 255, 255) !important;
+  border-bottom-color: #ffffff !important;
   border-style: solid;
   border-color: transparent transparent transparent transparent;
 }
@@ -117,7 +117,7 @@ body {
   cursor: pointer;
 }
 
-.main-content {
+.dashboard-main-content {
   box-sizing: border-box;
   flex-wrap: wrap;
   padding: 20px;
@@ -129,12 +129,11 @@ body {
   max-width: 1440px;
   overflow-y: hidden;
   overflow-x: auto;
-  scrollbar-width: thin;
 }
 
-.sidebar-open .main-content {
-  width: calc(100% - 260px);
-  margin-left: 260px;
+.sidebar-open .dashboard-main-content {
+  width: calc(100% - 230px);
+  margin-left: 230px;
 }
 
 .dashboard-icon {

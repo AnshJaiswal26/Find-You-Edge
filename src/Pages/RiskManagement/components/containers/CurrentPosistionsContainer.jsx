@@ -1,9 +1,6 @@
-import {
-  useRiskCalculator,
-  useTab,
-  useTransaction,
-} from "../../context/context";
-import { useClearLogic } from "../../hooks/useClearLogic";
+import { Container } from "@layout";
+import { useRiskCalculator, useTab, useTransaction } from "@RM/context";
+import { useClearLogic } from "@RM/hooks";
 
 export function CurrentPositionsContainer() {
   console.log("CurrentPositionsContainer...");
@@ -53,10 +50,7 @@ export function CurrentPositionsContainer() {
   };
 
   return (
-    <div
-      className="containers center"
-      style={{ borderTopLeftRadius: "0px", color: "grey" }}
-    >
+    <Container>
       <div className="banknifty-container">
         {data.map((item, index) => (
           <div
@@ -85,6 +79,6 @@ export function CurrentPositionsContainer() {
           </div>
         ))}
       </div>
-    </div>
+    </Container>
   );
 }

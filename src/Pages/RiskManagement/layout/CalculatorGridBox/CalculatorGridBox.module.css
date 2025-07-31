@@ -1,0 +1,15 @@
+.calculatorGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-width), 1fr));
+  gap: 12px 17px;
+}
+
+.calculatorGrid img {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+:global(.dark-theme) .calculatorGrid img {
+  filter: invert(1);
+}

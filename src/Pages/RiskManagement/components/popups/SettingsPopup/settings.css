@@ -1,0 +1,300 @@
+.settings-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.settings-popup-container {
+  background-color: white;
+  border-radius: 0.5rem;
+  max-width: 28rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  height: 500px;
+  overflow: auto;
+}
+
+.dark-theme .settings-popup-container {
+  background-color: #1f2937;
+}
+
+.settings-popup-header {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  padding: 20px;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid #efefef;
+  z-index: 2;
+}
+
+.dark-theme .settings-popup-header {
+  background-color: #1f2937;
+  color: white;
+  border-bottom: 1px solid #2a394f;
+}
+
+.settings-popup-header-content {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-popup-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.settings-popup-close-button {
+  font-size: 1.25rem;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
+}
+
+.dark-theme .settings-popup-close-button {
+  color: white;
+}
+
+.settings-popup-close-button:hover {
+  color: rgb(255, 0, 0);
+}
+
+.settings-popup-body {
+  padding: 1.25rem;
+}
+
+.settings-popup-label {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.dark-theme .settings-popup-label {
+  color: #ffffff;
+}
+
+.settings-popup-label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.divider {
+  border-top: 1px solid #e1e1e1;
+  margin: 15px 0px;
+}
+
+.dark-theme .divider {
+  border-top: 1px solid #3b4556;
+}
+
+.settings-popup-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 10px;
+}
+
+.section-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.input-title {
+  color: #047857;
+}
+
+.dark-theme .input-title {
+  color: #27c196;
+}
+
+.calc-title {
+  color: #1d4ed8;
+}
+
+.dark-theme .calc-title {
+  color: #3a6fff;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.field-card {
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  border: 1px solid;
+}
+
+.input-card {
+  background-color: #e5fff3;
+  border-color: #d1fae5;
+}
+
+.dark-theme .input-card {
+  background: #00bf6c7e;
+  border: 1px solid #2b6d4f;
+}
+
+.input-field:hover {
+  cursor: pointer;
+}
+.input-field:active {
+  transform: scale(0.9);
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: transform ease 0.5s;
+}
+
+.input-field.selected {
+  border: 1px solid #070707;
+  pointer-events: none;
+  transition: transform ease 0.5s;
+}
+
+.dark-theme .input-field.selected {
+  border: 1px solid #ffffff;
+}
+
+.calc-card {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.dark-theme .calc-card {
+  background-color: #004bad6c;
+  border-color: #1e385a;
+}
+
+.field-name {
+  font-weight: 500;
+}
+
+.dark-theme .field-name {
+  color: white;
+}
+
+.field-note {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.dark-theme .field-note {
+  color: #ffffff;
+}
+.arrow-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.arrow-icon-wrapper .arrow-icon {
+  font-size: 35px;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  font-weight: bolder;
+}
+
+.dark-theme .arrow-icon-wrapper .arrow-icon {
+  color: white;
+}
+
+.formula-box-green,
+.formula-box {
+  background-color: white;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.dark-theme .formula-box {
+  background-color: #002b6c72;
+  border: 1px solid #001a4155;
+}
+
+.formula-box-green {
+  background-color: white;
+  border: 1px solid #bffedb;
+}
+
+.dark-theme .formula-box-green {
+  background-color: #005e3fba;
+  border: 1px solid #005e3f81;
+}
+
+.formula-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.dark-theme .formula-label {
+  color: #ffffff;
+}
+
+.formula-value-green,
+.formula-value {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: #1e40af;
+}
+
+.dark-theme .formula-value {
+  color: #ffffff;
+}
+
+.formula-value-green {
+  color: #1eaf58;
+}
+
+.dark-theme .formula-value-green {
+  color: #ffffff;
+}
+
+.summary-box {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dark-theme .summary-box {
+  border-top: 1px solid #384153;
+}
+
+.summary-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+.highlight-input {
+  color: #047857;
+  font-weight: 500;
+}
+
+.dark-theme .highlight-input {
+  color: #27c196;
+}
+
+.highlight-calc {
+  color: #1d4ed8;
+  font-weight: 500;
+}
+.dark-theme .highlight-calc {
+  color: #3a6fff;
+}

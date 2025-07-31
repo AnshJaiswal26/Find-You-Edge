@@ -1,8 +1,8 @@
-import { useTransaction } from "../../context/context";
-import { useTradeSummary } from "../../hooks/useTradeSummary";
-import { formatINR } from "../../utils/utils";
+import { useTransaction } from "@RM/context";
+import { useTradeSummary } from "@RM/hooks";
+import { formatINR, safe } from "@RM/utils";
 
-export default function TransactionSummarySectionWithoutContext() {
+export default function TransactionSummarySection() {
   console.log("TransactionSummarySection...");
 
   return (
@@ -61,7 +61,7 @@ function TransactionSummaryRow() {
           <span className="transaction-summary-label">{item.label}</span>
           <div className={`transaction-summary-value ${item.style}`}>
             {item.label === "Net P&L (%)"
-              ? item.value + " %"
+              ? safe(item.value, 2) + "%"
               : formatINR(item.value || 0)}
           </div>
         </div>

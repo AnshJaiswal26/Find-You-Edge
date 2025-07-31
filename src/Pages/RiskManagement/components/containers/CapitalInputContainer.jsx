@@ -1,78 +1,50 @@
-import { useNote, useSettings, useRiskCalculator } from "../../context/context";
-import InputNote from "../../../../components/InputTooltip/InputNote";
-import { useInputChange } from "../../hooks/useInputChange";
-import { handleSpecialCases } from "../../utils/utils";
+import { IconButton, ValidationTooltip } from "@components";
+import { Container } from "@layout";
+import { Input } from "@RM/components";
+import { useNote, useSettings, useRiskCalculator } from "@RM/context";
 
 export function CapitalInputContainer() {
+  const { updateSettings } = useSettings();
+
   console.log("CapitalInputContainer...");
 
   return (
-    <div className="containers">
-      <div className="flex justify wrap">
-        <div className="flex baseline gap10 relative">
-          <label className="risk-label fs20">Capital</label>
+    <Container>
+      <div className="flex justify center">
+        <div className="relative">
           <CapitalInput />
-          <CapitalInputNote />
         </div>
-        <SettingsButton />
+        <IconButton
+          src="Icons/others/adjust.png"
+          onClick={() => updateSettings({ show: true })}
+        />
       </div>
-    </div>
+    </Container>
   );
 }
 
 function CapitalInput() {
   const { capital } = useRiskCalculator();
-  const { handleChange } = useInputChange();
+  const { note, showNote } = useNote();
 
   return (
-    <input
-      className="risk-input"
-      type="text"
-      value={capital.current}
-      onChange={(e) => {
-        handleChange(capital, "capital", e.target.value);
-      }}
-      onBlur={(e) => {
-        handleSpecialCases(capital, "capital", e.target.value);
-      }}
-      placeholder="₹"
-      min={0}
-    />
-  );
-}
-
-function CapitalInputNote() {
-  const { note } = useNote();
-
-  return (
-    <InputNote
-      message="Enter Capital to calculate returns in %"
-      down={true}
-      show={note.capital.current}
-      style={{ bottom: "-50px" }}
-    />
-  );
-}
-
-function SettingsButton() {
-  const { showSettings, updateSettings } = useSettings();
-
-  console.log("showSettings", showSettings);
-
-  return (
-    <button
-      className="settings-icon-btn"
-      onClick={() => updateSettings("showSettings", true)}
-    >
-      <img
-        style={{
-          width: "20px",
-          height: "20px",
-          filter: "invert(1)",
-        }}
-        src="Icons/others/adjust.png"
-        alt="Settings Icon"
+    <>
+      <Input
+        className={note.capital.current ? "info" : ""}
+        label={"Trading Capital"}
+        section={capital}
+        field={"capital"}
+        value={capital.current}
       />
-    </button>
+      <ValidationTooltip
+        message="Enter Capital to calculate returns in %"
+        position="bottom"
+        isVisible={note.capital.current}
+        onClose={() => showNote("capital", "current", false)}
+        type="info"
+        autoHide={true}
+        showCloseButton={true}
+      />
+    </>
   );
 }

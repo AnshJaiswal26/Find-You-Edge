@@ -1,37 +1,39 @@
 import { useRef } from "react";
-import { useNote, useTransaction, useRiskCalculator } from "../context/context";
+import { useNote, useRiskCalculator } from "@RM/context";
+import { useUpdater } from "@RM/hooks";
 
-export function useClearLogic() {
+export default function useClearLogic() {
   const clearTimers = useRef({});
 
   const { timeOut } = useNote();
-  const { updateTransaction } = useTransaction();
-  const { target, stopLoss, updateRiskCalculator } = useRiskCalculator();
+  const { target, stopLoss } = useRiskCalculator();
+  const { updateSection, updateTransaction } = useUpdater();
 
-  const clearSection = (section, update) => {
-    if (clearTimers.current[section.name]) return;
+  const clearSection = (section) => {
+    const { name } = section;
+    if (clearTimers.current[name]) return;
 
-    if (section.name !== "calculator") {
-      const field = section.name === "target" ? "greater" : "less";
+    if (name !== "calculator") {
+      const field = name === "target" ? "greater" : "less";
 
-      updateRiskCalculator("riskReward", {
+      updateSection("riskReward", {
         ratio: 0,
       });
 
-      timeOut(section.name, field, 0, false);
+      timeOut(name, field, 0, false);
     }
 
-    update(section.name, 0);
+    updateSection(name, 0);
     updateTransaction(0);
 
-    clearTimers.current[section.name] = setTimeout(() => {
-      delete clearTimers.current[section.name];
+    clearTimers.current[name] = setTimeout(() => {
+      delete clearTimers.current[name];
     }, 1000);
   };
 
   const clearTargetAndStopLoss = () => {
-    clearSection(target, updateRiskCalculator);
-    clearSection(stopLoss, updateRiskCalculator);
+    clearSection(target);
+    clearSection(stopLoss);
   };
 
   return { clearSection, clearTargetAndStopLoss };

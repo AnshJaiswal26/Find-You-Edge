@@ -312,26 +312,3 @@
 .dark-theme .editor-user-name {
   color: #ffffff;
 }
-
-.editor-button {
-  background: none;
-  text-align: center;
-  border: none;
-  color: white;
-  font-size: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: normal;
-  border-radius: 6px;
-  height: 34px;
-  width: 36px;
-}
-
-.editor-button:hover {
-  background: rgb(236, 236, 236);
-}
-
-.dark-theme .editor-button:hover {
-  background: #27333f;
-}

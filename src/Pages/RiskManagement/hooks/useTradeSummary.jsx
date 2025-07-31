@@ -1,31 +1,29 @@
-import { useRefiners } from "./useRefiners";
-import { calculateCharges } from "../utils/utils";
-import { useTransaction } from "../context/context";
+import { useTransaction } from "@RM/context";
+import { calculateCharges } from "@RM/utils";
 
-export function useTradeSummary() {
+export default function useTradeSummary() {
   const { transaction } = useTransaction();
-  const { refine } = useRefiners();
 
   const qty = transaction.qty;
-  const buyVal = refine(transaction.buyPrice * qty);
-  const sellVal = refine(transaction.sellPrice * qty);
-  const tradeVal = refine(buyVal + sellVal);
+  const buyVal = transaction.buyPrice * qty;
+  const sellVal = transaction.sellPrice * qty;
+  const tradeVal = buyVal + sellVal;
 
   const calculate = (field) =>
     calculateCharges(field, qty, buyVal, sellVal, tradeVal);
 
-  const netPL = refine(sellVal - buyVal - calculate("totalCharges"), 0);
-  const netPLPercent = refine((netPL / buyVal) * 100, 0);
   const totalCharges = calculate("totalCharges");
+  const netPL = sellVal - buyVal - totalCharges;
+  const netPLPercent = (netPL / buyVal) * 100;
 
   return {
     tradeVal,
     buyVal,
     sellVal,
-    grossPL: refine(sellVal - buyVal),
+    grossPL: sellVal - buyVal,
     netPL,
     netPLPercent,
-    breakevenPts: refine(totalCharges / qty, 0),
+    breakevenPts: totalCharges / qty,
     colorForPnl: netPL === 0 ? "neutral" : netPL > 0 ? "green" : "red",
     charges: {
       brokerage: calculate("brokerage"),

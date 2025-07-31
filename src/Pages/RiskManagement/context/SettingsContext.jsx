@@ -9,27 +9,28 @@ import {
 
 const SettingsContext = createContext();
 
-export function SettingsContextProvider({ children }) {
-  const [showSettings, setShowSettings] = useState(false);
-  const [calcMode, setCalcMode] = useState("approx");
-  const [calcModeSAndT, setCalcModeSAndT] = useState("market");
-
-  const setterMap = useMemo(
-    () => ({
-      showSettings: setShowSettings,
-      calcMode: setCalcMode,
-      calcModeSAndT: setCalcModeSAndT,
-    }),
-    []
-  );
+export default function SettingsContextProvider({ children }) {
+  const [settings, setSettings] = useState({
+    show: false,
+    autoRounding: false,
+    calculation: { mode: "Approx" },
+    derived: { mode: "amount" },
+    guide: { selectedField: "buyPrice" },
+    amount: { changesIn: "sellPrice" },
+    selectedSection: "Calculator",
+  });
 
   const updateSettings = useCallback(
-    (section, updates) => setterMap[section](updates),
-    [setterMap]
+    (updates) =>
+      setSettings((prev) => ({
+        ...prev,
+        ...updates,
+      })),
+    [setSettings]
   );
   const value = useMemo(
-    () => ({ showSettings, calcMode, calcModeSAndT, updateSettings }),
-    [showSettings, calcMode, calcModeSAndT, updateSettings]
+    () => ({ settings, updateSettings }),
+    [settings, updateSettings]
   );
 
   return (

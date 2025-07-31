@@ -1,25 +1,28 @@
 import { useMemo } from "react";
-import { formatValue } from "../utils/utils";
-import { useSettings } from "../context/context";
+import { useSettings } from "@RM/context";
+import { formatValue } from "@RM/utils";
 
-export function useRefiners() {
+export default function useRefiners() {
   const { calcMode, calcModeSAndT } = useSettings();
 
-  const refine = (val, config) => {
-    const parsed = formatValue(val, calcMode, config);
+  const refine = (val) => {
+    const parsed = formatValue(val, calcMode);
+    // console.log("calcMode", calcMode);
     return Number.isInteger(parsed) ? parseInt(parsed) : parsed;
   };
 
-  const round = (val, config) => {
-    const parsed = formatValue(val, calcModeSAndT, config);
+  const round = (val) => {
+    const parsed = formatValue(val, calcModeSAndT);
+    // console.log(`calcModeSAndT=${calcModeSAndT}, parsedValue=${parsed}`);
     return Number.isInteger(parsed) ? parseInt(parsed) : parsed;
   };
 
   const getFormatter = (name) => {
     const formatterMap = {
-      calculator: refine,
+      calcultor: refine,
       default: round,
     };
+
     return formatterMap[name] || formatterMap.default;
   };
 

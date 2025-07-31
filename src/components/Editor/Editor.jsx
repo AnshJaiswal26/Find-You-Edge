@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Editor.css";
-
 import FilterPopup from "./components/FilterPopup";
-import { useUI } from "../../context/Context";
+import { useUI } from "../../context/UIContext";
+import { IconButton } from "@components";
 
-function Editor() {
+export default function Editor() {
   console.log("Editor...");
   const navigate = useNavigate();
   const { toggleSidebar, selectedAvatar, userName, toggleTheme } = useUI();
@@ -60,14 +60,7 @@ function EditorLeftActions({
   return (
     <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
       <div className="editor-editor-actions-1">
-        <button className="editor-button">
-          <img
-            className="editor-icon"
-            src="Icons/others/menus.png"
-            alt="Menu"
-            onClick={toggleSidebar}
-          />
-        </button>
+        <IconButton src="Icons/others/menus.png" onClick={toggleSidebar} />
         <button
           className={
             isFilterApplied
@@ -98,32 +91,17 @@ function EditorRightActions({
       <div className="editor-user-name">
         <strong>{userName}</strong>
       </div>
-      <button className="editor-button">
-        <img
-          src="Icons/others/themes.png"
-          alt="theme"
-          className="editor-icon"
-          style={{ width: "26px", height: "25px" }}
-          onClick={toggleTheme}
-        />
-      </button>
-      <button className="editor-button">
-        <img
-          src="Icons/others/bell2.png"
-          alt="Notifications"
-          className="editor-icon"
-        />
-      </button>
-      <button className="editor-button">
-        <img
-          src="Icons/others/settings.png"
-          alt="Settings"
-          className="editor-icon"
-          onClick={() => navigate("/settings")}
-        />
-      </button>
+      <IconButton
+        src="Icons/others/themes.png"
+        onClick={toggleTheme}
+        width={25}
+        height={25}
+      />
+      <IconButton src="Icons/others/bell2.png" />
+      <IconButton
+        src="Icons/others/settings.png"
+        onClick={() => navigate("/settings")}
+      />
     </div>
   );
 }
-
-export default Editor;

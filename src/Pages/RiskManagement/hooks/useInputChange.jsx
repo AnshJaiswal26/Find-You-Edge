@@ -1,62 +1,53 @@
-import {
-  useRiskCalculator,
-  useCalculator,
-  useNote,
-  useTransaction,
-} from "../context/context";
-import { handleSpecialCases } from "../utils/utils";
-import {
-  useAmountAndPtsHandler,
-  useCapitalHandler,
-  usePercentHandler,
-  usePriceHandler,
-  useQtyHandler,
-  useRiskRewardHandler,
-} from "./handlers/handlers";
+import { useCallback } from "react";
+import { useRiskCalculator, useNote } from "@RM/context";
+import { useFieldHandler, useUpdater, useInputValidator } from "@RM/hooks";
 
-export function useInputChange() {
-  const { updateCalculator } = useCalculator();
-  const { capital, updateRiskCalculator } = useRiskCalculator();
-  const { updateTransaction } = useTransaction();
-  const { timeOut } = useNote();
+export default function useInputChange() {
+  const handleSpecialCases = useInputValidator();
+  const handlers = useFieldHandler();
+  const { capital } = useRiskCalculator();
+  const { showNote } = useNote();
+  const { updateSection, updateTransaction } = useUpdater();
 
-  const handlePriceChange = usePriceHandler();
-  const handleAmountOrPtsChange = useAmountAndPtsHandler();
-
-  const fieldHandlers = {
-    capital: useCapitalHandler(),
-    ratio: useRiskRewardHandler(),
-    buyPrice: handlePriceChange,
-    sellPrice: handlePriceChange,
-    qty: useQtyHandler(),
-    pts: handleAmountOrPtsChange,
-    amount: handleAmountOrPtsChange,
-    percent: usePercentHandler(),
+  const checkValues = (section, field, val) => {
+    let Max_Val = 100 * 10000000,
+      isValid;
+    if (field === "pts" || field === "percent") isValid = val <= 10000;
+    else if (field === "amount" || field === "capital")
+      isValid = val <= Max_Val;
+    else if (field === "ratio") isValid = val <= 100;
+    else val <= 100000;
   };
 
-  const handleChange = (section, field, val) => {
-    const updateSection =
-      section.name === "calculator" ? updateCalculator : updateRiskCalculator;
-    console.log(field);
+  const handleChange = useCallback(
+    (section, field, val) => {
+      const value = field === "ratio" ? val.replace("1 : ", "") : val;
+      const isInvalid = handleSpecialCases(section, field, value);
 
-    if (handleSpecialCases(section, field, val, false, updateSection)) return;
+      console.log("isValid", isInvalid, value, field);
+      if (isInvalid) return;
 
-    const numericValue = val === "" ? 0 : Number(val);
+      const numericValue = value === "" ? 0 : Number(value);
 
-    if (capital.current === 0 && field === "percent") {
-      timeOut("capital", "current");
-      return;
-    }
-    if (typeof fieldHandlers[field] === "function") {
-      fieldHandlers[field](section, field, numericValue);
-    } else {
-      console.warn(`Missing field handler for "${field}"`);
-    }
+      if (capital.current === 0 && field === "percent") {
+        showNote("capital", "current", true);
+        return;
+      }
 
-    const updated = fieldHandlers[field](section, field, numericValue);
-    if (updated?.section) updateSection(section.name, updated.section);
-    if (updated?.transaction) updateTransaction(updated.transaction);
-  };
+      const updated = handlers[field](section, field, numericValue);
 
-  return { handleChange };
+      if (updated?.section) updateSection(section.name, updated.section, true);
+      if (updated?.transaction) updateTransaction(updated.transaction);
+    },
+    [
+      handlers,
+      handleSpecialCases,
+      updateSection,
+      updateTransaction,
+      showNote,
+      capital,
+    ]
+  );
+
+  return handleChange;
 }

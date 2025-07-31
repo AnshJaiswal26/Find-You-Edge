@@ -1,44 +1,58 @@
-import { useNote, useRiskCalculator } from "../../context/context";
+import { useNote, useRiskCalculator, useSettings } from "@RM/context";
+import { useSyncOppositeSection, useVerifyInput } from "@RM/hooks";
+import { safe } from "@RM/utils";
+import { useCallback } from "react";
 
-export function useQtyHandler() {
-  const { showNote } = useNote();
-  const { capital, riskReward, target, stopLoss, updateRiskCalculator } =
-    useRiskCalculator();
+export default function useQtyHandler() {
+  const { capital } = useRiskCalculator();
+  const syncOppositeSection = useSyncOppositeSection();
+  const { settings } = useSettings();
+  const verifyValues = useVerifyInput();
 
-  const formatter = (val) => {
-    if (!isFinite(val) || isNaN(val)) return 0;
-    else return parseInt(val);
-  };
+  const isAmountLock = settings.derived.mode === "amount";
+  const isBuyLock = settings.derived.mode === "buyPrice";
 
-  function handleQtyChange(section, field, val, isRecursive = false) {
-    const { name, buyPrice, amount } = section;
-    const isTarget = name === "target";
-    const oppositeSection = isTarget ? stopLoss : target;
+  const handleQtyChange = useCallback(
+    (section, field, val) => {
+      const { name, buyPrice, sellPrice, pts, amount } = section;
 
-    const updatedQty = Math.max(0, val);
-    const updated = { qty: updatedQty };
-    updated.pts = formatter(amount / updatedQty);
-    updated.sellPrice = formatter(buyPrice + updated.pts);
-    updated.percent = formatter(amount / capital, 0);
+      const updatedQty = Math.max(0, val);
+      const updated = { qty: updatedQty };
 
-    showNote(name, isTarget ? "greater" : "less", updated.pts === 0);
+      if (isAmountLock) {
+        updated.amount = pts * updatedQty;
+        updated.percent = safe(updated.amount / capital.current) * 100;
+      } else {
+        updated.pts = safe(amount / updatedQty);
+        if (isBuyLock) updated.buyPrice = sellPrice - updated.pts;
+        else updated.sellPrice = buyPrice + updated.pts;
+      }
 
-    if (isRecursive) return updated;
-    else if (name !== "calculator") {
-      updateRiskCalculator(
-        oppositeSection.name,
-        handleQtyChange(oppositeSection, field, updatedQty, true)
-      );
-    }
+      const isAnyInvalid = verifyValues(name, field, {
+        buyPrice: updated.buyPrice ?? buyPrice,
+        sellPrice: updated.sellPrice ?? sellPrice,
+      });
 
-    return {
-      section: updated,
-      transaction: {
-        buyPrice: buyPrice,
-        sellPrice: updated.sellPrice,
-        qty: updatedQty,
-      },
-    };
-  }
+      if (isAnyInvalid) return { section: updated };
+
+      if (name !== "calculator")
+        syncOppositeSection({
+          name: name,
+          buyPrice: updated.buyPrice ?? buyPrice,
+          pts: updated.pts ?? pts,
+          qty: updatedQty,
+        });
+
+      return {
+        section: updated,
+        transaction: {
+          buyPrice: updated.buyPrice ?? buyPrice,
+          sellPrice: updated.sellPrice ?? sellPrice,
+          qty: updatedQty,
+        },
+      };
+    },
+    [capital, isAmountLock, isBuyLock, syncOppositeSection, verifyValues]
+  );
   return handleQtyChange;
 }

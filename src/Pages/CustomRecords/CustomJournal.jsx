@@ -9,7 +9,7 @@ import DeleteConfirmationPopup from "../../components/TableComponents/Popups/Del
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Editor from "../../components/Editor/Editor";
 import DateHeader from "../../components/DateHeader/DateHeader";
-import Button from "../../components/Button/Button";
+import { Button } from "@components";
 
 function CustomRecords({ isCustomEdge }) {
   const [trades, setTrades] = useState([]); // Start with empty trades array

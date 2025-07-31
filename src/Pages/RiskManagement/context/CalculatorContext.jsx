@@ -1,16 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
-
-import {
-  createContext,
-  useContext,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
+import { createContext, useContext, useState, useMemo, useEffect } from "react";
+import { useRefiners } from "@RM/hooks";
+import { set } from "@RM/utils";
 
 export const CalculatorContext = createContext();
 
-export function CalculatorContextProvider({ children }) {
+export default function CalculatorContextProvider({ children }) {
+  const { refine } = useRefiners();
+
   const [calculator, setcalculator] = useState({
     name: "calculator",
     buyPrice: 0,
@@ -20,8 +17,17 @@ export function CalculatorContextProvider({ children }) {
     amount: 0,
     percent: 0,
     color: "neutral",
-    labels: ["Captured (Pts)", "Net P&L (₹)", "Net P&L (%)"],
+    labels: ["Captured Points"],
     prevVal: 0,
+    flash: {
+      buyPrice: false,
+      sellPrice: false,
+      qty: false,
+      pts: false,
+      amount: false,
+      percent: false,
+    },
+    mode: "approx",
   });
   const [positionSizing, setPositionSizing] = useState({
     name: "positionSizing",
@@ -41,29 +47,10 @@ export function CalculatorContextProvider({ children }) {
     []
   );
 
-  const updateCalculator = useCallback((section, updates) => {
-    if (updates === 0) {
-      const updatedToZero = {};
-      setterMap[section]((prev) => {
-        const keys = [
-          "buyPrice",
-          "sellPrice",
-          "qty",
-          "pts",
-          "amount",
-          "percent",
-        ];
-        keys.forEach((key) => {
-          updatedToZero[key] = 0;
-        });
-        return { ...prev, ...updatedToZero };
-      });
-      return;
-    }
-    setterMap[section]((prev) => {
-      return { ...prev, ...updates };
-    });
-  }, []);
+  const updateCalculator = useMemo(
+    () => set(setterMap, refine),
+    [setterMap, refine]
+  );
 
   const value = useMemo(
     () => ({

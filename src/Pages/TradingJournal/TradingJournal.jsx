@@ -11,7 +11,7 @@ import DeleteConfirmationPopup from "../../components/TableComponents/Popups/Del
 import EditDropdownColumn from "../../components/TableComponents/Popups/Edit-Dropdown";
 import DeleteColumnModal from "../../components/TableComponents/Popups/delete-column";
 import Table from "../../components/TableComponents/Table/Table";
-import Summary from "../../components/SummaryHeader/Summary";
+import Summary from "../../components/TradeSummary/TradeSummary";
 
 function TradingJournal() {
   const [editingDateRow, setEditingDateRow] = useState(null);

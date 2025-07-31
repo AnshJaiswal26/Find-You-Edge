@@ -1,0 +1,100 @@
+.neutral {
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+}
+
+.dark-theme .neutral {
+  color: rgb(255, 255, 255);
+}
+
+.dark-theme .red,
+.red {
+  font-weight: bold;
+  color: #fe5a5a;
+}
+
+.dark-theme .green,
+.green {
+  font-weight: bold;
+  color: #05ab72;
+}
+
+.flex {
+  display: flex;
+}
+.wrap {
+  flex-wrap: wrap;
+}
+.center {
+  align-items: center;
+}
+.justify {
+  justify-content: space-between;
+}
+
+.j-flex-end {
+  justify-content: flex-end;
+}
+
+.a-flex-end {
+  align-items: flex-end;
+}
+
+.gap10 {
+  gap: 10px;
+}
+
+.gap20 {
+  gap: 20px;
+}
+
+.baseline {
+  align-items: baseline;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.fs20 {
+  font-size: 20px;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.margin-top-5 {
+  margin-top: 5px;
+}
+.margin-top-10 {
+  margin-top: 10px;
+}
+.margin-top-20 {
+  margin-top: 20px;
+}
+.margin-bottom-5 {
+  margin-bottom: 5px;
+}
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.flashing {
+  box-shadow: 0px 0px 4px rgba(0, 118, 202, 0.6);
+}
+
+.dark-theme .flashing {
+  box-shadow: 0px 0px 4px rgb(112, 196, 255, 0.5);
+}

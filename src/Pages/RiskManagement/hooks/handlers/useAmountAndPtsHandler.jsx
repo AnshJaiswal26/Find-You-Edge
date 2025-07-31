@@ -1,57 +1,59 @@
-import { useRiskCalculator, useNote } from "../../context/context";
-import { getValBySecName, getPtsByRatio } from "../../utils/utils";
-import { useRefiners } from "../useRefiners";
+import { useCallback } from "react";
+import { useRiskCalculator, useSettings } from "@RM/context";
+import { useVerifyInput, useSyncOppositeSection } from "@RM/hooks";
+import { cleanFloat, getValBySecName, safe } from "@RM/utils";
 
-export function useAmountAndPtsHandler() {
-  const { getFormatter } = useRefiners();
-  const { showNote } = useNote();
-  const { capital, riskReward, target, stopLoss, updateRiskCalculator } =
-    useRiskCalculator();
+export default function useAmountAndPtsHandler() {
+  const { capital } = useRiskCalculator();
+  const syncOppositeSection = useSyncOppositeSection();
+  const { settings } = useSettings();
+  const verifyValues = useVerifyInput();
 
-  function handleAmountOrPtsChange(section, field, val, isRecursive = false) {
-    console.info(
-      `handleAmountOrPtsChange Called for section=${section.name} ${
-        isRecursive ? "(Rucursive Call)" : ""
-      } val=${val}`
-    );
+  const isBuyLock = settings.derived.mode === "buyPrice";
+  const isAmountLock = settings.derived.mode === "amount";
+  const isBuyViaAmount =
+    settings.amount.changesIn === "buyPrice" && isAmountLock;
 
-    const { name, buyPrice, qty } = section;
-    const isTarget = name === "target";
-    const oppositeSection = isTarget ? stopLoss : target;
-    const formatter = getFormatter(name);
+  const handleAmountOrPtsChange = useCallback(
+    (section, field, val) => {
+      const { name, buyPrice, sellPrice, qty } = section;
 
-    const isPts = field === "pts";
-    const newValue = val;
-    const value = getValBySecName(name, newValue);
+      const isPts = field === "pts";
+      const value = getValBySecName(name, val);
 
-    const updated = {
-      pts: isPts ? formatter(value) : formatter(value / qty),
-    };
-    updated.amount = isPts ? formatter(value * qty) : formatter(value);
-    updated.sellPrice = formatter(updated.pts + buyPrice);
-    updated.percent = formatter((updated.amount / capital) * 100, 0);
+      const updated = { pts: isPts ? value : safe(value / qty) };
+      updated.amount = isPts ? value * qty : value;
+      updated.percent = safe(updated.amount / capital.current) * 100;
 
-    showNote(name, isTarget ? "greater" : "less", updated.pts === 0);
-    if (isRecursive) return updated;
-    else if (name !== "calculator") {
-      updateRiskCalculator(
-        oppositeSection.name,
-        handleAmountOrPtsChange(
-          oppositeSection,
-          field,
-          getPtsByRatio(isTarget, value, riskReward.ratio),
-          true
-        )
-      );
-    }
+      if (isBuyLock || isBuyViaAmount)
+        updated.buyPrice = cleanFloat(sellPrice - updated.pts);
+      else updated.sellPrice = cleanFloat(updated.pts + buyPrice);
 
-    return {
-      section: updated,
-      transaction: {
-        sellPrice: updated.sellPrice,
-      },
-    };
-  }
+      const isAnyInvalid = verifyValues(name, field, {
+        buyPrice: updated.buyPrice ?? buyPrice,
+        sellPrice: updated.sellPrice ?? sellPrice,
+      });
+
+      if (isAnyInvalid) return { section: updated };
+
+      if (name !== "calculator")
+        syncOppositeSection({
+          name: name,
+          buyPrice: updated.buyPrice ?? buyPrice,
+          pts: updated.pts,
+          qty: qty,
+        });
+
+      return {
+        section: updated,
+        transaction: {
+          sellPrice: updated.sellPrice ?? sellPrice,
+          buyPrice: updated.buyPrice ?? buyPrice,
+        },
+      };
+    },
+    [syncOppositeSection, verifyValues, capital, isBuyLock, isBuyViaAmount]
+  );
 
   return handleAmountOrPtsChange;
 }

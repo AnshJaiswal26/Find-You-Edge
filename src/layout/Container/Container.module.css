@@ -1,0 +1,31 @@
+.container {
+  min-width: 360px;
+  border: 1px solid #e6e6e6;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  gap: 20px;
+  border-radius: 15px;
+  padding: 20px;
+  box-sizing: border-box;
+  color: #1c252e;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+:global(.dark-theme) .container {
+  color: white;
+  border: 1px solid #1c252e;
+  background-color: #1c252e;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0px;
+  margin-bottom: 5px;
+}
+
+:global(.dark-theme) .container img {
+  filter: invert(1);
+}

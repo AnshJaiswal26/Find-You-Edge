@@ -1,0 +1,34 @@
+.tab {
+  position: relative;
+  display: flex;
+  color: #929292;
+  border-bottom: none;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 16px;
+  border-bottom: 1px solid #d6d1d1;
+}
+
+:global(.dark-theme) .tab {
+  color: #949494;
+  border-bottom: 1px solid #1c252e;
+}
+
+.element {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.element.selected {
+  background-color: #d1e5ff47;
+  color: #000;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border-bottom: 2px solid rgb(83, 141, 255);
+}
+
+:global(.dark-theme) .element.selected {
+  color: white;
+  background-color: #78bcff11;
+}

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Chart from "react-apexcharts";
-import Button from "../../../components/Button/Button";
+import { ToggleButton } from "@components";
 
 function CapitalGrowthLineChart({ data, theme, isSidebarOpen }) {
   const [audienceMetricsData, setAudienceMetricsData] = useState([
@@ -281,24 +281,13 @@ function CapitalGrowthLineChart({ data, theme, isSidebarOpen }) {
           justifyContent: "space-between",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span>Total Capital</span>
-          <Button
-            styleType={"ENABLE"}
-            toggleOn={isDematCapital}
-            color={"#05ab72"}
-            onClick={handleCapitalChange}
-            bothSide={true}
-          />
-          <span>Demat Capital</span>
-        </div>
+        <ToggleButton
+          label={["Total Capital", "Demat Capital"]}
+          toggleOn={isDematCapital}
+          color={"#05ab72"}
+          onClick={handleCapitalChange}
+          bothSide={true}
+        />
 
         <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
           {audienceMetricsData.length > pageSize && (

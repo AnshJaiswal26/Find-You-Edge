@@ -1,0 +1,105 @@
+.button,
+.disabled {
+  padding: 10px 10px;
+  border: none;
+  margin: 0px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #dfdfdf;
+  color: white;
+  transition: background-color ease 0.2s, transform ease-in-out 0.1s;
+}
+
+.disabled {
+  background-color: #e8e8e8 !important;
+  color: rgba(187, 187, 187, 0.692);
+  cursor: not-allowed;
+}
+
+:global(.dark-theme) .disabled {
+  background-color: rgb(40, 55, 77) !important;
+  color: rgba(79, 90, 122, 0.692);
+}
+
+.button:active {
+  filter: brightness(0.85);
+  transform: scale(0.98);
+}
+
+.toggleBtnContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toggleBtnLabel {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+:global(.dark-theme) .toggleBtnLabel {
+  color: #ffffff;
+}
+
+.toggleBtnTrack {
+  cursor: pointer;
+  width: 25px;
+  min-width: 25px;
+  background-color: #d0d0d0;
+  height: 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  transition: background-color ease 0.2s;
+}
+
+:global(.dark-theme) .toggleBtnTrack {
+  background-color: #314355;
+}
+
+.toggleBtnCircle {
+  width: 10.5px;
+  height: 11px;
+  background-color: #ffffff;
+  border: 1px solid #007bff;
+  border-radius: 60%;
+  transition: transform ease 0.2s, border ease 0.2s;
+}
+
+.toggleBtnEnable {
+  transform: translateX(120%);
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  width: 38px;
+  border-radius: 10px;
+  transition: background-color 0.2s;
+}
+
+.iconBtn img {
+  width: 20px;
+  height: 20px;
+}
+
+:global(.dark-theme) .iconBtn img {
+  filter: invert(1);
+}
+
+.iconBtn:hover {
+  background-color: rgba(241, 241, 255, 0.717);
+}
+
+:global(.dark-theme) .iconBtn:hover {
+  background-color: rgba(47, 61, 86, 0.361);
+}

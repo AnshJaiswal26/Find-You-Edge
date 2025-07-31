@@ -1,63 +1,57 @@
-import { useRefiners } from "../useRefiners";
-import { getUpdatedPts, getPtsByRatio } from "../../utils/utils";
-import { useRiskCalculator, useNote } from "../../context/context";
+import { useCallback } from "react";
+import { useRiskCalculator, useNote, useSettings } from "@RM/context";
+import { useSyncOppositeSection, useVerifyInput } from "@RM/hooks";
+import { getDerivedObj, safe } from "@RM/utils";
 
-export function usePriceHandler() {
-  const { getFormatter } = useRefiners();
-  const { showNote } = useNote();
-  const { capital, riskReward, target, stopLoss, updateRiskCalculator } =
-    useRiskCalculator();
+export default function usePriceHandler() {
+  const { capital } = useRiskCalculator();
+  const syncOppositeSection = useSyncOppositeSection();
+  const { settings } = useSettings();
+  const verifyValues = useVerifyInput();
 
-  const handlePriceChange = (section, field, val, isRecursive = false) => {
-    const { name, qty, amount } = section;
+  const derivedField = settings.derived.mode;
 
-    const isTarget = name === "target";
-    const oppositeSection = isTarget ? stopLoss : target;
-    const formatter = getFormatter(name);
+  const handlePriceChange = useCallback(
+    (section, field, val) => {
+      const { name, buyPrice, sellPrice, qty, amount, pts } = section;
 
-    const isBuyPrice = field === "buyPrice";
-    const updatedPrice = Math.max(0, val);
-    const updated = {
-      [field]: formatter(updatedPrice),
-      pts: formatter(getUpdatedPts(section, updatedPrice, isBuyPrice)),
-    };
+      const isBuyPrice = field === "buyPrice";
 
-    if (isBuyPrice) {
-      updated.sellPrice = formatter(amount / qty + updatedPrice);
-      updated.pts = formatter(updated.sellPrice - updatedPrice);
-    } else {
-      updated.amount = formatter(updated.pts * qty);
-      updated.percent = formatter((updated.amount / capital.current) * 100, 0);
-    }
+      const price = Math.max(0, val);
+      const updated = getDerivedObj(section, price, isBuyPrice, derivedField);
 
-    showNote(name, isTarget ? "greater" : "less", updated.pts === 0);
+      updated[field] = price;
+      if (updated.pts !== undefined || updated.pts !== null) {
+        updated.amount = safe(updated.pts * qty);
+        updated.percent = safe(updated.amount / capital.current) * 100;
+      }
 
-    if (isRecursive) return updated;
-    else if (name !== "calculator") {
-      updateRiskCalculator(
-        oppositeSection.name,
-        handlePriceChange(
-          oppositeSection,
-          field,
-          isBuyPrice
-            ? updatedPrice
-            : getPtsByRatio(isTarget, updated.pts, riskReward.ratio),
-          true
-        )
-      );
-    }
+      const isAnyInvalid = verifyValues(name, field, {
+        buyPrice: updated.buyPrice ?? buyPrice,
+        sellPrice: updated.sellPrice ?? sellPrice,
+      });
 
-    return {
-      section: updated,
-      transaction: {
-        [field]: formatter(updatedPrice),
-        ...(updated.sellPrice !== undefined && {
-          sellPrice: updated.sellPrice,
-        }),
-        qty: qty,
-      },
-    };
-  };
+      if (isAnyInvalid) return { section: updated };
+
+      if (name !== "calculator")
+        syncOppositeSection({
+          name: name,
+          buyPrice: updated.buyPrice ?? buyPrice,
+          pts: updated.pts ?? pts,
+          qty: qty,
+        });
+
+      return {
+        section: updated,
+        transaction: {
+          buyPrice: updated.buyPrice ?? buyPrice,
+          sellPrice: updated.sellPrice ?? sellPrice,
+          qty: qty,
+        },
+      };
+    },
+    [syncOppositeSection, verifyValues, capital, derivedField]
+  );
 
   return handlePriceChange;
 }

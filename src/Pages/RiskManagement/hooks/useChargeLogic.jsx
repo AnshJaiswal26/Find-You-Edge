@@ -1,107 +1,108 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import {
   useNotification,
   useCalculator,
   useNote,
   useRiskCalculator,
   useTransaction,
-} from "../context/context";
-import { getNewCharges } from "../utils/utils";
-import { useRefiners } from "./useRefiners";
+} from "@RM/context";
+import { useUpdater } from "@RM/hooks";
+import { getNewCharges, safe } from "@RM/utils";
 
-export function useChargesLogic() {
-  const { calculator, updateCalculator } = useCalculator();
-  const { transaction, updateTransaction } = useTransaction();
+export default function useChargesLogic() {
+  const { calculator } = useCalculator();
+  const { transaction } = useTransaction();
   const { capital, riskReward, target, stopLoss, updateRiskCalculator } =
     useRiskCalculator();
+  const { updateTransaction, updateSection } = useUpdater();
   const { showMsg } = useNotification();
-  const { refine, round } = useRefiners();
-  const { timeOut } = useNote();
+  const { showNote } = useNote();
 
   const isProcessing = useRef(false);
 
-  const getFormatterAndUpdater = (name) => {
-    const isCalc = name === "calculator";
-    return {
-      formatter: isCalc ? refine : round,
-      updateSection: isCalc ? updateCalculator : updateRiskCalculator,
-    };
-  };
+  const toggleCharges = useCallback(
+    (section, field) => {
+      const { name, buyPrice, sellPrice, qty, pts, amount, percent } = section;
 
-  function toggleCharges(section, field) {
-    const { name, sellPrice, pts, amount, percent } = section;
+      const isAdd = field === "added";
 
-    const isAdd = field === "added";
+      showMsg("charges", field, true);
 
-    showMsg("charges", field);
+      const baseCharges = getNewCharges(section, 0);
+      const adjustCharges = isAdd
+        ? getNewCharges(section, baseCharges)
+        : baseCharges;
+      const newCharges = safe(isAdd ? adjustCharges : -adjustCharges);
 
-    const { formatter, updateSection } = getFormatterAndUpdater(name);
+      const changeInPts = safe(newCharges / qty);
+      const changeInPercent = safe((newCharges / capital.current) * 100);
 
-    const baseCharges = getNewCharges(section, 0);
-    const adjustCharges = isAdd
-      ? getNewCharges(section, baseCharges)
-      : baseCharges;
-    const newCharges = formatter(isAdd ? adjustCharges : -adjustCharges);
+      const updated = {
+        sellPrice: safe(sellPrice + changeInPts),
+        pts: safe(pts + changeInPts),
+        amount: safe(amount + newCharges),
+        percent: capital ? safe(percent + changeInPercent) : 0,
+      };
 
-    const changeInPts = formatter(newCharges / section.qty);
-    const changeInPercent = formatter((newCharges / capital.current) * 100, 0);
+      updateSection(name, updated, true);
 
-    const updated = {
-      sellPrice: formatter(sellPrice + changeInPts),
-      pts: formatter(pts + changeInPts),
-      amount: formatter(amount + newCharges),
-      percent: capital ? formatter(percent + changeInPercent, 0) : 0,
-    };
+      if (name.includes(transaction.currentSection.name.slice(-4)))
+        updateTransaction({
+          buyPrice: buyPrice,
+          sellPrice: updated.sellPrice,
+          qty: qty,
+        });
 
-    updateSection(section.name, updated);
+      return updated.amount;
+    },
+    [showMsg, transaction, capital, updateSection, updateTransaction]
+  );
 
-    if (section.name.includes(transaction.currentSection.name.slice(-4)))
-      updateTransaction({
-        buyPrice: section.buyPrice,
-        sellPrice: updated.sellPrice,
-        qty: section.qty,
+  const charges = useCallback(
+    (field) => {
+      if (isProcessing.current) return;
+      isProcessing.current = true;
+
+      let targetAmt = 0,
+        slAmt = 0;
+      [target, stopLoss, calculator].forEach((section) => {
+        const { name, qty } = section;
+        if (qty !== 0) {
+          const amount = toggleCharges(section, field);
+
+          if (name === "target") targetAmt = amount;
+          else if (name === "stopLoss") slAmt = amount;
+        }
       });
 
-    return updated.amount;
-  }
+      const isTargetOrSl = transaction.currentSection.name !== "Calculator";
 
-  const charges = (field) => {
-    if (isProcessing.current) return;
-    isProcessing.current = true;
+      if (isTargetOrSl && slAmt !== 0) {
+        updateRiskCalculator("riskReward", {
+          ratio: safe(targetAmt / -slAmt, 2),
+          prevRatio: riskReward.ratio,
+        });
 
-    let targetAmt = 0,
-      slAmt = 0;
-    [target, stopLoss, calculator].forEach((section) => {
-      const { name, qty } = section;
-      if (qty !== 0) {
-        const amount = toggleCharges(section, field);
-
-        if (name === "target") targetAmt = amount;
-        else if (name === "stopLoss") slAmt = amount;
+        field === "added"
+          ? showNote("riskReward", "ratio", true)
+          : showNote("riskReward", "ratio", false);
       }
-    });
 
-    const isNonCalculatorSection =
-      transaction.currentSection.name !== "Calculator";
-
-    if (isNonCalculatorSection && slAmt !== 0) {
-      updateRiskCalculator("riskReward", {
-        ratio: round(targetAmt / -slAmt, 0),
-        prevRatio: riskReward.ratio,
-      });
-
-      timeOut(
-        "riskReward",
-        "ratio",
-        field === "added" ? 7000 : 0,
-        field !== "added"
-      );
-    }
-
-    setTimeout(() => {
-      isProcessing.current = false;
-    }, 600);
-  };
+      setTimeout(() => {
+        isProcessing.current = false;
+      }, 300);
+    },
+    [
+      toggleCharges,
+      target,
+      stopLoss,
+      calculator,
+      transaction,
+      riskReward,
+      updateRiskCalculator,
+      showNote,
+    ]
+  );
 
   return { charges };
 }

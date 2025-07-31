@@ -1,0 +1,219 @@
+.validation-tooltip {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  max-width: 200px;
+  font-weight: lighter;
+  line-height: 1.4;
+}
+
+.tooltip-content {
+  border-radius: 8px;
+  padding: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: flex-start;
+  text-align: left;
+  gap: 8px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 2px solid;
+}
+
+.tooltip-content.animate-in {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.tooltip-error .tooltip-content {
+  border-left-color: #dc2626;
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+}
+
+.tooltip-warning .tooltip-content {
+  border-left-color: #d97706;
+  background: linear-gradient(135deg, #fefbeb 0%, #ffffff 100%);
+}
+
+.tooltip-success .tooltip-content {
+  border-left-color: #059669;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.tooltip-info .tooltip-content {
+  border-left-color: #2563eb;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+}
+
+.dark-theme .tooltip-content {
+  background: linear-gradient(135deg, #1c2936 0%, #283441 100%);
+}
+
+.tooltip-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tooltip-error .tooltip-icon {
+  color: #dc2626;
+}
+
+.tooltip-warning .tooltip-icon {
+  color: #d97706;
+}
+
+.tooltip-success .tooltip-icon {
+  color: #059669;
+}
+
+.tooltip-info .tooltip-icon {
+  color: #2563eb;
+}
+
+.tooltip-message {
+  flex: 1;
+  font-weight: lighter;
+  font-size: 11.8px;
+  margin: 0;
+}
+
+.tooltip-close {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+
+.tooltip-close:hover {
+  color: #374151;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme .tooltip-close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tooltip-close-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.tooltip-arrow-border,
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.tooltip-error .tooltip-arrow {
+  --arrow-color: #fef2f2;
+}
+.tooltip-warning .tooltip-arrow {
+  --arrow-color: #fefbeb;
+}
+.tooltip-success .tooltip-arrow {
+  --arrow-color: #f0fdf4;
+}
+.tooltip-info .tooltip-arrow {
+  --arrow-color: #eff6ff;
+}
+
+.dark-theme .validation-tooltip .tooltip-arrow {
+  --arrow-color: #24303d;
+}
+
+/* Position variations */
+.tooltip-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-top .tooltip-arrow-border,
+.tooltip-top .tooltip-arrow {
+  top: 99%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0px 6px;
+  border-color: var(--arrow-color) transparent transparent transparent;
+}
+
+.tooltip-top .tooltip-arrow-border {
+  border-color: var(--color-border) transparent transparent transparent;
+}
+
+.tooltip-bottom {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-bottom .tooltip-arrow-border,
+.tooltip-bottom .tooltip-arrow {
+  bottom: 99%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 6px 6px 6px;
+  border-color: transparent transparent var(--arrow-color) transparent;
+}
+.tooltip-bottom .tooltip-arrow-border {
+  border-color: transparent transparent var(--color-border) transparent;
+}
+
+.tooltip-left {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip-left .tooltip-arrow-border,
+.tooltip-left .tooltip-arrow {
+  left: 99%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px 0 6px 6px;
+  border-color: transparent transparent transparent var(--arrow-color);
+}
+.tooltip-left .tooltip-arrow-border {
+  border-color: transparent transparent transparent var(--color-border);
+}
+
+.tooltip-right {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip-right .tooltip-arrow-border,
+.tooltip-right .tooltip-arrow {
+  right: 99%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px 6px 6px 6px;
+  border-color: transparent var(--arrow-color) transparent transparent;
+}
+.tooltip-right .tooltip-arrow-border {
+  border-color: transparent var(--color-border) transparent transparent;
+}
+
+.tooltip-arrow-border {
+  z-index: -1;
+  border-width: 7.5px 7.5px 7.5px 7.5px !important;
+  --color-border: #eeeeee;
+}
+
+.dark-theme .tooltip-arrow-border {
+  --color-border: #283441;
+}

@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useContext } from "react";
-import { UIContext } from "../../context/Context";
+import { UIContext } from "../../context/UIContext";
 
-function DateHeader() {
+export default function DateHeader() {
   const { isSidebarOpen } = useContext(UIContext);
   const formatDateForDisplay = (dateStr) => {
     if (!dateStr) return "";
@@ -98,5 +98,3 @@ function DateHeader() {
     </div>
   );
 }
-
-export default DateHeader;
