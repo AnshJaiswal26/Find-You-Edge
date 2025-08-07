@@ -1,5 +1,5 @@
 import { useNote, useRiskCalculator, useSettings } from "@RM/context";
-import { useSyncOppositeSection, useVerifyInput } from "@RM/hooks";
+import { useSyncOppositeSection, useValidateAndNotify } from "@RM/hooks";
 import { safe } from "@RM/utils";
 import { useCallback } from "react";
 
@@ -7,7 +7,7 @@ export default function useQtyHandler() {
   const { capital } = useRiskCalculator();
   const syncOppositeSection = useSyncOppositeSection();
   const { settings } = useSettings();
-  const verifyValues = useVerifyInput();
+  const validateAndNotify = useValidateAndNotify();
 
   const isAmountLock = settings.derived.mode === "amount";
   const isBuyLock = settings.derived.mode === "buyPrice";
@@ -15,7 +15,6 @@ export default function useQtyHandler() {
   const handleQtyChange = useCallback(
     (section, field, val) => {
       const { name, buyPrice, sellPrice, pts, amount } = section;
-
       const updatedQty = Math.max(0, val);
       const updated = { qty: updatedQty };
 
@@ -28,7 +27,7 @@ export default function useQtyHandler() {
         else updated.sellPrice = buyPrice + updated.pts;
       }
 
-      const isAnyInvalid = verifyValues(name, field, {
+      const isAnyInvalid = validateAndNotify(name, field, {
         buyPrice: updated.buyPrice ?? buyPrice,
         sellPrice: updated.sellPrice ?? sellPrice,
       });
@@ -52,7 +51,7 @@ export default function useQtyHandler() {
         },
       };
     },
-    [capital, isAmountLock, isBuyLock, syncOppositeSection, verifyValues]
+    [capital, isAmountLock, isBuyLock, syncOppositeSection, validateAndNotify]
   );
   return handleQtyChange;
 }

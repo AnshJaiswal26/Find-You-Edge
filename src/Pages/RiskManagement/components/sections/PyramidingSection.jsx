@@ -1,14 +1,14 @@
 import React from "react";
 import { Button } from "@components";
 import { useRiskCalculator, useNote } from "@RM/context";
-import { useInputChange, useInputValidator } from "@RM/hooks";
+import { useInputChange, useSpecialCaseHandler } from "@RM/hooks";
 
 export default function PyramidingSection() {
   console.log("Pyramiding...");
   const { stopLoss, pyramiding, updateRiskCalculator } = useRiskCalculator();
   const { note } = useNote();
   const handleChange = useInputChange();
-  const handleSpecialCases = useInputValidator();
+  const handleSpecialCases = useSpecialCaseHandler();
 
   const handleLayerChange = (direction) => {
     const currentLayer = pyramiding.currentLayer;

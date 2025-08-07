@@ -1,20 +1,33 @@
-export const getFlashers = ({ prev, updates, reset = false }) => {
-  const flashValues = Object.keys(updates).reduce((acc, key) => {
-    if (!reset && (updates[key] ?? 0) !== prev[key]) acc[key] = true;
-    else acc[key] = false;
+export const getUpdatedKeys = ({ prev, updates }) => {
+  console.groupCollapsed("%c[getUpdatedKeys]", "color: #d3ff63ff;");
+  console.log("Previous State:", prev);
+  console.log("Incoming Updates:", updates);
+
+  const keysToUpdate = {};
+  const keysToReset = {};
+  const keysToFlash = Object.keys(updates).reduce((acc, key) => {
+    const prevVal = String(prev[key]);
+    const newVal = String(updates[key]);
+
+    if (newVal !== prevVal) {
+      acc[key] = true;
+      keysToUpdate[key] = updates[key];
+      keysToReset[key] = false;
+    }
+
     return acc;
   }, {});
-  return flashValues;
+
+  console.log("Keys to Update:", keysToUpdate);
+  console.groupEnd();
+
+  return { keysToFlash, keysToUpdate, keysToReset };
 };
 
-export const getStates = ({ prev, updates, updatedToZero, flashers }) => {
+export const getStates = ({ prev, updates, updatedToZero }) => {
   return {
     ...prev,
-    ...(updates || {}),
-    ...(updates?.lock && { lock: { ...prev.lock, ...updates.lock } }),
-    ...(updatedToZero || {}),
-    ...(flashers && {
-      flash: { ...prev.flash, ...flashers },
-    }),
+    ...(updates && updates),
+    ...(updatedToZero && updatedToZero),
   };
 };

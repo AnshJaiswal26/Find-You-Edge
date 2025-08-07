@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import { useNote } from "../context/NoteContext";
-import { useSettings } from "../context/SettingsContext";
+import { useNote, useSettings } from "@RM/context";
 
 export default function useSectionData(section) {
   const { note } = useNote();
@@ -159,7 +158,7 @@ export default function useSectionData(section) {
         ],
       },
     ],
-    [is, labels, price, oppoPrice, otherMsg, isTarget, isSl]
+    [is, labels, price, oppoPrice, otherMsg, isTarget, isSl, derivedField]
   );
 
   return inputData;

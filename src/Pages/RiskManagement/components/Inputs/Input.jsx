@@ -1,14 +1,23 @@
 import { useState } from "react";
 import "./Inputs.css";
-import { useSettings } from "@RM/context";
-import { useInputChange, useInputValidator } from "@RM/hooks";
+import { useCalculator, useRiskCalculator, useSettings } from "@RM/context";
+import { useInputChange, useSpecialCaseHandler } from "@RM/hooks";
 import { Tooltip } from "@components";
 
 export default function Input({ className, label, section, field, value }) {
   const handleChange = useInputChange();
-  const handleSpecialCases = useInputValidator();
+  const handleSpecialCases = useSpecialCaseHandler();
+  const { calculatorFlash } = useCalculator();
+  const { targetFlash, stopLossFlash } = useRiskCalculator();
 
   const { name, amount, pts } = section;
+
+  const flashing =
+    name === "calculator"
+      ? calculatorFlash
+      : name === "target"
+      ? targetFlash
+      : stopLossFlash;
 
   const isValidField =
     field === "pts" || field === "amount" || field === "percent";
@@ -26,7 +35,7 @@ export default function Input({ className, label, section, field, value }) {
       <Label label={label} field={field} />
       <input
         className={`risk-input ${field} ${className} input-${color} ${
-          section.flash?.[field] ? "flashing" : ""
+          flashing[field] ? "flashing" : ""
         }`}
         type="text"
         value={value}

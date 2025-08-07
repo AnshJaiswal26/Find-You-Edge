@@ -22,20 +22,47 @@ export default function TransactionContextProvider({ children }) {
 
   const updateTransaction = useCallback(
     (updates) => {
+      console.groupCollapsed(
+        "%c[updateTransaction] Updating with:",
+        "color: #d3ff63ff;"
+      );
+      console.log("updates: ", updates);
+
       if (updates === 0) {
         const updatedToZero = {};
-        setTransaction((prev) => {
-          const keys = ["buyPrice", "sellPrice", "qty"];
-          keys.forEach((key) => {
-            updatedToZero[key] = 0;
-          });
-          return { ...prev, ...updatedToZero };
+        const keys = ["buyPrice", "sellPrice", "qty"];
+
+        keys.forEach((key) => {
+          updatedToZero[key] = 0;
         });
+
+        console.log("Resetting transaction values to zero:", updatedToZero);
+
+        setTransaction((prev) => {
+          const merged = { ...prev, ...updatedToZero };
+          console.log(
+            "%cUpdated transaction state:",
+            "color: #22c55e; font-weight: bold",
+            merged
+          );
+          return merged;
+        });
+
+        // console.groupEnd();
         return;
       }
+
       setTransaction((prev) => {
-        return { ...prev, ...updates };
+        const merged = { ...prev, ...updates };
+        console.log(
+          "%cUpdated transaction state:",
+          "color: #22c55e; font-weight: bold",
+          merged
+        );
+        return merged;
       });
+
+      console.groupEnd();
     },
     [setTransaction]
   );

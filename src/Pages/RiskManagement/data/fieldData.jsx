@@ -7,3 +7,12 @@ export const fieldLabels = {
   amount: "Amount",
   percent: "Pnl (%)",
 };
+
+export const fields = [
+  "buyPrice",
+  "sellPrice",
+  "qty",
+  "pts",
+  "amount",
+  "percent",
+];

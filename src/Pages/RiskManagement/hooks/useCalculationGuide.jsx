@@ -1,11 +1,14 @@
 import { useMemo } from "react";
 import { useSettings } from "@RM/context";
+import { fields } from "@RM/data";
+import { getFormulaMap } from "@RM/utils";
 
 export default function useCalculationGuide() {
   const { settings } = useSettings();
 
-  const derivedField = useMemo(() => settings.derived.mode, [settings]);
-  const selectedField = useMemo(() => settings.guide.selectedField, [settings]);
+  const derivedField = settings.derived.mode;
+  const selectedField = settings.guide.selectedField;
+  const currentSection = settings.selectedSection;
 
   const isAmountLock = useMemo(() => derivedField === "amount", [derivedField]);
   const isBuyLock = useMemo(() => derivedField === "buyPrice", [derivedField]);
@@ -20,18 +23,12 @@ export default function useCalculationGuide() {
     [isBuyLock]
   );
 
-  const fields = useMemo(
-    () => ["buyPrice", "sellPrice", "qty", "pts", "amount", "percent"],
-    []
-  );
-
   const mainFields = useMemo(
     () =>
-      settings.selectedSection === "Target" ||
-      settings.selectedSection === "Stop-Loss"
+      currentSection === "Target" || currentSection === "Stop-Loss"
         ? ["riskReward", ...fields]
         : fields,
-    [settings, fields]
+    [currentSection]
   );
 
   const commonAffectedFields = useMemo(() => {
@@ -44,6 +41,7 @@ export default function useCalculationGuide() {
       pts: ["amount", "percent", commonField],
       amount: ["pts", "percent", commonField],
       percent: ["amount", "pts", commonField],
+      riskReward: ["sellPrice", "pts", "amount", "percent"],
     };
   }, [commonField, remainingCommonField, isAmountLock, derivedField]);
 
@@ -58,16 +56,7 @@ export default function useCalculationGuide() {
   );
 
   const formulaMap = useMemo(
-    () => ({
-      buyPrice: "Sell Price - Pts",
-      sellPrice: "Buy Price + Pts",
-      pts: selectedField.includes("Price")
-        ? "Sell Price - Buy Price"
-        : "Amount / Qty",
-      amount:
-        selectedField === "percent" ? "Capital × (Pnl (%) / 100)" : "Pts × Qty",
-      percent: "(Amount / Capital) × 100",
-    }),
+    () => getFormulaMap(selectedField),
     [selectedField]
   );
 

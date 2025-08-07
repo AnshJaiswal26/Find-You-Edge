@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import { useRiskCalculator, useNote, useSettings } from "@RM/context";
-import { useSyncOppositeSection, useVerifyInput } from "@RM/hooks";
+import { useSyncOppositeSection, useValidateAndNotify } from "@RM/hooks";
 import { getValBySecName, safe } from "@RM/utils";
 
 export default function usePercentHandler() {
   const { capital } = useRiskCalculator();
   const syncOppositeSection = useSyncOppositeSection();
   const { settings } = useSettings();
-  const verifyValues = useVerifyInput();
+  const validateAndNotify = useValidateAndNotify();
 
   const isBuyLock = settings.derived.mode === "buyPrice";
   const isAmountLock = settings.derived.mode === "amount";
@@ -28,7 +28,7 @@ export default function usePercentHandler() {
         updated.buyPrice = sellPrice - updated.pts;
       else updated.sellPrice = buyPrice + updated.pts;
 
-      const isAnyInvalid = verifyValues(name, field, {
+      const isAnyInvalid = validateAndNotify(name, field, {
         buyPrice: updated.buyPrice ?? buyPrice,
         sellPrice: updated.sellPrice ?? sellPrice,
       });
@@ -52,7 +52,7 @@ export default function usePercentHandler() {
         },
       };
     },
-    [capital, isBuyLock, isBuyViaAmount, syncOppositeSection, verifyValues]
+    [capital, isBuyLock, isBuyViaAmount, syncOppositeSection, validateAndNotify]
   );
   return handlePercentChange;
 }

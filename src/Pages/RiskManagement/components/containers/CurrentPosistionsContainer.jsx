@@ -50,7 +50,7 @@ export function CurrentPositionsContainer() {
   };
 
   return (
-    <Container>
+    <Container className="radius-top-0">
       <div className="banknifty-container">
         {data.map((item, index) => (
           <div

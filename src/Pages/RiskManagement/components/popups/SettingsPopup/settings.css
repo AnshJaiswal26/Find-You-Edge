@@ -153,16 +153,16 @@
   cursor: pointer;
 }
 .input-field:active {
-  transform: scale(0.9);
+  transform: scale(0.97);
   border: 1px solid #ccc;
   cursor: pointer;
-  transition: transform ease 0.5s;
+  transition: transform ease 0.3s;
 }
 
 .input-field.selected {
   border: 1px solid #070707;
   pointer-events: none;
-  transition: transform ease 0.5s;
+  transition: transform ease 0.3s;
 }
 
 .dark-theme .input-field.selected {

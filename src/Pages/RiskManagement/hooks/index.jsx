@@ -5,8 +5,9 @@ export { default as useTradeSummary } from "./useTradeSummary";
 export { default as useInputChange } from "./useInputChange";
 export { default as useUpdater } from "./useUpdater";
 export { default as useSectionData } from "./useSectionData";
-export { default as useVerifyInput } from "./useVerifyInput";
-
+export { default as useValidateAndNotify } from "./useValidateAndNotify";
+export { default as useCalculationGuide } from "./useCalculationGuide";
+export { default as useFormatterLogic } from "./useFormatterLogic";
 // handlers
 export {
   useCapitalHandler,
@@ -14,7 +15,7 @@ export {
   usePriceHandler,
   useQtyHandler,
   useAmountAndPtsHandler,
-  useInputValidator,
+  useSpecialCaseHandler,
   useFieldHandler,
   usePercentHandler,
   useSyncOppositeSection,

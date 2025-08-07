@@ -39,22 +39,25 @@ export const safe = (val, d = 4) => {
 export const formatValue = (val, mode) => {
   if (isNaN(val) || !isFinite(val) || val === 0) return 0;
 
-  const adjustBy = (percent) => val + (val * percent) / 100;
-  const adjustedVal = adjustBy(0.6);
+  const adjustBy = (percent) => val + (Math.abs(val) * percent) / 100;
 
-  const decimalFixer = (d) => Number(parseFloat(val).toFixed(d));
-  const decimalRounder = (tick) =>
-    Number(parseFloat(Math.round(val / tick) * tick).toFixed(2));
+  const roundToApprox = (decimals) => Number(parseFloat(val).toFixed(decimals));
+
+  const roundToMarket = (tick) =>
+    Number(parseFloat(Math.ceil(val / tick) * tick).toFixed(2));
+
+  const roundToBuffer = (tick) => {
+    const adjustedVal = adjustBy(0.6);
+    return Number(parseFloat(Math.ceil(adjustedVal / tick) * tick).toFixed(2));
+  };
 
   switch (mode) {
-    case "approx":
-      return decimalFixer(2);
-    case "precise":
-      return decimalFixer(4);
-    case "buffer":
-      return decimalRounder(0.1);
-    case "market":
-      return decimalRounder(0.05);
+    case "Approx":
+      return roundToApprox(2);
+    case "Buffer":
+      return roundToBuffer(0.05);
+    case "Market":
+      return roundToMarket(0.05);
     default:
       return val;
   }

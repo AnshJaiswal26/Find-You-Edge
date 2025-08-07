@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+import { fields } from "@RM/data";
 import {
   createContext,
   useContext,
@@ -53,18 +54,13 @@ export default function NoteContextProvider({ children }) {
     },
   });
 
-  const keyFields = useMemo(
-    () => ["buyPrice", "sellPrice", "qty", "pts", "amount", "percent"],
-    []
-  );
-
   const getFilteredNotes = useCallback(
     (prev) =>
-      keyFields.reduce((acc, k) => {
+      fields.reduce((acc, k) => {
         if (prev[k]) acc[k] = false;
         return acc;
       }, {}),
-    [keyFields]
+    []
   );
 
   const showNote = useCallback((section, field, isVisible = true) => {

@@ -1,5 +1,5 @@
 import { ButtonSelector, Overview } from "@components";
-import { fieldLabels } from "../data/fieldData";
+import { fieldLabels } from "../../../../data/fieldData";
 
 export default function DerivedModeSelector({
   derivedField,

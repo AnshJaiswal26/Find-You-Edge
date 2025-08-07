@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import { useRiskCalculator, useSettings } from "@RM/context";
-import { useVerifyInput, useSyncOppositeSection } from "@RM/hooks";
-import { cleanFloat, getValBySecName, safe } from "@RM/utils";
+import { useValidateAndNotify, useSyncOppositeSection } from "@RM/hooks";
+import { getValBySecName, safe } from "@RM/utils";
 
 export default function useAmountAndPtsHandler() {
   const { capital } = useRiskCalculator();
   const syncOppositeSection = useSyncOppositeSection();
   const { settings } = useSettings();
-  const verifyValues = useVerifyInput();
+  const validateAndNotify = useValidateAndNotify();
 
   const isBuyLock = settings.derived.mode === "buyPrice";
   const isAmountLock = settings.derived.mode === "amount";
@@ -15,7 +15,7 @@ export default function useAmountAndPtsHandler() {
     settings.amount.changesIn === "buyPrice" && isAmountLock;
 
   const handleAmountOrPtsChange = useCallback(
-    (section, field, val) => {
+    (section, field, val, sync = true) => {
       const { name, buyPrice, sellPrice, qty } = section;
 
       const isPts = field === "pts";
@@ -26,17 +26,17 @@ export default function useAmountAndPtsHandler() {
       updated.percent = safe(updated.amount / capital.current) * 100;
 
       if (isBuyLock || isBuyViaAmount)
-        updated.buyPrice = cleanFloat(sellPrice - updated.pts);
-      else updated.sellPrice = cleanFloat(updated.pts + buyPrice);
+        updated.buyPrice = sellPrice - updated.pts;
+      else updated.sellPrice = updated.pts + buyPrice;
 
-      const isAnyInvalid = verifyValues(name, field, {
+      const isAnyInvalid = validateAndNotify(name, field, {
         buyPrice: updated.buyPrice ?? buyPrice,
         sellPrice: updated.sellPrice ?? sellPrice,
       });
 
       if (isAnyInvalid) return { section: updated };
 
-      if (name !== "calculator")
+      if (name !== "calculator" && sync)
         syncOppositeSection({
           name: name,
           buyPrice: updated.buyPrice ?? buyPrice,
@@ -49,10 +49,13 @@ export default function useAmountAndPtsHandler() {
         transaction: {
           sellPrice: updated.sellPrice ?? sellPrice,
           buyPrice: updated.buyPrice ?? buyPrice,
+          ...(isBuyLock || isBuyViaAmount
+            ? { buyPrice: updated.buyPrice }
+            : { sellPrice: updated.sellPrice }),
         },
       };
     },
-    [syncOppositeSection, verifyValues, capital, isBuyLock, isBuyViaAmount]
+    [syncOppositeSection, validateAndNotify, capital, isBuyLock, isBuyViaAmount]
   );
 
   return handleAmountOrPtsChange;

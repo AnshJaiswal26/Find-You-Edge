@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./ButtonStyles.module.css";
 
-export default function Button({ text, color, onClick, style }) {
+export default function Button({ text, color, onClick, style, title }) {
   if (!text || typeof text !== "string")
     console.error("Text must be a non-empty string");
 
@@ -14,9 +14,10 @@ export default function Button({ text, color, onClick, style }) {
     <div>
       <button
         style={buttonStyle}
+        title={title}
         className={style?.disabled ? `${styles.disabled}` : styles.button}
         disabled={style?.disabled}
-        onClick={(e) => {
+        onClick={() => {
           if (!onClick) return;
           onClick();
         }}

@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 import { useRiskCalculator } from "@RM/context";
 import { getPtsByRatio, safe } from "@RM/utils";
+import { useValidateAndNotify } from "..";
 
 export default function useSyncOppositeSection() {
   const { riskReward, capital, updateRiskCalculator } = useRiskCalculator();
+  const validateAndNotify = useValidateAndNotify();
   const syncOppositeSection = useCallback(
     (current) => {
-      const { name, buyPrice, pts, qty, ratio } = current;
+      const { name, field, buyPrice, pts, qty, ratio } = current;
 
       const isTarget = name === "target";
       const oppoSec = isTarget ? "stopLoss" : "target";
@@ -21,9 +23,11 @@ export default function useSyncOppositeSection() {
       sync.amount = sync.pts * qty;
       sync.percent = safe(sync.amount / capital.current) * 100;
 
+      validateAndNotify(oppoSec, field, sync);
+
       updateRiskCalculator(oppoSec, sync);
     },
-    [riskReward, capital, updateRiskCalculator]
+    [riskReward, capital, updateRiskCalculator, validateAndNotify]
   );
 
   return syncOppositeSection;

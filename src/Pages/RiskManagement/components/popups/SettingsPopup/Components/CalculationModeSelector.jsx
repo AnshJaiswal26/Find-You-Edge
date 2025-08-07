@@ -11,14 +11,10 @@ export default function CalculationModeSelector({
       "✅ Useful for quick estimates and faster input.",
       "⚠️ May result in minor precision loss — not ideal for order placement.",
     ],
-    Precise: [
-      "Calculations go up to 5 decimal places.",
-      "✅ Ideal when precision is critical for analysis or strategy testing.",
-      "⚠️ May not align perfectly with market constraints (order multipliers).",
-    ],
     Market: [
       "Values align with market multiples — typically steps of 0.05.",
       "✅ Best used when placing target or stop-loss orders.",
+      "Its also gives slightly buffered values",
     ],
     Buffer: [
       "Rounding happens in steps of 0.1 for safer execution.",
@@ -38,7 +34,7 @@ export default function CalculationModeSelector({
         />
       </div>
       <ButtonSelector
-        options={["Approx", "Precise", "Market", "Buffer"]}
+        options={["Approx", "Market", "Buffer"]}
         selectedOption={calculationMode}
         onSelect={(mode) => updateSettings({ calculation: { mode: mode } })}
       />

@@ -1,7 +1,7 @@
 export { default as useAmountAndPtsHandler } from "./useAmountAndPtsHandler";
 export { default as useCapitalHandler } from "./useCapitalHandler";
 export { default as useFieldHandler } from "./useFieldHandler";
-export { default as useInputValidator } from "./useInputValidator";
+export { default as useSpecialCaseHandler } from "./useSpecialCaseHandler";
 export { default as usePercentHandler } from "./usePercentHandler";
 export { default as usePriceHandler } from "./usePriceHandler";
 export { default as useQtyHandler } from "./useQtyHandler";

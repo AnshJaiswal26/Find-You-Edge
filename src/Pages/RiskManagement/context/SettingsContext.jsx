@@ -14,7 +14,7 @@ export default function SettingsContextProvider({ children }) {
     show: false,
     autoRounding: false,
     calculation: { mode: "Approx" },
-    derived: { mode: "amount" },
+    derived: { mode: "sellPrice" },
     guide: { selectedField: "buyPrice" },
     amount: { changesIn: "sellPrice" },
     selectedSection: "Calculator",

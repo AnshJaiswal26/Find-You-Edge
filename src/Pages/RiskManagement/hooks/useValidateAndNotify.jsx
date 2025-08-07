@@ -1,14 +1,30 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useNote, useSettings } from "@RM/context";
 import { cleanFloat } from "@RM/utils";
 
-export default function useVerifyInput() {
+export default function useValidateAndNotify() {
   const { note, showNote, showNoteInBatch } = useNote();
   const { settings } = useSettings();
 
   const derivedField = settings.derived.mode;
 
-  const verifyValues = useCallback(
+  const sectionRules = useCallback(
+    (buyPrice, sellPrice, isBuyPrice) => ({
+      target: {
+        condition: buyPrice > sellPrice,
+        label: isBuyPrice ? "buyPriceLesser" : "sellPriceGreater",
+        labels: ["buyPriceLesser", "sellPriceGreater"],
+      },
+      stopLoss: {
+        condition: buyPrice < sellPrice,
+        label: isBuyPrice ? "buyPriceGreater" : "sellPriceLesser",
+        labels: ["buyPriceGreater", "sellPriceLesser"],
+      },
+    }),
+    []
+  );
+
+  const validateAndNotify = useCallback(
     (name, field, obj) => {
       const buyPrice = cleanFloat(obj.buyPrice);
       const sellPrice = cleanFloat(obj.sellPrice);
@@ -17,21 +33,9 @@ export default function useVerifyInput() {
       const isBuyOrSell = isBuyPrice || field === "sellPrice";
       const opposite = derivedField === "buyPrice" ? "sellPrice" : "buyPrice";
       const updated = {};
-      let flag = false;
+      let isWrong = false;
 
-      const sectionRules = {
-        target: {
-          condition: buyPrice > sellPrice,
-          label: isBuyPrice ? "buyPriceLesser" : "sellPriceGreater",
-          labels: ["buyPriceLesser", "sellPriceGreater"],
-        },
-        stopLoss: {
-          condition: buyPrice < sellPrice,
-          label: isBuyPrice ? "buyPriceGreater" : "sellPriceLesser",
-          labels: ["buyPriceGreater", "sellPriceLesser"],
-        },
-      };
-      const rule = sectionRules[name];
+      const rule = sectionRules(buyPrice, sellPrice, isBuyPrice)[name];
 
       if (derivedField === "amount") {
         const isBuyNeg = buyPrice < 0;
@@ -40,14 +44,14 @@ export default function useVerifyInput() {
         showNote(name, "buyPriceNeg", isBuyNeg);
         showNote(name, "sellPriceNeg", isSellNeg);
         showNote(name, field, isBuyNeg || isSellNeg);
-        if (isBuyNeg || isSellNeg) flag = true;
+        if (isBuyNeg || isSellNeg) isWrong = true;
       } else {
-        if (note[name][opposite + "Neg"]) updated[opposite + "Neg"] = false;
+        if (note[name]?.[opposite + "Neg"]) updated[opposite + "Neg"] = false;
 
         const isInvalid = obj[derivedField] < 0;
         updated[derivedField + "Neg"] = isInvalid;
         updated[field] = isInvalid;
-        if (isInvalid) flag = true;
+        if (isInvalid) isWrong = true;
       }
 
       if (rule) {
@@ -59,14 +63,14 @@ export default function useVerifyInput() {
           updated[key] = shouldShow && isInvalid;
         });
 
-        if (isInvalid) flag = true;
+        if (isInvalid) isWrong = true;
       }
 
       if (Object.keys(updated).length > 0) showNoteInBatch(name, updated);
-      return flag;
+      return isWrong;
     },
-    [showNote, showNoteInBatch, derivedField]
+    [showNote, showNoteInBatch, derivedField, note, sectionRules]
   );
 
-  return verifyValues;
+  return validateAndNotify;
 }

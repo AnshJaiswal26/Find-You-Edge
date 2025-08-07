@@ -1,4 +1,3 @@
-import useCalculationGuide from "../../hooks/useCalculationGuide";
 import { ButtonSelector } from "@components";
 import {
   Arrow,
@@ -7,19 +6,20 @@ import {
   ManualInputs,
   Summary,
 } from "./GuideComponents";
+import { useCalculationGuide } from "@RM/hooks";
+import { fields } from "@RM/data";
+import { useMemo } from "react";
 
 export default function CalculationLogicGuide({ settings, updateSettings }) {
-  const {
-    selectedField,
-    affected,
-    userDefined,
-    fields,
-    mainFields,
-    formulaMap,
-  } = useCalculationGuide();
+  const { selectedField, affected, userDefined, mainFields, formulaMap } =
+    useCalculationGuide();
+
   const selectedSection = settings.selectedSection;
-  const isTargetOrSl =
-    selectedSection === "Target" || selectedSection === "Stop-Loss";
+
+  const isTargetOrSl = useMemo(
+    () => selectedSection === "Target" || selectedSection === "Stop-Loss",
+    [selectedSection]
+  );
 
   return (
     <>

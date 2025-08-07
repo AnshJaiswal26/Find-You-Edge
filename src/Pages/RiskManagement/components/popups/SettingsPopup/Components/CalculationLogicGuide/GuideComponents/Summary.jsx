@@ -1,4 +1,4 @@
-import { fieldLabels } from "../../../data/fieldData";
+import { fieldLabels } from "../../../../../../data/fieldData";
 
 export default function Summary({
   affected,
@@ -19,10 +19,10 @@ export default function Summary({
         <span className="highlight-calc">
           {affected.map((field) => fieldLabels[field]).join(", ")}
         </span>{" "}
-        are Auto-Calculated.
+        {affected.length < 2 ? "is" : "are"} Auto-Calculated.
       </div>
       <div className="summary-text">
-        {isTargetOrSl && (
+        {isTargetOrSl && selectedField !== "riskReward" && (
           <span className="summary-text">
             Auto-Calculated inputs in {oppositeSection}→{" "}
             <span className="highlight-calc">

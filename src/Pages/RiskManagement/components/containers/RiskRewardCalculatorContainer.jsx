@@ -2,16 +2,22 @@ import { Button, ValidationTooltip } from "@components";
 import { Container } from "@layout";
 import { Input, CalculatorSection, PyramidingSection } from "@RM/components";
 import { useRiskCalculator, useNote } from "@RM/context";
-import { useClearLogic } from "@RM/hooks";
+import { useClearLogic, useFormatterLogic } from "@RM/hooks";
 
 export function RiskRewardCalculatorContainer() {
   console.log("RiskRewardCalculatorContainer...");
 
   return (
-    <Container title={"Pyramiding & Risk Management Calculator"}>
+    <Container
+      title={"Pyramiding & Risk Management Calculator"}
+      className="container radius-top-0"
+    >
       <div className="flex justify a-flex-end">
         <RiskRewardInput />
-        <ClearSectionButton />
+        <div className="flex gap10">
+          <FormatButton />
+          <ClearSectionButton />
+        </div>
       </div>
       <TargetAndStopLossSection />
       {/* <PyramidingSection /> */}
@@ -43,20 +49,38 @@ function RiskRewardInput() {
     </div>
   );
 }
-
-function ClearSectionButton() {
-  const { clearTargetAndStopLoss } = useClearLogic();
+function FormatButton() {
+  const { format, mode } = useFormatterLogic();
 
   return (
     <Button
-      text="Clear All"
-      color="#fe5a5a"
-      onClick={clearTargetAndStopLoss}
+      text="Format"
+      title={"Current Mode : " + mode}
+      color="#e8bd3eff"
+      onClick={format}
       style={{
         padding: "5px 10px",
         fontSize: "12px",
       }}
     />
+  );
+}
+
+function ClearSectionButton() {
+  const { clearTargetAndStopLoss } = useClearLogic();
+
+  return (
+    <>
+      <Button
+        text="Clear All"
+        color="#fe5a5a"
+        onClick={clearTargetAndStopLoss}
+        style={{
+          padding: "5px 10px",
+          fontSize: "12px",
+        }}
+      />
+    </>
   );
 }
 

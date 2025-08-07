@@ -3,7 +3,7 @@ import { useRiskCalculator } from "@RM/context";
 import { useSyncOppositeSection } from "@RM/hooks";
 
 export default function useRiskRewardHandler() {
-  const { target, stopLoss, updateRiskCalculator } = useRiskCalculator();
+  const { stopLoss, updateRiskCalculator } = useRiskCalculator();
   const syncOppositeSection = useSyncOppositeSection();
   const handleRiskRewardChange = useCallback(
     (section, field, val) => {

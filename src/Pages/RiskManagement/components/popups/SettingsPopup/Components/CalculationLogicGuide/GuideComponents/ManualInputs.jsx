@@ -1,5 +1,5 @@
 import { useTab } from "../../../../../../context/TabContext";
-import { fieldLabels } from "../../../data/fieldData";
+import { fieldLabels } from "../../../../../../data/fieldData";
 
 export default function ManualInputs({ userDefined }) {
   const { currentTab } = useTab();

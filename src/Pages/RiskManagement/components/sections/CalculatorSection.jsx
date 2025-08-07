@@ -4,9 +4,13 @@ import { Input } from "@RM/components";
 import { useTransaction } from "@RM/context";
 import { useClearLogic, useSectionData } from "@RM/hooks";
 import { CalculatorGridBox } from "@RM/layout";
+import { useEffect, useMemo, useRef } from "react";
 
 export default function CalculatorSection({ section }) {
-  console.log("CalculatorSection...");
+  const renderCount = useRef(-1);
+  renderCount.current += 1;
+  console.log("CalculatorSection", "Render count:", renderCount.current);
+
   const { name, buyPrice, sellPrice, qty, color } = section;
 
   const { transaction, updateTransaction } = useTransaction();
@@ -17,9 +21,11 @@ export default function CalculatorSection({ section }) {
       ? "Stop-Loss"
       : "Calculator";
 
-  const debouncedsetHoveredSection = debounce(() => {
-    setHoveredSection();
-  }, 100);
+  const debouncedsetHoveredSection = useMemo(() => {
+    return debounce(() => {
+      setHoveredSection();
+    }, 100);
+  }, [buyPrice, sellPrice, qty, sectionName]);
 
   const setHoveredSection = () => {
     if (transaction.currentSection.name === sectionName) return;

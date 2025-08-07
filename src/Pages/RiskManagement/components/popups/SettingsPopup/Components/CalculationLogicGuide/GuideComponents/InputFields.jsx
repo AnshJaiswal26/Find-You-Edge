@@ -1,4 +1,4 @@
-import { fieldLabels } from "../../../data/fieldData";
+import { fieldLabels } from "@RM/data";
 
 export default function InputFields({
   selectedField,
@@ -8,7 +8,7 @@ export default function InputFields({
   return (
     <div>
       <div className="section-title input-title">
-        <span> ✏️ Input Fields ({mainFields.length})</span>
+        <span> ✏️ Input Fields - {mainFields.length}</span>
       </div>
       <div></div>
       <div className="field-grid">

@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useMemo } from "react";
-import { set } from "@RM/utils";
+import { createFlash, createMetrics, set } from "@RM/utils";
 
 export const RiskCalculatorContext = createContext();
 
@@ -20,45 +20,22 @@ export default function RiskCalculatorContextProvider({ children }) {
 
   const [target, setTarget] = useState({
     name: "target",
-    buyPrice: 0,
-    sellPrice: 0,
-    qty: 0,
-    pts: 0,
-    amount: 0,
-    percent: 0,
+    ...createMetrics(),
     color: "green",
     labels: ["Target Points", "Target (₹)", "Target (%)"],
     prevVal: 0,
-    flash: {
-      buyPrice: false,
-      sellPrice: false,
-      qty: false,
-      pts: false,
-      amount: false,
-      percent: false,
-    },
   });
 
   const [stopLoss, setStopLoss] = useState({
     name: "stopLoss",
-    buyPrice: 0,
-    sellPrice: 0,
-    qty: 0,
-    pts: 0,
-    amount: 0,
-    percent: 0,
+    ...createMetrics(),
     color: "red",
     labels: ["SL Points", "SL (₹)", "SL (%)"],
     prevVal: 0,
-    flash: {
-      buyPrice: false,
-      sellPrice: false,
-      qty: false,
-      pts: false,
-      amount: false,
-      percent: false,
-    },
   });
+
+  const [targetFlash, setTargetFlash] = useState(createFlash());
+  const [stopLossFlash, setStopLossFlash] = useState(createFlash());
 
   const [pyramiding, setPyramiding] = useState({
     name: "pyramiding",
@@ -98,6 +75,8 @@ export default function RiskCalculatorContextProvider({ children }) {
       target: setTarget,
       stopLoss: setStopLoss,
       pyramiding: setPyramiding,
+      targetFlash: setTargetFlash,
+      stopLossFlash: setStopLoss,
     }),
     []
   );
@@ -111,9 +90,20 @@ export default function RiskCalculatorContextProvider({ children }) {
       target,
       stopLoss,
       pyramiding,
+      targetFlash,
+      stopLossFlash,
       updateRiskCalculator,
     }),
-    [capital, riskReward, target, stopLoss, pyramiding, updateRiskCalculator]
+    [
+      capital,
+      riskReward,
+      target,
+      stopLoss,
+      pyramiding,
+      targetFlash,
+      stopLossFlash,
+      updateRiskCalculator,
+    ]
   );
 
   return (

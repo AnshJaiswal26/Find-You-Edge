@@ -1,4 +1,5 @@
 import styles from "./Container.module.css";
+import "../../styles/utilities.css";
 
 export default function Container({ children, className = "", title }) {
   return (

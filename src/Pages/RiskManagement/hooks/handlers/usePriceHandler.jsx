@@ -1,56 +1,80 @@
 import { useCallback } from "react";
-import { useRiskCalculator, useNote, useSettings } from "@RM/context";
-import { useSyncOppositeSection, useVerifyInput } from "@RM/hooks";
+import { useRiskCalculator, useSettings } from "@RM/context";
+import { useSyncOppositeSection, useValidateAndNotify } from "@RM/hooks";
 import { getDerivedObj, safe } from "@RM/utils";
 
 export default function usePriceHandler() {
   const { capital } = useRiskCalculator();
   const syncOppositeSection = useSyncOppositeSection();
   const { settings } = useSettings();
-  const verifyValues = useVerifyInput();
+  const validateAndNotify = useValidateAndNotify();
 
   const derivedField = settings.derived.mode;
 
   const handlePriceChange = useCallback(
     (section, field, val) => {
-      const { name, buyPrice, sellPrice, qty, amount, pts } = section;
+      console.groupCollapsed(
+        `%c[PriceHandler] ${section.name} → ${field}: ${val}`,
+        "color: #d3ff63ff; font-weight: bold;"
+      );
 
+      const { name, buyPrice, sellPrice, qty, pts } = section;
       const isBuyPrice = field === "buyPrice";
 
       const price = Math.max(0, val);
+      console.log("Normalized price:", price);
+
       const updated = getDerivedObj(section, price, isBuyPrice, derivedField);
 
       updated[field] = price;
-      if (updated.pts !== undefined || updated.pts !== null) {
+      console.log(`Updated → Updated + ${field}:`, updated);
+
+      if (updated.pts !== undefined && updated.pts !== null) {
         updated.amount = safe(updated.pts * qty);
-        updated.percent = safe(updated.amount / capital.current) * 100;
+        updated.percent = safe((updated.amount / capital.current) * 100);
+        console.log(`Updated → Updated + amount:`, updated);
+        console.log(`Updated → Updated + percent:`, updated);
       }
 
-      const isAnyInvalid = verifyValues(name, field, {
+      const isAnyInvalid = validateAndNotify(name, field, {
         buyPrice: updated.buyPrice ?? buyPrice,
         sellPrice: updated.sellPrice ?? sellPrice,
       });
 
-      if (isAnyInvalid) return { section: updated };
+      if (isAnyInvalid) {
+        console.log("Validation result: ❌ Invalid");
+        console.warn(" Invalid input, skipping sync & transaction.");
+        console.groupEnd();
+        return { section: updated };
+      } else {
+        console.log("Validation result: ✅ Valid");
+      }
 
-      if (name !== "calculator")
+      if (name !== "calculator") {
+        console.log("%c🔄 Syncing opposite section...", "color: #a855f7;");
         syncOppositeSection({
-          name: name,
+          name,
+          field,
           buyPrice: updated.buyPrice ?? buyPrice,
           pts: updated.pts ?? pts,
-          qty: qty,
+          qty,
         });
+      }
 
-      return {
+      const result = {
         section: updated,
         transaction: {
           buyPrice: updated.buyPrice ?? buyPrice,
           sellPrice: updated.sellPrice ?? sellPrice,
-          qty: qty,
+          qty,
         },
       };
+
+      console.log("[PriceHandler] result:", result);
+      console.groupEnd();
+      return result;
     },
-    [syncOppositeSection, verifyValues, capital, derivedField]
+    [syncOppositeSection, validateAndNotify, capital, derivedField]
   );
 
   return handlePriceChange;
