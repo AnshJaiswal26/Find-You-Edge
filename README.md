@@ -4,25 +4,25 @@
 Full-stack trading analytics platform to track your edge, analyze performance, and manage risk—built with React, Zustand, MongoDB, and broker integrations.
 
 ## 📦 Features
-- 📊 Dashboard Analytics
+- 📊 Dashboard Analytics -
 A dynamic dashboard that visualizes trade records with metrics like average risk-reward, win/loss rate, and daily returns. Users can apply filters to analyze performance across custom timeframes.
 
-- 📈 Google Sheets Sync
+- 📈 Google Sheets Sync -
 Direct integration with Google Sheets allows users to push trade records into their personalized edge tables, enabling detailed tracking and external auditability.
 
-- 🗓️ Trade Calendar
+- 🗓️ Trade Calendar -
 A calendar view that maps trades to specific days, highlighting winning streaks, best-performing days, and strategy consistency over time.
 
-- 📋 Strategy Definition Table
+- 📋 Strategy Definition Table -
 Users can define trading strategies with setup details and upload annotated images directly into the system, creating a visual and data-driven strategy repository.
 
-- 🧪 Backtest Extension
+- 🧪 Backtest Extension -
 A browser-based popup that overlays broker charts, allowing users to enter backtesting data directly from the chart into their edge sheet—bridging live analysis with historical review.
 
-- 📐 Advanced Risk Management Calculator
+- 📐 Advanced Risk Management Calculator -
 A precision calculator that includes brokerage charges, target/stop-loss placement, and real-time risk profiling. It’s designed to guide traders toward disciplined execution.
 
-- ⚙️ Settings & Broker Integration
+- ⚙️ Settings & Broker Integration -
 A settings panel that includes broker connection via API keys and an automatic kill switch that activates when daily risk thresholds are breached—available for supported brokers.
 
 ## 🧱 Tech Stack
