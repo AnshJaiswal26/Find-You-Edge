@@ -1,3 +1,5 @@
+import { logEnd, logObj, logResult, logStart } from ".";
+
 export function formatINR(num) {
   const number = parseFloat(num);
   if (isNaN(number)) return "₹0";
@@ -19,15 +21,22 @@ export function formatINR(num) {
 
 export const cleanFloat = (
   val,
-  { threshold = 0.01, epsilon = 1e-10, decimals = 4 } = {}
+  cfg = { threshold: 0.01, epsilon: 1e-10, decimals: 4 }
 ) => {
-  if (Math.abs(val) < epsilon) return 0;
+  const { threshold, epsilon, decimals } = cfg;
+  logStart("cleanFloat", { val, cfg });
+  if (Math.abs(val) < epsilon) {
+    logResult("cleanFloat", 0);
+    return 0;
+  }
 
   const fractional = Math.abs(val % 1);
   const nearInteger = fractional <= threshold || fractional >= 1 - threshold;
 
   const rounded = nearInteger ? Math.round(val) : val;
-  return parseFloat(rounded.toFixed(decimals));
+  const result = parseFloat(rounded.toFixed(decimals));
+  logResult("cleanFloat", result);
+  return result;
 };
 
 export const safe = (val, d = 4) => {
@@ -61,4 +70,22 @@ export const formatValue = (val, mode) => {
     default:
       return val;
   }
+};
+
+export const roundKeys = (keys, updates) => {
+  logStart("roundKeys", { keys, updates });
+  const preciseUpdates = keys.reduce(
+    (acc, key) => {
+      if (key in updates) {
+        acc[key] =
+          key === "percent"
+            ? safe(updates[key] ?? 0)
+            : cleanFloat(updates[key] ?? 0);
+      }
+      return acc;
+    },
+    { ...updates }
+  );
+  logResult("roundKeys", preciseUpdates);
+  return preciseUpdates;
 };

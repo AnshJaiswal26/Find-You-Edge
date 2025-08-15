@@ -1,2 +1,2 @@
-export { fieldLabels } from "./fieldData";
-export { fields } from "./fieldData";
+export { fieldLabels, fields, sectionLabels, sectionColor } from "./fieldData";
+export { calculationPoints } from "./settingsData";

@@ -1,77 +1,117 @@
-import { useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import "./Inputs.css";
-import { useCalculator, useRiskCalculator, useSettings } from "@RM/context";
+import {
+  useCalculatorStore,
+  useSettingsStore,
+  useTooltipStore,
+} from "@RM/context";
 import { useInputChange, useSpecialCaseHandler } from "@RM/hooks";
-import { Tooltip } from "@components";
+import { Tooltip, ValidationTooltip } from "@components";
+import RenderLogger from "@Profiler";
+import { debounce } from "lodash";
+import { generateTooltip, is, logInfo, logObj } from "@RM/utils";
 
-export default function Input({ className, label, section, field, value }) {
-  const handleChange = useInputChange();
-  const handleSpecialCases = useSpecialCaseHandler();
-  const { calculatorFlash } = useCalculator();
-  const { targetFlash, stopLossFlash } = useRiskCalculator();
-
-  const { name, amount, pts } = section;
-
-  const flashing =
-    name === "calculator"
-      ? calculatorFlash
-      : name === "target"
-      ? targetFlash
-      : stopLossFlash;
-
-  const isValidField =
-    field === "pts" || field === "amount" || field === "percent";
-
-  const color =
-    isValidField &&
-    (amount < 0 || pts < 0
-      ? "red"
-      : amount > 0 || pts > 0
-      ? "green"
-      : "neutral");
-
+export default function Input({ className, label, sectionName, field, value }) {
   return (
     <>
       <Label label={label} field={field} />
-      <input
-        className={`risk-input ${field} ${className} input-${color} ${
-          flashing[field] ? "flashing" : ""
-        }`}
-        type="text"
+      <NormalInput
+        className={className}
+        sectionName={sectionName}
+        field={field}
         value={value}
-        onChange={(e) => {
-          handleChange(section, field, e.target.value);
-        }}
-        onBlur={(e) => {
-          handleSpecialCases(section, field, e.target.value, true);
-        }}
       />
     </>
   );
 }
 
+function NormalInput({ className, sectionName, field, value }) {
+  const handleChange = useInputChange();
+  const handleSpecialCases = useSpecialCaseHandler();
+
+  const priceTooltip = useTooltipStore((s) => s[sectionName][field]);
+  const causedByTooltip = useTooltipStore((s) => {
+    const tooltip = s[sectionName].causedBy;
+    return tooltip?.for === field ? tooltip : null;
+  });
+
+  const tooltip = priceTooltip ?? causedByTooltip;
+
+  const showNote = useTooltipStore((s) => s.showNote);
+  const currentVal = useCalculatorStore((cxt) => cxt[sectionName][field]);
+  const fieldFlash = useCalculatorStore(
+    (cxt) => cxt.flash?.[sectionName]?.[field]
+  );
+  logObj("toolTip", sectionName + field);
+
+  const isCapital = sectionName === "capital";
+
+  const isValidField = is.PAP(field);
+  const color =
+    isValidField &&
+    (currentVal < 0 ? "red" : currentVal > 0 ? "green" : "neutral");
+
+  const debouncedChange = useMemo(
+    () =>
+      debounce((sectionName, field, val) => {
+        handleChange(sectionName, field, val);
+      }, 20),
+    [handleChange]
+  );
+
+  return (
+    <RenderLogger id={`NormalInput`} why={`${sectionName}.${field}`}>
+      <input
+        className={`risk-input ${field} ${className} ${
+          tooltip ? tooltip?.type ?? "error" : ""
+        } input-${color} ${fieldFlash ? "flashing" : ""}`}
+        type="text"
+        value={value ?? currentVal}
+        onChange={(e) => {
+          debouncedChange(sectionName, field, e.target.value);
+        }}
+        onBlur={(e) => {
+          handleSpecialCases(sectionName, field, e.target.value, true);
+        }}
+      />
+      {tooltip && field !== "ratio" && (
+        <ValidationTooltip
+          type={tooltip.type ?? "error"}
+          message={tooltip.message}
+          position={tooltip.position}
+          isVisible={true}
+          autoHide={isCapital}
+          onClose={() => showNote(sectionName, "none")}
+          showCloseButton={isCapital}
+        />
+      )}
+    </RenderLogger>
+  );
+}
+
 function Label({ label, field }) {
-  const { settings } = useSettings();
+  const derived = useSettingsStore((s) => s.derived);
+
   const [isVisible, setVisiblity] = useState();
 
-  const mode = settings.derived.mode;
-  const amtChangeIn = settings.amount.changesIn;
-  const isAmountLock = mode === "amount";
+  const derivedInput = derived.input;
+  const adjust = derived.adjust;
+  const isAmountLock = derivedInput === "amount";
+  const isPAP = (f) => f === "pts" || f === "amount" || f === "percent";
 
   const getTitle = () => {
     return [
       "✏️ Input",
-      field === mode && "🎯 Derived Input",
-      ((amtChangeIn === field && isAmountLock) ||
-        field === mode ||
-        field === "pts" ||
-        field === "amount" ||
-        field === "percent") &&
+      field === derivedInput && "🎯 Derived Input",
+      ((adjust === field && isAmountLock) ||
+        field === derivedInput ||
+        isPAP(field)) &&
         "🔄 Auto-Calculated",
     ];
   };
 
   return (
+    // <RenderLogger id={`Lablel-(${field})`}>
     <div
       className="risk-label"
       onMouseEnter={() => setVisiblity(true)}
@@ -84,5 +124,6 @@ function Label({ label, field }) {
         position={field.includes("Price") || field === "qty" ? "top" : "bottom"}
       />
     </div>
+    // </RenderLogger>
   );
 }

@@ -1,46 +1,41 @@
 import { ToggleButton, ButtonSelector, Overview } from "@components";
+import { useSettingsStore } from "@RM/context";
+import { calculationPoints } from "@RM/data";
 
-export default function CalculationModeSelector({
-  calculationMode,
-  updateSettings,
-  autoRounding,
-}) {
-  const points = {
-    Approx: [
-      "Rounding is done up to 2 decimal places.",
-      "✅ Useful for quick estimates and faster input.",
-      "⚠️ May result in minor precision loss — not ideal for order placement.",
-    ],
-    Market: [
-      "Values align with market multiples — typically steps of 0.05.",
-      "✅ Best used when placing target or stop-loss orders.",
-      "Its also gives slightly buffered values",
-    ],
-    Buffer: [
-      "Rounding happens in steps of 0.1 for safer execution.",
-      "✅ Use when placing risk-sensitive orders to avoid slippage.",
-      "👍 Recommended for stop-loss and target setup to ensure reliability.",
-    ],
-  };
+export default function CalculationModeSelector({ updateSettings }) {
+  const autoRound = useSettingsStore((s) => s.calculation.autoRound);
+
   return (
     <>
       <div className="settings-popup-label-container">
         <div className="settings-popup-label">Calculation Mode:</div>
         <ToggleButton
           label={["Auto-Rounding"]}
-          toggleOn={autoRounding}
-          onClick={() => updateSettings({ autoRounding: !autoRounding })}
+          toggleOn={autoRound}
+          onClick={() =>
+            updateSettings("calculation", { autoRound: !autoRound })
+          }
           color={"#1d4ed8"}
         />
       </div>
+      <SelectorAndOverview updateSettings={updateSettings} />
+    </>
+  );
+}
+
+function SelectorAndOverview({ updateSettings }) {
+  const calcMode = useSettingsStore((s) => s.calculation.mode);
+
+  return (
+    <>
       <ButtonSelector
         options={["Approx", "Market", "Buffer"]}
-        selectedOption={calculationMode}
-        onSelect={(mode) => updateSettings({ calculation: { mode: mode } })}
+        selectedOption={calcMode}
+        onSelect={(mode) => updateSettings("calculation", { mode: mode })}
       />
       <Overview
         title={"⚙️ Calculation Mode Overview"}
-        pointsArray={points[calculationMode]}
+        pointsArray={calculationPoints[calcMode]}
         withNote={true}
         note={
           <>

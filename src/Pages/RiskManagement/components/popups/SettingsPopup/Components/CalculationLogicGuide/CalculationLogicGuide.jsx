@@ -9,12 +9,13 @@ import {
 import { useCalculationGuide } from "@RM/hooks";
 import { fields } from "@RM/data";
 import { useMemo } from "react";
+import { useSettingsStore } from "@RM/context";
 
-export default function CalculationLogicGuide({ settings, updateSettings }) {
+export default function CalculationLogicGuide({ updateSettings }) {
   const { selectedField, affected, userDefined, mainFields, formulaMap } =
     useCalculationGuide();
 
-  const selectedSection = settings.selectedSection;
+  const selectedSection = useSettingsStore((s) => s.selectedSection);
 
   const isTargetOrSl = useMemo(
     () => selectedSection === "Target" || selectedSection === "Stop-Loss",
@@ -26,8 +27,8 @@ export default function CalculationLogicGuide({ settings, updateSettings }) {
       <ButtonSelector
         label={"Calculation Logic Guide:"}
         options={["Calculator", "Target", "Stop-Loss", "Position-Sizing"]}
-        onSelect={(mode) => updateSettings({ selectedSection: mode })}
-        selectedOption={settings.selectedSection}
+        onSelect={(mode) => updateSettings("selectedSection", mode)}
+        selectedOption={selectedSection}
         size="small"
       />
       {/* Dependencies Visualization */}
@@ -37,11 +38,7 @@ export default function CalculationLogicGuide({ settings, updateSettings }) {
           updateSettings={updateSettings}
           mainFields={mainFields}
         />
-        <Arrow
-          settings={settings}
-          updateSettings={updateSettings}
-          selectedField={selectedField}
-        />
+        <Arrow selectedField={selectedField} />
         <ManualInputs userDefined={userDefined} />
         <CalculatedFields
           affected={affected}

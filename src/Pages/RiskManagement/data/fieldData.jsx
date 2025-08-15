@@ -16,3 +16,19 @@ export const fields = [
   "amount",
   "percent",
 ];
+
+export const sectionLabels = {
+  calculator: "Calculator",
+  positionSizing: "Postition-Sizing",
+  target: "Target",
+  stopLoss: "Stop-Loss",
+  pyramiding: "Pyramiding",
+};
+
+export const sectionColor = {
+  calculator: "neutral",
+  positionSizing: "neutral",
+  target: "green",
+  stopLoss: "red",
+  pyramiding: "neutral",
+};

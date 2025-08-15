@@ -1,16 +1,16 @@
 import { useCallback } from "react";
-import { useRiskCalculator, useNote } from "@RM/context";
-import { useFieldHandler, useUpdater, useSpecialCaseHandler } from "@RM/hooks";
-import { fieldLabels } from "@RM/data";
+import { useCalculatorStore, useTooltipStore } from "@RM/context";
+import { useFieldHandler, useSpecialCaseHandler } from "@RM/hooks";
+import { logInfo, logResult, logStart } from "@RM/utils";
 
 export default function useInputChange() {
   const handleSpecialCases = useSpecialCaseHandler();
   const handlers = useFieldHandler();
-  const { capital } = useRiskCalculator();
-  const { showNote } = useNote();
-  const { updateSection, updateTransaction } = useUpdater();
 
-  const checkValues = (section, field, val) => {
+  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
+  const showNote = useTooltipStore((cxt) => cxt.showNote);
+
+  const checkValues = (field, val) => {
     let Max_Val = 100 * 10000000,
       isValid;
     if (field === "pts" || field === "percent") isValid = val <= 10000;
@@ -21,61 +21,54 @@ export default function useInputChange() {
   };
 
   const handleChange = useCallback(
-    (section, field, val) => {
-      console.groupCollapsed(
-        `%c[InputChange] ${section.name} → ${field}: ${val}`,
-        "color: #d3ff63ff; font-weight: bold;"
-      );
+    (sectionName, field, val) => {
+      // console.time("handleInputChange");
+      const state = useCalculatorStore.getState();
+      const capital = state.capital.current;
+      const section = state[sectionName];
 
-      console.log("Raw input value:", val);
+      logStart("handleInputChange", { section, field, val });
 
       const value = field === "ratio" ? val.replace("1 : ", "") : val;
-      field === "ratio" && console.log("Processed input value:", value);
+      field === "ratio" && logInfo("Processed value for ratio", value);
 
       const isSpecialCaseFound = handleSpecialCases(section, field, value);
 
       if (isSpecialCaseFound) {
-        console.groupEnd();
+        logResult("handleInputChange", "Special Case Found.");
+        // console.timeEnd("handleInputChange");
         return;
       }
 
       const prev = section[field];
       const numericValue = value === "" ? 0 : Number(value);
-      console.log("Converted numeric value:", numericValue);
 
       if (prev === numericValue) {
-        console.log("No Change Found - skipping update.");
-        console.groupEnd();
+        logResult("handleInputChange", "No Change Found - skipping update.");
+        // console.timeEnd("handleInputChange");
+
         return;
       }
 
-      if (capital.current === 0 && field === "percent") {
-        console.warn("Capital is zero and field is 'percent' — showing note.");
-        showNote("capital", "current", true);
-        console.groupEnd();
+      if (capital === 0 && field === "percent") {
+        showNote("capital", "zeroCapital");
+        // console.timeEnd("handleInputChange");
+        logResult(
+          "handleInputChange",
+          "Capital is Zero - skipping update and showing note."
+        );
+
         return;
       }
 
-      const updated = handlers[field](section, field, numericValue);
+      const sectionUpdates = handlers[field](section, field, numericValue);
 
-      if (updated?.section) {
-        updateSection(section.name, updated.section, true);
-      }
+      if (sectionUpdates) updateSection(section.name, sectionUpdates);
 
-      if (updated?.transaction) {
-        updateTransaction(updated.transaction);
-      }
-
-      console.groupEnd();
+      logResult("handleInputChange", `Process Done for ${section.name}.`);
+      // console.timeEnd("handleInputChange");
     },
-    [
-      handlers,
-      handleSpecialCases,
-      updateSection,
-      updateTransaction,
-      showNote,
-      capital,
-    ]
+    [handlers, handleSpecialCases, updateSection, showNote]
   );
 
   return handleChange;

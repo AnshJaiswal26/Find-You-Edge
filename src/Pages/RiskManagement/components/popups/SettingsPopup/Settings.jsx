@@ -1,5 +1,5 @@
 import "./settings.css";
-import { useSettings } from "@RM/context";
+import { useSettingsStore } from "@RM/context";
 import {
   CalculationLogicGuide,
   CalculationModeSelector,
@@ -7,12 +7,10 @@ import {
 } from "./components";
 
 function Settings() {
-  const { settings, updateSettings } = useSettings();
-  const derivedField = settings.derived.mode;
-  const calculationMode = settings.calculation.mode;
-  const changesViaAmount = settings.amount.changesIn;
+  const updateSettings = useSettingsStore((s) => s.updateSettings);
+  const show = useSettingsStore((s) => s.show);
 
-  if (!settings.show || !settings.calculation || !settings.derived) return null;
+  if (!show) return null;
 
   return (
     <div className="settings-popup-overlay">
@@ -22,7 +20,7 @@ function Settings() {
           <div className="settings-popup-header-content">
             <span className="settings-popup-title">Settings</span>
             <button
-              onClick={() => updateSettings({ show: false })}
+              onClick={() => updateSettings("show", false)}
               className="settings-popup-close-button"
             >
               ×
@@ -31,26 +29,15 @@ function Settings() {
         </div>
 
         <div className="settings-popup-body">
-          <CalculationModeSelector
-            calculationMode={calculationMode}
-            updateSettings={updateSettings}
-            autoRounding={settings.autoRounding}
-          />
+          <CalculationModeSelector updateSettings={updateSettings} />
 
           <div className="divider"></div>
 
-          <DerivedModeSelector
-            derivedField={derivedField}
-            changesViaAmount={changesViaAmount}
-            updateSettings={updateSettings}
-          />
+          <DerivedModeSelector updateSettings={updateSettings} />
 
           <div className="divider"></div>
 
-          <CalculationLogicGuide
-            settings={settings}
-            updateSettings={updateSettings}
-          />
+          <CalculationLogicGuide updateSettings={updateSettings} />
         </div>
       </div>
     </div>

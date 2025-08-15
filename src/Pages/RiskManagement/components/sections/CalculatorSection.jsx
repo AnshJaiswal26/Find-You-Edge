@@ -1,60 +1,44 @@
+import { useMemo } from "react";
 import { debounce } from "lodash";
 import { Button, ValidationTooltip } from "@components";
 import { Input } from "@RM/components";
-import { useTransaction } from "@RM/context";
-import { useClearLogic, useSectionData } from "@RM/hooks";
+import {
+  useCalculatorStore,
+  useSettingsStore,
+  useTooltipStore,
+} from "@RM/context";
+import { useClearLogic } from "@RM/hooks";
 import { CalculatorGridBox } from "@RM/layout";
-import { useEffect, useMemo, useRef } from "react";
+import { fieldLabels, fields, sectionColor, sectionLabels } from "@RM/data";
+import RenderLogger from "@Profiler";
 
-export default function CalculatorSection({ section }) {
-  const renderCount = useRef(-1);
-  renderCount.current += 1;
-  console.log("CalculatorSection", "Render count:", renderCount.current);
-
-  const { name, buyPrice, sellPrice, qty, color } = section;
-
-  const { transaction, updateTransaction } = useTransaction();
-  const sectionName =
-    name === "target"
-      ? "Target"
-      : name === "stopLoss"
-      ? "Stop-Loss"
-      : "Calculator";
+export default function CalculatorSection({ sectionName }) {
+  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
 
   const debouncedsetHoveredSection = useMemo(() => {
-    return debounce(() => {
-      setHoveredSection();
+    const handler = debounce((name) => {
+      const currentTransaction =
+        useCalculatorStore.getState().currentTransaction;
+      if (currentTransaction === name) return;
+      updateSection("currentTransaction", name);
     }, 100);
-  }, [buyPrice, sellPrice, qty, sectionName]);
 
-  const setHoveredSection = () => {
-    if (transaction.currentSection.name === sectionName) return;
+    return handler;
+  }, [updateSection]);
 
-    updateTransaction({
-      buyPrice: buyPrice,
-      sellPrice: sellPrice,
-      qty: qty,
-      currentSection: {
-        name: sectionName,
-        color: section.color,
-      },
-    });
-
-    console.log(`setting ${name} to transaction`);
-    console.log("buyPrice", buyPrice);
-    console.log("sellPrice", sellPrice);
-    console.log("qty", qty);
-  };
-  const isTargetOrSL = section.name !== "calculator";
+  const isTargetOrSL = sectionName !== "calculator";
 
   return (
+    // <RenderLogger id={"CalculatorSection"} why={sectionName}>
     <div
-      key={section.name}
+      key={sectionName}
       className="calculator-sections"
-      onMouseEnter={() => debouncedsetHoveredSection()}
+      onMouseEnter={() => debouncedsetHoveredSection(sectionName)}
     >
       <div className="section-heading flex justify">
-        <span className={color}>{sectionName}</span>
+        <span className={sectionColor[sectionName]}>
+          {sectionLabels[sectionName]}
+        </span>
         {isTargetOrSL && (
           <Button
             text={`Place ${sectionName}`}
@@ -67,45 +51,55 @@ export default function CalculatorSection({ section }) {
           />
         )}
       </div>
-      <InputRow section={section} />
-      {!isTargetOrSL && <FooterButtons section={section} />}
+      <InputRow sectionName={sectionName} />
+      {!isTargetOrSL && <FooterButtons sectionName={sectionName} />}
     </div>
+    // </RenderLogger>
   );
 }
 
-function InputRow({ section }) {
-  const inputData = useSectionData(section);
-  console.log("InputRow for section:", section.name, inputData);
-
+function InputRow({ sectionName }) {
   return (
+    // <RenderLogger id={"InputRow"} why={sectionName}>
     <CalculatorGridBox>
-      {inputData.map((input) => (
-        <div className="relative" key={input.field}>
+      {fields.map((field) => (
+        <div className="relative" key={field}>
           <Input
-            className={input.className}
-            label={input.label}
-            section={section}
-            field={input.field}
-            value={section[input.field]}
+            label={fieldLabels[field]}
+            sectionName={sectionName}
+            field={field}
           />
-          {input.note.map((note, idx) => (
-            <ValidationTooltip
-              key={idx}
-              type={note.type ?? "error"}
-              message={note.message}
-              position={note.position}
-              isVisible={note.show}
-              autoHide={false}
-              showCloseButton={false}
-            />
-          ))}
         </div>
       ))}
     </CalculatorGridBox>
+    // </RenderLogger>
   );
 }
 
-function FooterButtons({ section }) {
+function MapValidationTooltips({ sectionName, key, message, type, position }) {
+  const isVisible = useTooltipStore((s) => s[sectionName]?.[key]);
+  const derivedInput = useSettingsStore((s) => s.derived.input);
+  const msg =
+    message +
+    (derivedInput === "amount"
+      ? "adjust Pts or Amount or Pnl(%) to rebalance the calculation."
+      : "");
+
+  return (
+    <>
+      <ValidationTooltip
+        type={type ?? "error"}
+        message={msg}
+        position={position}
+        isVisible={isVisible}
+        autoHide={false}
+        showCloseButton={false}
+      />
+    </>
+  );
+}
+
+function FooterButtons({ sectionName }) {
   const { clearSection } = useClearLogic();
 
   return (
@@ -113,7 +107,7 @@ function FooterButtons({ section }) {
       <Button
         text="Clear All"
         color="#fe5a5a"
-        onClick={() => clearSection(section)}
+        onClick={() => clearSection(sectionName)}
         style={{
           padding: "3px 10px",
           fontSize: "12px",

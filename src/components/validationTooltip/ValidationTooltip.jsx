@@ -32,7 +32,7 @@ export default function ValidationTooltip({
     setIsAnimating(false);
     setTimeout(() => {
       onClose && onClose();
-    }, 200);
+    }, 100);
   };
 
   const getTooltipConfig = () => {

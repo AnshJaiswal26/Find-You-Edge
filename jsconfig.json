@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
+      "@Profiler": ["RenderLogger"],
       "@components": ["components"],
       "@layout": ["layout"],
       "@RM/*": ["pages/RiskManagement/*"]

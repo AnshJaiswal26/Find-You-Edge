@@ -1,29 +1,32 @@
 import { useCallback } from "react";
-import { useCalculator, useRiskCalculator } from "@RM/context";
+import { useCalculatorStore } from "@RM/context";
 import { safe } from "@RM/utils";
 
 export default function useCapitalHandler() {
-  const { target, stopLoss, updateRiskCalculator } = useRiskCalculator();
-  const { calculator, updateCalculator } = useCalculator();
+  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
 
   const handleCapitalChange = useCallback(
     (section, field, numericValue) => {
+      const calculatorAmt = useCalculatorStore.getState().calculator.amount;
+      const targetAmt = useCalculatorStore.getState().target.amount;
+      const stopLossAmt = useCalculatorStore.getState().stopLoss.amount;
+
       const newCapital = Math.max(0, numericValue);
 
       const updated = {
-        calcPer: safe((calculator.amount / newCapital) * 100),
-        targetPer: safe((target.amount / newCapital) * 100),
-        sLPer: safe((stopLoss.amount / newCapital) * 100),
+        calcPer: safe((calculatorAmt / newCapital) * 100),
+        targetPer: safe((targetAmt / newCapital) * 100),
+        sLPer: safe((stopLossAmt / newCapital) * 100),
       };
 
-      updateCalculator("calculator", { percent: updated.calcPer });
-      updateRiskCalculator("target", { percent: updated.targetPer });
-      updateRiskCalculator("stopLoss", { percent: updated.sLPer });
+      updateSection("calculator", { percent: updated.calcPer });
+      updateSection("target", { percent: updated.targetPer });
+      updateSection("stopLoss", { percent: updated.sLPer });
 
-      updateRiskCalculator("capital", { current: newCapital });
+      updateSection("capital", { current: newCapital });
       return null;
     },
-    [target, stopLoss, calculator, updateCalculator, updateRiskCalculator]
+    [updateSection]
   );
   return handleCapitalChange;
 }

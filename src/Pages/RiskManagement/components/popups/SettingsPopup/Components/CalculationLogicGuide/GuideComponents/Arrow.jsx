@@ -1,9 +1,8 @@
 import { useTab } from "../../../../../../context/TabContext";
 import { fieldLabels } from "../../../../../../data/fieldData";
 
-export default function Arrow({ settings, updateSettings, selectedField }) {
-  const { currentTab } = useTab();
-  const isRR = currentTab === "risk-management";
+export default function Arrow({ selectedField }) {
+  
   return (
     <>
       <div className="arrow-icon-wrapper">

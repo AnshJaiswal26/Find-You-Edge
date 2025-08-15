@@ -1,17 +1,15 @@
 import { useMemo } from "react";
-import { useSettings } from "@RM/context";
+import { useSettingsStore } from "@RM/context";
 import { fields } from "@RM/data";
 import { getFormulaMap } from "@RM/utils";
 
 export default function useCalculationGuide() {
-  const { settings } = useSettings();
+  const derivedInput = useSettingsStore((s) => s.derived.input);
+  const selectedField = useSettingsStore((s) => s.logicGuide.selectedField);
+  const selectedSection = useSettingsStore((s) => s.selectedSection);
 
-  const derivedField = settings.derived.mode;
-  const selectedField = settings.guide.selectedField;
-  const currentSection = settings.selectedSection;
-
-  const isAmountLock = useMemo(() => derivedField === "amount", [derivedField]);
-  const isBuyLock = useMemo(() => derivedField === "buyPrice", [derivedField]);
+  const isAmountLock = useMemo(() => derivedInput === "amount", [derivedInput]);
+  const isBuyLock = useMemo(() => derivedInput === "buyPrice", [derivedInput]);
 
   const commonField = useMemo(
     () => (isBuyLock ? "buyPrice" : "sellPrice"),
@@ -25,10 +23,10 @@ export default function useCalculationGuide() {
 
   const mainFields = useMemo(
     () =>
-      currentSection === "Target" || currentSection === "Stop-Loss"
+      selectedSection === "Target" || selectedSection === "Stop-Loss"
         ? ["riskReward", ...fields]
         : fields,
-    [currentSection]
+    [selectedSection]
   );
 
   const commonAffectedFields = useMemo(() => {
@@ -37,13 +35,13 @@ export default function useCalculationGuide() {
       [remainingCommonField]: isAmountLock
         ? ["pts", "amount", "percent"]
         : [commonField],
-      qty: isAmountLock ? ["amount", "percent"] : ["pts", derivedField],
+      qty: isAmountLock ? ["amount", "percent"] : ["pts", derivedInput],
       pts: ["amount", "percent", commonField],
       amount: ["pts", "percent", commonField],
       percent: ["amount", "pts", commonField],
       riskReward: ["sellPrice", "pts", "amount", "percent"],
     };
-  }, [commonField, remainingCommonField, isAmountLock, derivedField]);
+  }, [commonField, remainingCommonField, isAmountLock, derivedInput]);
 
   const affected = useMemo(
     () => commonAffectedFields[selectedField],

@@ -1,47 +1,20 @@
-import {
-  useCalculator,
-  useRiskCalculator,
-  useSettings,
-  useTab,
-} from "@RM/context";
-import { useAmountAndPtsHandler, useUpdater } from ".";
-import { formatValue } from "@RM/utils";
 import { useCallback } from "react";
-import { fields } from "@RM/data";
+import { useCalculatorStore, useSettingsStore, useTab } from "@RM/context";
+import { useAmountAndPtsHandler } from ".";
+import { formatValue } from "@RM/utils";
+import { shouldFormat } from "@RM/utils/derivedUtils";
 
 export default function useFormatterLogic() {
   const { currentTab } = useTab();
-  const { settings } = useSettings();
-  const { target, stopLoss } = useRiskCalculator();
-  const { calculator } = useCalculator();
-  const { updateSection, updateTransaction } = useUpdater();
+  const updateSection = useCalculatorStore((s) => s.updateSection);
+
   const handleAmountOrPtsChange = useAmountAndPtsHandler();
-
-  const mode = settings.calculation.mode;
-
-  const shouldFormat = useCallback(
-    (sec) => {
-      if (sec.pts === 0) return false;
-
-      const format = (acc, key) => (acc[key] = formatValue(sec[key], mode));
-
-      const formatedKeys = fields.reduce((acc, key) => {
-        const val = sec[key].toString();
-        const regex1 = /^-?\d+(?:\.(?:\d{1}|(?:\d{1}[05])))?$/;
-        const regex2 = /^-?\d+(?:\.\d{2})?$/;
-
-        if (mode !== "Approx" && !regex1.test(val)) format(acc, key);
-        else if (mode === "Approx" && !regex2.test(val)) format(acc, key);
-        return acc;
-      }, {});
-
-      return Object.keys(formatedKeys).length !== 0 ? formatedKeys : false;
-    },
-    [mode]
-  );
 
   const formatAndUpdate = useCallback(
     (sec, formatedKeys) => {
+      const { name, buyPrice, sellPrice, qty } = sec;
+      const mode = useSettingsStore.getState().calculation.mode;
+
       if (mode === "Approx") {
         updateSection(sec.name, formatedKeys);
         return;
@@ -49,28 +22,31 @@ export default function useFormatterLogic() {
       const correctMode = mode === "Buffer" ? "Market" : mode;
 
       const formated = {
-        name: sec.name,
-        buyPrice: formatValue(sec.buyPrice, correctMode),
-        sellPrice: formatValue(sec.sellPrice, correctMode),
-        qty: sec.qty,
+        name: name,
+        buyPrice: formatValue(buyPrice, correctMode),
+        sellPrice: formatValue(sellPrice, correctMode),
+        qty: qty,
       };
       const adjustedPts = formatValue(sec.pts, mode);
 
-      const { section, transaction } = handleAmountOrPtsChange(
+      const section = handleAmountOrPtsChange(
         formated,
         "pts",
         adjustedPts,
         false
       );
 
-      updateSection(sec.name, { ...formated, ...section });
-      if (sec.name !== "target") updateTransaction("transaction", transaction);
+      updateSection(name, { ...formated, ...section });
     },
-    [mode, handleAmountOrPtsChange, updateSection, updateTransaction]
+    [handleAmountOrPtsChange, updateSection]
   );
 
   const format = useCallback(() => {
     const isNormal = currentTab === "normal";
+    const state = useCalculatorStore.getState();
+    const calculator = state.calculator;
+    const target = state.target;
+    const stopLoss = state.stopLoss;
 
     if (isNormal) {
       const formatedKeys = shouldFormat(calculator);
@@ -83,7 +59,7 @@ export default function useFormatterLogic() {
       if (formatedKeys1) formatAndUpdate(stopLoss, formatedKeys1);
       if (formatedKeys2) formatAndUpdate(target, formatedKeys2);
     }
-  }, [currentTab, calculator, target, stopLoss, formatAndUpdate, shouldFormat]);
+  }, [currentTab, formatAndUpdate]);
 
-  return { format, mode };
+  return { format };
 }

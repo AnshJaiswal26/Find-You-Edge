@@ -1,5 +1,5 @@
 import { Button } from "@components";
-import { useNote } from "@RM/context";
+import { useTooltipStore } from "@RM/context";
 import { useTradeSummary, useChargesLogic } from "@RM/hooks";
 import { formatINR, safe } from "@RM/utils";
 
@@ -23,7 +23,8 @@ export default function ChargesSummarySection() {
 }
 
 function ToggleChargesButtons() {
-  const { note } = useNote();
+  const active = useTooltipStore((s) => s.anyActive);
+
   const { charges } = useChargesLogic();
   return (
     <div className="flex gap10">
@@ -34,7 +35,7 @@ function ToggleChargesButtons() {
         style={{
           padding: "3px 10px",
           fontSize: "12px",
-          disabled: note.target.greater || note.stopLoss.less,
+          disabled: active,
         }}
       />
       <Button
@@ -44,7 +45,7 @@ function ToggleChargesButtons() {
         style={{
           padding: "3px 10px",
           fontSize: "12px",
-          disabled: note.target.greater || note.stopLoss.less,
+          disabled: active,
         }}
       />
     </div>

@@ -1,12 +1,17 @@
 import React from "react";
 import { Button } from "@components";
-import { useRiskCalculator, useNote } from "@RM/context";
+import { useCalculatorStore, useTooltipStore } from "@RM/context";
 import { useInputChange, useSpecialCaseHandler } from "@RM/hooks";
 
 export default function PyramidingSection() {
   console.log("Pyramiding...");
-  const { stopLoss, pyramiding, updateRiskCalculator } = useRiskCalculator();
-  const { note } = useNote();
+  const { stopLoss, pyramiding, updateSection } = useCalculatorStore((cxt) => ({
+    stopLoss: cxt.stopLoss,
+    pyramiding: cxt.pyramiding,
+    updateSection: cxt.updateSection,
+  }));
+  const note = useTooltipStore((s) => s.pyramiding);
+
   const handleChange = useInputChange();
   const handleSpecialCases = useSpecialCaseHandler();
 
@@ -14,9 +19,9 @@ export default function PyramidingSection() {
     const currentLayer = pyramiding.currentLayer;
     const totalLayers = pyramiding.table.rows.length;
     if (direction === "next" && currentLayer < totalLayers - 1) {
-      updateRiskCalculator("pyramiding", { currentLayer: currentLayer + 1 });
+      updateSection("pyramiding", { currentLayer: currentLayer + 1 });
     } else if (direction === "prev" && currentLayer > 0) {
-      updateRiskCalculator("pyramiding", { currentLayer: currentLayer - 1 });
+      updateSection("pyramiding", { currentLayer: currentLayer - 1 });
     }
   };
 
@@ -57,7 +62,7 @@ export default function PyramidingSection() {
               className="risk-input"
               style={{ fontSize: "14px", padding: "8px" }}
               onChange={(e) =>
-                updateRiskCalculator("pyramiding", {
+                updateSection("pyramiding", {
                   riskIncrement: e.target.value,
                 })
               }
@@ -115,8 +120,7 @@ export default function PyramidingSection() {
                     pyramiding,
                     pyramiding.at,
                     e.target.value,
-                    true,
-                    updateRiskCalculator
+                    true
                   )
                 }
                 type="text"

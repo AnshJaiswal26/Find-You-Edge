@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      "@Profiler": path.resolve(__dirname, "src/RenderLogger"),
       "@components": path.resolve(__dirname, "src/components"),
       "@layout": path.resolve(__dirname, "src/layout"),
       "@RM": path.resolve(__dirname, "src/pages/RiskManagement"),

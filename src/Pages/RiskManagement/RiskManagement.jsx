@@ -6,15 +6,7 @@ import {
   CalculatorAndPositionsContainer,
   Settings,
 } from "@RM/components";
-import {
-  SettingsContextProvider,
-  TransactionContextProvider,
-  NoteContextProvider,
-  CalculatorContextProvider,
-  RiskCalculatorContextProvider,
-  TabContextProvider,
-  NotificationContextProvider,
-} from "@RM/context";
+import { TabContextProvider, NotificationContextProvider } from "@RM/context";
 
 function RiskManagementWithoutContext() {
   return (
@@ -33,21 +25,11 @@ function RiskManagementWithoutContext() {
 
 function RiskManagement() {
   return (
-    <SettingsContextProvider>
-      <NoteContextProvider>
-        <CalculatorContextProvider>
-          <RiskCalculatorContextProvider>
-            <TabContextProvider>
-              <NotificationContextProvider>
-                <TransactionContextProvider>
-                  <RiskManagementWithoutContext />
-                </TransactionContextProvider>
-              </NotificationContextProvider>
-            </TabContextProvider>
-          </RiskCalculatorContextProvider>
-        </CalculatorContextProvider>
-      </NoteContextProvider>
-    </SettingsContextProvider>
+    <TabContextProvider>
+      <NotificationContextProvider>
+        <RiskManagementWithoutContext />
+      </NotificationContextProvider>
+    </TabContextProvider>
   );
 }
 

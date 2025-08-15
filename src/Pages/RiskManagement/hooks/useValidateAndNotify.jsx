@@ -1,75 +1,73 @@
-import { useCallback, useMemo } from "react";
-import { useNote, useSettings } from "@RM/context";
-import { cleanFloat } from "@RM/utils";
+import { useCallback } from "react";
+import { useTooltipStore } from "@RM/context";
+import {
+  cleanFloat,
+  generateTooltip,
+  is,
+  logResult,
+  logStart,
+} from "@RM/utils";
 
 export default function useValidateAndNotify() {
-  const { note, showNote, showNoteInBatch } = useNote();
-  const { settings } = useSettings();
-
-  const derivedField = settings.derived.mode;
-
-  const sectionRules = useCallback(
-    (buyPrice, sellPrice, isBuyPrice) => ({
-      target: {
-        condition: buyPrice > sellPrice,
-        label: isBuyPrice ? "buyPriceLesser" : "sellPriceGreater",
-        labels: ["buyPriceLesser", "sellPriceGreater"],
-      },
-      stopLoss: {
-        condition: buyPrice < sellPrice,
-        label: isBuyPrice ? "buyPriceGreater" : "sellPriceLesser",
-        labels: ["buyPriceGreater", "sellPriceLesser"],
-      },
-    }),
-    []
-  );
+  const showNote = useTooltipStore((s) => s.showNote);
 
   const validateAndNotify = useCallback(
     (name, field, obj) => {
+      logStart("validateAndNotify", { name, field, obj });
+
+      const prev = useTooltipStore.getState()[name];
+
       const buyPrice = cleanFloat(obj.buyPrice);
       const sellPrice = cleanFloat(obj.sellPrice);
 
+      const isTargetOrSl = is.TOrSl(name);
+      const opposite = is.oFL(field);
       const isBuyPrice = field === "buyPrice";
-      const isBuyOrSell = isBuyPrice || field === "sellPrice";
-      const opposite = derivedField === "buyPrice" ? "sellPrice" : "buyPrice";
       const updated = {};
-      let isWrong = false;
 
-      const rule = sectionRules(buyPrice, sellPrice, isBuyPrice)[name];
+      const isBuyNeg = buyPrice < 0;
+      const isSellNeg = sellPrice < 0;
+      const isBuyGreater = buyPrice > sellPrice && name === "target";
+      const isSellGreater = buyPrice < sellPrice && name === "stopLoss";
+      const isAnyInvalid =
+        isBuyNeg || isSellNeg || isBuyGreater || isSellGreater;
 
-      if (derivedField === "amount") {
-        const isBuyNeg = buyPrice < 0;
-        const isSellNeg = sellPrice < 0;
+      const fields = [
+        ["buyPrice", isBuyNeg],
+        ["sellPrice", isSellNeg],
+      ];
 
-        showNote(name, "buyPriceNeg", isBuyNeg);
-        showNote(name, "sellPriceNeg", isSellNeg);
-        showNote(name, field, isBuyNeg || isSellNeg);
-        if (isBuyNeg || isSellNeg) isWrong = true;
-      } else {
-        if (note[name]?.[opposite + "Neg"]) updated[opposite + "Neg"] = false;
-
-        const isInvalid = obj[derivedField] < 0;
-        updated[derivedField + "Neg"] = isInvalid;
-        updated[field] = isInvalid;
-        if (isInvalid) isWrong = true;
+      for (const [f, isNeg] of fields) {
+        const isPrevNull = prev[f] === null;
+        if (isPrevNull && isNeg) {
+          updated[f] = generateTooltip(f, "negative");
+        } else if (!isPrevNull && !isNeg && prev[f].key.startsWith("n")) {
+          updated[f] = null;
+        }
       }
 
-      if (rule) {
-        const { condition, label, labels } = rule;
-        const isInvalid = condition;
+      if (isTargetOrSl && is.BS(field)) {
+        const label1 = isBuyPrice && isBuyGreater ? "less" : "greater";
+        const label2 = isBuyPrice && isSellGreater ? "greater" : "less";
+        const key = name === "target" ? label1 : label2;
 
-        labels.forEach((key) => {
-          const shouldShow = !isBuyOrSell || key === label;
-          updated[key] = shouldShow && isInvalid;
-        });
-
-        if (isInvalid) isWrong = true;
+        if (isBuyGreater || isSellGreater) {
+          prev[field] === null &&
+            (updated[field] = generateTooltip(field, key));
+        } else {
+          prev[field] !== null && (updated[field] = null);
+          prev[opposite] !== null && (updated[opposite] = null);
+        }
       }
 
-      if (Object.keys(updated).length > 0) showNoteInBatch(name, updated);
-      return isWrong;
+      if (Object.keys(updated).length > 0) {
+        showNote(name, updated);
+      }
+
+      logResult("validateAndNotify", isAnyInvalid);
+      return isAnyInvalid;
     },
-    [showNote, showNoteInBatch, derivedField, note, sectionRules]
+    [showNote]
   );
 
   return validateAndNotify;

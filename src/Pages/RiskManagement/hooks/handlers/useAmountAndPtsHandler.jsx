@@ -1,21 +1,23 @@
 import { useCallback } from "react";
-import { useRiskCalculator, useSettings } from "@RM/context";
+import { useCalculatorStore, useSettingsStore } from "@RM/context";
 import { useValidateAndNotify, useSyncOppositeSection } from "@RM/hooks";
 import { getValBySecName, safe } from "@RM/utils";
 
 export default function useAmountAndPtsHandler() {
-  const { capital } = useRiskCalculator();
   const syncOppositeSection = useSyncOppositeSection();
-  const { settings } = useSettings();
   const validateAndNotify = useValidateAndNotify();
-
-  const isBuyLock = settings.derived.mode === "buyPrice";
-  const isAmountLock = settings.derived.mode === "amount";
-  const isBuyViaAmount =
-    settings.amount.changesIn === "buyPrice" && isAmountLock;
 
   const handleAmountOrPtsChange = useCallback(
     (section, field, val, sync = true) => {
+      const capital = useCalculatorStore.getState().capital.current;
+      const state = useSettingsStore.getState();
+      const mode = state.derived.input;
+      const adjust = state.derived.adjust;
+
+      const isBuyLock = mode === "buyPrice";
+      const isAmountLock = mode === "amount";
+      const isBuyViaAmount = adjust === "buyPrice" && isAmountLock;
+
       const { name, buyPrice, sellPrice, qty } = section;
 
       const isPts = field === "pts";
@@ -23,7 +25,7 @@ export default function useAmountAndPtsHandler() {
 
       const updated = { pts: isPts ? value : safe(value / qty) };
       updated.amount = isPts ? value * qty : value;
-      updated.percent = safe(updated.amount / capital.current) * 100;
+      updated.percent = safe(updated.amount / capital) * 100;
 
       if (isBuyLock || isBuyViaAmount)
         updated.buyPrice = sellPrice - updated.pts;
@@ -34,9 +36,7 @@ export default function useAmountAndPtsHandler() {
         sellPrice: updated.sellPrice ?? sellPrice,
       });
 
-      if (isAnyInvalid) return { section: updated };
-
-      if (name !== "calculator" && sync)
+      if (name !== "calculator" && sync && !isAnyInvalid)
         syncOppositeSection({
           name: name,
           buyPrice: updated.buyPrice ?? buyPrice,
@@ -44,18 +44,9 @@ export default function useAmountAndPtsHandler() {
           qty: qty,
         });
 
-      return {
-        section: updated,
-        transaction: {
-          sellPrice: updated.sellPrice ?? sellPrice,
-          buyPrice: updated.buyPrice ?? buyPrice,
-          ...(isBuyLock || isBuyViaAmount
-            ? { buyPrice: updated.buyPrice }
-            : { sellPrice: updated.sellPrice }),
-        },
-      };
+      return updated;
     },
-    [syncOppositeSection, validateAndNotify, capital, isBuyLock, isBuyViaAmount]
+    [syncOppositeSection, validateAndNotify]
   );
 
   return handleAmountOrPtsChange;

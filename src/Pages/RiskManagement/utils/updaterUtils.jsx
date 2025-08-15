@@ -1,128 +1,92 @@
+import { useTooltipStore } from "@RM/context";
 import { fields } from "@RM/data";
-import { cleanFloat, safe } from "./formatterUtils";
-import { getStates, getUpdatedKeys } from "./stateUtils";
+import {
+  getUpdatedKeys,
+  logResult,
+  logStart,
+  logStateUpdate,
+  resetAllToZero,
+  roundKeys,
+} from "@RM/utils";
 
-export const set = (setterMap) => {
-  const updater = (
-    section,
-    updates,
-    cfg = {
-      flashing: true,
-      duration: 150,
-      round: true,
+const flashTimeoutMap = new Map();
+const defaultCfg = { flashing: true, duration: 100, round: true };
+
+const triggerFlash = (section, set, prev, toFlash, toReset) => {
+  logStart("triggerFlash", { section, toFlash, toReset });
+
+  const key = `${section}_Flash`;
+  const existingTimeout = flashTimeoutMap.get(key);
+  if (existingTimeout) {
+    logResult("triggerFlash", `Flash skipped for ${section} (already active)`);
+    return;
+  }
+
+  const timeout = setTimeout(() => {
+    set((prev) => {
+      const prevFlashSection = prev.flash[section];
+      const reset = { ...prevFlashSection, ...toReset };
+      logStateUpdate(`Flash reset for ${section}`, toReset, false, false);
+      return { flash: { ...prev.flash, [section]: reset } };
+    });
+
+    flashTimeoutMap.delete(key);
+  }, defaultCfg.duration);
+
+  flashTimeoutMap.set(key, timeout);
+
+  const prevFlashSection = prev[section];
+  const flashSec = { ...prevFlashSection, ...toFlash };
+  logResult("triggerFlash", toFlash);
+  return { ...prev, [section]: flashSec };
+};
+
+export const updater = (set, section, updates, inputCfg = defaultCfg) => {
+  const cfg = { ...defaultCfg, ...inputCfg };
+  const timer = logStart("updateSection", { section, updates, cfg });
+
+  set((prev) => {
+    if (section === "currentTransaction") {
+      logStateUpdate(`Transaction set`, updates, timer);
+      return { currentTransaction: updates };
     }
-  ) => {
-    console.groupCollapsed(`%c[updater] Updating with:`, "color: #d3ff63ff;");
-    console.log("Section:", section);
-    console.log("Updates:", updates);
-    console.log("Config:", cfg);
 
     if (updates === 0) {
-      const updatedToZero = {};
-      fields.forEach((key) => {
-        updatedToZero[key] = 0;
-      });
-      console.log(`Resetting ${section} values to zero:`, updatedToZero);
-
-      setterMap[section]((prev) => {
-        const result = getStates({ prev, updatedToZero });
-        console.log(
-          `%cUpdated ${section} state:`,
-          "color: #22c55e; font-weight: bold",
-          result
-        );
-        return result;
-      });
-
-      console.groupEnd();
-      return;
+      const prevSec = prev[section];
+      const zeros = resetAllToZero(fields);
+      const result = { ...prevSec, ...zeros };
+      logStateUpdate(`Inputs Reset to 0 for ${section}`, zeros, timer);
+      return { [section]: result };
     }
 
-    const preciseUpdates = cfg.round
-      ? fields.reduce(
-          (acc, key) => {
-            if (key in updates) {
-              acc[key] =
-                key === "percent"
-                  ? safe(updates[key] ?? 0)
-                  : cleanFloat(updates[key] ?? 0);
-            }
-            return acc;
-          },
-          { ...updates }
-        )
-      : updates;
+    const preciseUpdates = cfg.round ? roundKeys(fields, updates) : updates;
 
-    console.log("→ Precise Updates:", preciseUpdates);
+    const prevTooltip = useTooltipStore.getState()[section];
+    const { toUpdate, toFlash, toReset } = getUpdatedKeys(
+      prev[section],
+      preciseUpdates,
+      prevTooltip
+    );
 
-    const flash = (keysToFlash, keysToReset) => {
-      const flashName = section + "Flash";
+    if (Object.keys(toUpdate).length === 0) {
+      logResult("updateSection", `No update needed for ${section}`);
+      return prev;
+    }
 
-      console.groupCollapsed(`%c[flash] ${flashName}`, "color: #d3ff63ff;");
-      console.log("Keys to Flash:", keysToFlash);
-      console.log("Keys to Reset:", keysToReset);
+    const prevSection = prev[section];
+    const result = { ...prevSection, ...toUpdate };
 
-      setterMap[flashName]((prev) => {
-        const next =
-          Object.keys(keysToFlash).length === 0
-            ? prev
-            : { ...prev, ...keysToFlash };
-        console.log(
-          `%cflash set with ${flashName}:`,
-          "color: #22c55e; font-weight: bold",
-          next
-        );
-        return next;
-      });
+    const shouldFlash = cfg.flashing && Object.keys(toFlash).length > 0;
 
-      setTimeout(() => {
-        setterMap[flashName]((prev) => {
-          const next =
-            Object.keys(keysToReset).length === 0
-              ? prev
-              : { ...prev, ...keysToReset };
-          console.log(
-            `%cflash reset with ${flashName}:`,
-            "color: #22c55e; font-weight: bold",
-            next
-          );
-          return next;
-        });
-      }, cfg.duration);
+    const flashResult = shouldFlash
+      ? triggerFlash(section, set, prev.flash, toFlash, toReset)
+      : false;
 
-      console.groupEnd();
-    };
-
-    setterMap[section]((prev) => {
-      const { keysToUpdate, keysToFlash, keysToReset } = getUpdatedKeys({
-        prev,
-        updates: preciseUpdates,
-      });
-
-      if (Object.keys(keysToUpdate).length === 0) {
-        console.log("→ No update needed, returning previous state");
-        console.groupEnd();
-        return prev;
-      }
-
-      if (cfg.flashing) {
-        flash(keysToFlash, keysToReset);
-      }
-
-      const result = getStates({
-        prev,
-        updates: keysToUpdate,
-      });
-
-      console.log(
-        `%cUpdated ${section} state:`,
-        "color: #22c55e; font-weight: bold",
-        result
-      );
-      console.groupEnd();
-      return result;
-    });
-  };
-
-  return updater;
+    logStateUpdate(
+      `Keys ${flashResult ? "& Flash" : ""} updated for ${section}`,
+      { toUpdate, ...(flashResult && { toFlash: toFlash }) },
+      timer
+    );
+    return { [section]: result, ...(flashResult && { flash: flashResult }) };
+  });
 };

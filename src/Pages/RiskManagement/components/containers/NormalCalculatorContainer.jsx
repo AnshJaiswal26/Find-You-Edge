@@ -1,9 +1,8 @@
 import { Container } from "@layout";
-import { useCalculator } from "../../context/CalculatorContext";
+import { useCalculatorStore } from "@RM/context";
 import CalculatorSection from "../sections/CalculatorSection";
 import { useFormatterLogic } from "@RM/hooks";
 import { Button } from "@components";
-import { useMemo } from "react";
 
 export function NormalCalculatorContainer() {
   console.log("NormalCalculatorContainer...");
@@ -19,12 +18,11 @@ export function NormalCalculatorContainer() {
 }
 
 function NormalAndPositionSizingSections() {
-  const { calculator } = useCalculator();
   console.log("NormalAndPositionSizingSections....");
 
   return (
     <>
-      <CalculatorSection section={calculator} />
+      <CalculatorSection sectionName={"calculator"} />
       {/* <CalculatorSection section={calculator} /> */}
     </>
   );

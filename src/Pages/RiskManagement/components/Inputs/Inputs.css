@@ -64,8 +64,8 @@
   color: #05ab72;
 }
 
-.dark-theme .invalid,
-.invalid {
+.dark-theme .error,
+.error {
   box-shadow: 0 0px 4px rgb(254, 90, 90, 0.8);
   border: 1px solid #fe5a5a;
 }

@@ -1,40 +1,43 @@
 import { useCallback } from "react";
-import { useUpdater } from "@RM/hooks";
+import { logInfo, logResult, logStart, logSuccess } from "@RM/utils";
+import { useCalculatorStore } from "@RM/context";
 
 export default function useSpecialCaseHandler() {
-  const { updateSection } = useUpdater();
+  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
 
   const handleSpecialCases = useCallback(
     (section, field, val, onBlur = false) => {
-      console.groupCollapsed(
-        `%c${onBlur ? "(On Blur) " : ""}[SpecialCaseHandler] ${
-          section.name
-        } → ${field}: ${val}`,
-        "color: #ff8763ff;"
-      );
+      logStart("handleSpecialCases", {
+        section,
+        field,
+        val,
+        onBlur,
+      });
 
-      const isDot = val === ".";
-      const isDash = val === "-";
-      const hasTrailingZerosOrDot = /^-?\d+\.$|^-?\d+\.0{1,4}$/.test(val);
-      const hasOnlyTrailingZeros = /\d+\.(?:0+)$/.test(val);
-      const isNegFormat = val.startsWith("-.") || val.startsWith("0-");
-      const isNegField =
-        section.name === "calculator" &&
-        ["pts", "amount", "percent"].includes(field);
+      const specialCases = {
+        isOnlyDot: val === ".",
+        isOnlyDash: val === "-",
+        isOnlyDotAtEnd: /^-?\d+\.$/.test(val),
+        hasOnlyTrailingZeros: /\d+\.(?:0+)$/.test(val),
+        isNegSignWithDotOrZero: val.startsWith("-.") || val.startsWith("0-"),
+        isNegField:
+          section.name === "calculator" &&
+          ["pts", "amount", "percent"].includes(field),
+      };
 
-      console.log("isDot:", isDot);
-      console.log("isDash:", isDash);
-      console.log("hasTrailingZerosOrDot:", hasTrailingZerosOrDot);
-      console.log("hasOnlyTrailingZeros:", hasOnlyTrailingZeros);
-      console.log("isNegFormat:", isNegFormat);
-      console.log("isNegField:", isNegField);
+      const {
+        isOnlyDot,
+        isOnlyDash,
+        isOnlyDotAtEnd,
+        hasOnlyTrailingZeros,
+        isNegSignWithDotOrZero,
+        isNegField,
+      } = specialCases;
 
       const update = (newValue, isPrevVal = false) => {
-        console.log(
-          "%c⚠ Special case detected - skipping numeric update.",
-          "background: #b35900ff; padding: 5px; border-radius: 3px; font-weight: bold;"
-        );
-        console.log("%c[update] → [updateSection]", "color: #ff8763ff;");
+        logStart("update", { newValue, isPrevVal });
+        logSuccess("Valid Special Case Found ", `'${val}'`);
+
         if (section.name !== "pyramiding") {
           updateSection(
             section.name,
@@ -50,32 +53,31 @@ export default function useSpecialCaseHandler() {
           );
         }
 
-        console.groupEnd();
+        logResult("update", true);
+        logResult("handleSpecialCases", true);
         return true;
       };
 
-      console.log("onBlur:", onBlur);
       if (onBlur) {
-        if (isDot) return update(0);
-        if (val.endsWith(".") || hasOnlyTrailingZeros || isDash)
+        if (isOnlyDot) return update(0);
+        if (val.endsWith(".") || hasOnlyTrailingZeros || isOnlyDash)
           return update(section.prevVal);
       }
 
-      if (isNegField && isNegFormat) return update("-");
+      if (isNegField && isNegSignWithDotOrZero) return update("-");
 
-      if (hasTrailingZerosOrDot || isDash) return update(val, true);
+      if (isOnlyDotAtEnd || hasOnlyTrailingZeros || isOnlyDash)
+        return update(val, true);
 
       const isValidNumeric = /^-?\d*\.?\d*$/.test(val);
+
       if (!isValidNumeric && val !== "") {
-        console.log(
-          "%c⚠ Special case detected - skipping numeric update.",
-          "background: #b35900ff; padding: 5px; border-radius: 3px;"
-        );
-        console.groupEnd();
+        logInfo("Invalid Special Case Found ", `'${val}'`);
+        logResult("handleSpecialCases", true);
         return true;
       }
 
-      console.groupEnd();
+      logResult("handleSpecialCases", false);
       return false;
     },
     [updateSection]

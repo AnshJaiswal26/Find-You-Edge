@@ -1,8 +1,9 @@
 import { Button, ValidationTooltip } from "@components";
 import { Container } from "@layout";
 import { Input, CalculatorSection, PyramidingSection } from "@RM/components";
-import { useRiskCalculator, useNote } from "@RM/context";
+import { useCalculatorStore, useTooltipStore } from "@RM/context";
 import { useClearLogic, useFormatterLogic } from "@RM/hooks";
+import { logInfo } from "@RM/utils";
 
 export function RiskRewardCalculatorContainer() {
   console.log("RiskRewardCalculatorContainer...");
@@ -26,26 +27,30 @@ export function RiskRewardCalculatorContainer() {
 }
 
 function RiskRewardInput() {
-  const { note, showNote } = useNote();
-  const { riskReward } = useRiskCalculator();
+  const tooltip = useTooltipStore((s) => s.riskReward.ratio);
+  const showNote = useTooltipStore((s) => s.showNote);
+
+  const riskReward = useCalculatorStore((s) => s.riskReward);
 
   return (
-    <div className="risk-input-group">
+    <div className="relative">
       <Input
         label="Risk/Reward"
-        section={riskReward}
-        field="ratio"
+        sectionName={"riskReward"}
+        field={"ratio"}
         value={"1 : " + riskReward.ratio}
       />
-      <ValidationTooltip
-        message={`To actually earn 1: ${riskReward.prevRatio} after charges, plan for a slightly wider target: around 1: ${riskReward.ratio}.`}
-        position="top"
-        type="info"
-        isVisible={note.riskReward.ratio}
-        onClose={() => showNote("riskReward", "ratio", false)}
-        autoHide={false}
-        showCloseButton={true}
-      />
+      {tooltip && (
+        <ValidationTooltip
+          message={`To actually earn 1: ${riskReward.prevRatio} after charges, plan for a slightly wider target: around 1: ${riskReward.ratio}.`}
+          position="top"
+          type="info"
+          isVisible={true}
+          onClose={() => showNote("riskReward", "increaseRatio")}
+          autoHide={false}
+          showCloseButton={true}
+        />
+      )}
     </div>
   );
 }
@@ -85,12 +90,13 @@ function ClearSectionButton() {
 }
 
 function TargetAndStopLossSection() {
-  const { target, stopLoss } = useRiskCalculator();
+  // const target = useCalculatorStore((cxt) => cxt.target);
+  // const stopLoss = useCalculatorStore((cxt) => cxt.stopLoss);
 
   return (
     <>
-      <CalculatorSection section={target} />
-      <CalculatorSection section={stopLoss} />
+      <CalculatorSection sectionName={"target"} />
+      <CalculatorSection sectionName={"stopLoss"} />
     </>
   );
 }

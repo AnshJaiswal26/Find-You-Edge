@@ -1,12 +1,15 @@
-import { useTransaction } from "@RM/context";
+import { useCalculatorStore } from "@RM/context";
 import { calculateCharges } from "@RM/utils";
 
 export default function useTradeSummary() {
-  const { transaction } = useTransaction();
+  const transaction = useCalculatorStore((cxt) => cxt.currentTransaction);
 
-  const qty = transaction.qty;
-  const buyVal = transaction.buyPrice * qty;
-  const sellVal = transaction.sellPrice * qty;
+  const buyPrice = useCalculatorStore((cxt) => cxt[transaction].buyPrice);
+  const sellPrice = useCalculatorStore((cxt) => cxt[transaction].sellPrice);
+  const qty = useCalculatorStore((cxt) => cxt[transaction].qty);
+
+  const buyVal = buyPrice * qty;
+  const sellVal = sellPrice * qty;
   const tradeVal = buyVal + sellVal;
 
   const calculate = (field) =>
@@ -17,6 +20,7 @@ export default function useTradeSummary() {
   const netPLPercent = (netPL / buyVal) * 100;
 
   return {
+    transactionName: transaction,
     tradeVal,
     buyVal,
     sellVal,

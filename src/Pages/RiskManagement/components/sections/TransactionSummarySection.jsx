@@ -1,10 +1,10 @@
-import { useTransaction } from "@RM/context";
+import RenderLogger from "@Profiler";
+import { useCalculatorStore } from "@RM/context";
+import { sectionColor, sectionLabels } from "@RM/data";
 import { useTradeSummary } from "@RM/hooks";
 import { formatINR, safe } from "@RM/utils";
 
 export default function TransactionSummarySection() {
-  console.log("TransactionSummarySection...");
-
   return (
     <div className="transaction-summary">
       <TransactionSummaryTitle />
@@ -14,20 +14,23 @@ export default function TransactionSummarySection() {
 }
 
 function TransactionSummaryTitle() {
-  const { transaction } = useTransaction();
+  const transaction = useCalculatorStore((cxt) => cxt.currentTransaction);
 
   return (
-    <div className="transaction-summary-title">
-      Transaction Summary For{" "}
-      <span className={transaction.currentSection.color}>
-        {transaction.currentSection.name}
-      </span>
-    </div>
+    <RenderLogger id={"TransactionSummaryTitle"} why={transaction}>
+      <div className="transaction-summary-title">
+        Transaction Summary For{" "}
+        <span className={sectionColor[transaction]}>
+          {sectionLabels[transaction]}
+        </span>
+      </div>
+    </RenderLogger>
   );
 }
 
 function TransactionSummaryRow() {
   const {
+    transactionName,
     tradeVal,
     buyVal,
     sellVal,
@@ -55,17 +58,19 @@ function TransactionSummaryRow() {
   ];
 
   return (
-    <div className="transaction-summary-row">
-      {transactionSummaryList.map((item, idx) => (
-        <div className="transaction-summary-col" key={idx}>
-          <span className="transaction-summary-label">{item.label}</span>
-          <div className={`transaction-summary-value ${item.style}`}>
-            {item.label === "Net P&L (%)"
-              ? safe(item.value, 2) + "%"
-              : formatINR(item.value || 0)}
+    <RenderLogger id={"TransactionSummaryRow"} why={transactionName}>
+      <div className="transaction-summary-row">
+        {transactionSummaryList.map((item, idx) => (
+          <div className="transaction-summary-col" key={idx}>
+            <span className="transaction-summary-label">{item.label}</span>
+            <div className={`transaction-summary-value ${item.style}`}>
+              {item.label === "Net P&L (%)"
+                ? safe(item.value, 2) + "%"
+                : formatINR(item.value || 0)}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </RenderLogger>
   );
 }

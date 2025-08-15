@@ -1,12 +1,11 @@
 import { Container } from "@layout";
-import { useRiskCalculator, useTab, useTransaction } from "@RM/context";
+import { useCalculatorStore, useTab } from "@RM/context";
 import { useClearLogic } from "@RM/hooks";
 
 export function CurrentPositionsContainer() {
   console.log("CurrentPositionsContainer...");
 
-  const { updateTransaction } = useTransaction();
-  const { updateRiskCalculator } = useRiskCalculator();
+  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
   const { setCurrentTab } = useTab();
   const { clearTargetAndStopLoss } = useClearLogic();
 
@@ -44,9 +43,8 @@ export function CurrentPositionsContainer() {
       sellPrice: Number(item.buyPrice),
     };
 
-    updateRiskCalculator("stopLoss", updated);
-    updateRiskCalculator("target", updated);
-    updateTransaction("transaction", updated);
+    updateSection("stopLoss", updated);
+    updateSection("target", updated);
   };
 
   return (

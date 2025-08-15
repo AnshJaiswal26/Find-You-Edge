@@ -18,7 +18,7 @@ export default function useFieldHandler() {
 
   const fieldHandlers = useMemo(
     () => ({
-      capital: capitalHandler,
+      current: capitalHandler,
       ratio: riskRewardHandler,
       buyPrice: handlePriceChange,
       sellPrice: handlePriceChange,

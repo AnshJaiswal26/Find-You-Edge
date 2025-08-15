@@ -1,28 +1,27 @@
 import { useCallback, useRef } from "react";
 import {
   useNotification,
-  useCalculator,
-  useNote,
-  useRiskCalculator,
-  useTransaction,
+  useCalculatorStore,
+  useTooltipStore,
 } from "@RM/context";
-import { useUpdater } from "@RM/hooks";
 import { getNewCharges, safe } from "@RM/utils";
 
 export default function useChargesLogic() {
-  const { calculator } = useCalculator();
-  const { transaction } = useTransaction();
-  const { capital, riskReward, target, stopLoss, updateRiskCalculator } =
-    useRiskCalculator();
-  const { updateTransaction, updateSection } = useUpdater();
+  const currentTransaction = useCalculatorStore((s) => s.currentTransaction);
+  const capital = useCalculatorStore((s) => s.capital.current);
+  const ratio = useCalculatorStore((s) => s.riskReward.ratio);
+  const showNote = useTooltipStore((s) => s.showNote);
+  const updateSection = useCalculatorStore((s) => s.updateSection);
   const { showMsg } = useNotification();
-  const { showNote } = useNote();
 
   const isProcessing = useRef(false);
 
   const toggleCharges = useCallback(
-    (section, field) => {
-      const { name, buyPrice, sellPrice, qty, pts, amount, percent } = section;
+    (secName, field) => {
+      const section = useCalculatorStore.getState()[secName];
+      const { name, sellPrice, qty, pts, amount, percent } = section;
+
+      if (qty === 0) return 0;
 
       const isAdd = field === "added";
 
@@ -35,27 +34,20 @@ export default function useChargesLogic() {
       const newCharges = safe(isAdd ? adjustCharges : -adjustCharges);
 
       const changeInPts = safe(newCharges / qty);
-      const changeInPercent = safe((newCharges / capital.current) * 100);
+      const changeInPercent = safe(newCharges / capital) * 100;
 
       const updated = {
-        sellPrice: safe(sellPrice + changeInPts),
-        pts: safe(pts + changeInPts),
-        amount: safe(amount + newCharges),
-        percent: capital ? safe(percent + changeInPercent) : 0,
+        sellPrice: sellPrice + changeInPts,
+        pts: pts + changeInPts,
+        amount: amount + newCharges,
+        percent: capital !== 0 ? percent + changeInPercent : 0,
       };
 
-      updateSection(name, updated, true);
-
-      if (name.includes(transaction.currentSection.name.slice(-4)))
-        updateTransaction({
-          buyPrice: buyPrice,
-          sellPrice: updated.sellPrice,
-          qty: qty,
-        });
+      updateSection(name, updated);
 
       return updated.amount;
     },
-    [showMsg, transaction, capital, updateSection, updateTransaction]
+    [showMsg, capital, updateSection]
   );
 
   const charges = useCallback(
@@ -65,22 +57,20 @@ export default function useChargesLogic() {
 
       let targetAmt = 0,
         slAmt = 0;
-      [target, stopLoss, calculator].forEach((section) => {
-        const { name, qty } = section;
-        if (qty !== 0) {
-          const amount = toggleCharges(section, field);
-
-          if (name === "target") targetAmt = amount;
-          else if (name === "stopLoss") slAmt = amount;
+      ["target", "stopLoss", "calculator"].forEach((secName) => {
+        const amount = toggleCharges(secName, field);
+        if (amount !== 0) {
+          if (secName === "target") targetAmt = amount;
+          else if (secName === "stopLoss") slAmt = amount;
         }
       });
 
-      const isTargetOrSl = transaction.currentSection.name !== "Calculator";
+      const isTargetOrSl = currentTransaction !== "Calculator";
 
       if (isTargetOrSl && slAmt !== 0) {
-        updateRiskCalculator("riskReward", {
+        updateSection("riskReward", {
           ratio: safe(targetAmt / -slAmt, 2),
-          prevRatio: riskReward.ratio,
+          prevRatio: ratio,
         });
 
         field === "added"
@@ -92,16 +82,7 @@ export default function useChargesLogic() {
         isProcessing.current = false;
       }, 300);
     },
-    [
-      toggleCharges,
-      target,
-      stopLoss,
-      calculator,
-      transaction,
-      riskReward,
-      updateRiskCalculator,
-      showNote,
-    ]
+    [toggleCharges, currentTransaction, ratio, updateSection, showNote]
   );
 
   return { charges };
