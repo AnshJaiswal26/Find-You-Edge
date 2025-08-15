@@ -1,4 +1,4 @@
-# Find-You-Edgege risk—built with React, Spring Boot, MongoDB, and broker integrations.
+# Find-You-Edge
 
 ## 📦 Features
 - 📊 Dashboard Analytics -
