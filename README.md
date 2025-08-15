@@ -27,8 +27,8 @@ A settings panel that includes broker connection via API keys and an automatic k
 
 ## 🧱 Tech Stack
 
-- Frontend: React + Zustand + Custom validation & tooltip architecture
-- Backend: REST API with MongoDB, JWT auth, HTTPS, and broker integrations
+- Frontend: React, Zustand
+- Backend: REST API with Spring Boot, Java, MongoDB, JWT auth, HTTPS, and broker integrations
 - Integrations: Google Sheets API, broker APIs (via key-based auth)
 
 ## 📌 Daily Updates
