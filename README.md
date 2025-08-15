@@ -1,7 +1,7 @@
 # Find-You-Edge
 
 ## 🚀 Overview
-Full-stack trading analytics platform to track your edge, analyze performance, and manage risk—built with React, Zustand, MongoDB, and broker integrations.
+Full-stack trading analytics platform to track your edge, analyze performance, and manage risk—built with React, Spring Boot, MongoDB, and broker integrations.
 
 ## 📦 Features
 - 📊 Dashboard Analytics -
