@@ -1,4 +1,4 @@
-import { useCalculatorStore, useSettingsStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useSyncOppositeSection, useValidateAndNotify } from "@RM/hooks";
 import { safe } from "@RM/utils";
 import { useCallback } from "react";
@@ -9,8 +9,9 @@ export default function useQtyHandler() {
 
   const handleQtyChange = useCallback(
     (section, field, val) => {
-      const capital = useCalculatorStore.getState().capital.current;
-      const derivedInput = useSettingsStore.getState().derived.input;
+      const state = useRiskManagementStore.getState();
+      const capital = state.capital.current;
+      const derivedInput = state.settings.derived.input;
 
       const isAmountLock = derivedInput === "amount";
       const isBuyLock = derivedInput === "buyPrice";

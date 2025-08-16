@@ -1,17 +1,20 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import { debounce } from "lodash";
 import "./Inputs.css";
-import {
-  useCalculatorStore,
-  useSettingsStore,
-  useTooltipStore,
-} from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useInputChange, useSpecialCaseHandler } from "@RM/hooks";
 import { Tooltip, ValidationTooltip } from "@components";
+import { is } from "@RM/utils";
 import RenderLogger from "@Profiler";
-import { debounce } from "lodash";
-import { generateTooltip, is, logInfo, logObj } from "@RM/utils";
 
-export default function Input({ className, label, sectionName, field, value }) {
+export default function Input({
+  className,
+  label,
+  sectionName,
+  field,
+  value,
+  enableTooltip = true,
+}) {
   return (
     <>
       <Label label={label} field={field} />
@@ -20,35 +23,28 @@ export default function Input({ className, label, sectionName, field, value }) {
         sectionName={sectionName}
         field={field}
         value={value}
+        enableTooltip={enableTooltip}
       />
     </>
   );
 }
 
-function NormalInput({ className, sectionName, field, value }) {
+function NormalInput({ className, sectionName, field, value, enableTooltip }) {
   const handleChange = useInputChange();
   const handleSpecialCases = useSpecialCaseHandler();
 
-  const priceTooltip = useTooltipStore((s) => s[sectionName][field]);
-  const causedByTooltip = useTooltipStore((s) => {
-    const tooltip = s[sectionName].causedBy;
-    return tooltip?.for === field ? tooltip : null;
-  });
-
-  const tooltip = priceTooltip ?? causedByTooltip;
-
-  const showNote = useTooltipStore((s) => s.showNote);
-  const currentVal = useCalculatorStore((cxt) => cxt[sectionName][field]);
-  const fieldFlash = useCalculatorStore(
-    (cxt) => cxt.flash?.[sectionName]?.[field]
+  const showTooltip = useRiskManagementStore((s) => s.update.tooltip);
+  const tooltip = useRiskManagementStore((s) => s.tooltip[sectionName][field]);
+  const fieldFlash = useRiskManagementStore(
+    (s) => s.flash?.[sectionName]?.[field]
   );
-  logObj("toolTip", sectionName + field);
+
+  const currentVal = useRiskManagementStore((s) => s[sectionName][field]);
 
   const isCapital = sectionName === "capital";
 
-  const isValidField = is.PAP(field);
   const color =
-    isValidField &&
+    is.PAP(field) &&
     (currentVal < 0 ? "red" : currentVal > 0 ? "green" : "neutral");
 
   const debouncedChange = useMemo(
@@ -63,7 +59,7 @@ function NormalInput({ className, sectionName, field, value }) {
     <RenderLogger id={`NormalInput`} why={`${sectionName}.${field}`}>
       <input
         className={`risk-input ${field} ${className} ${
-          tooltip ? tooltip?.type ?? "error" : ""
+          tooltip ? tooltip?.type : ""
         } input-${color} ${fieldFlash ? "flashing" : ""}`}
         type="text"
         value={value ?? currentVal}
@@ -74,14 +70,14 @@ function NormalInput({ className, sectionName, field, value }) {
           handleSpecialCases(sectionName, field, e.target.value, true);
         }}
       />
-      {tooltip && field !== "ratio" && (
+      {tooltip && enableTooltip && (
         <ValidationTooltip
           type={tooltip.type ?? "error"}
           message={tooltip.message}
           position={tooltip.position}
           isVisible={true}
           autoHide={isCapital}
-          onClose={() => showNote(sectionName, "none")}
+          onClose={() => showTooltip(sectionName, { [field]: null })}
           showCloseButton={isCapital}
         />
       )}
@@ -90,23 +86,19 @@ function NormalInput({ className, sectionName, field, value }) {
 }
 
 function Label({ label, field }) {
-  const derived = useSettingsStore((s) => s.derived);
+  const derived = useRiskManagementStore((s) => s.settings.derived);
 
   const [isVisible, setVisiblity] = useState();
 
   const derivedInput = derived.input;
-  const adjust = derived.adjust;
-  const isAmountLock = derivedInput === "amount";
-  const isPAP = (f) => f === "pts" || f === "amount" || f === "percent";
+  const isDerived = derivedInput === field;
+  const isAdjust = derived.adjust === field && derivedInput === "amount";
 
   const getTitle = () => {
     return [
       "✏️ Input",
-      field === derivedInput && "🎯 Derived Input",
-      ((adjust === field && isAmountLock) ||
-        field === derivedInput ||
-        isPAP(field)) &&
-        "🔄 Auto-Calculated",
+      isDerived && "🎯 Derived Input",
+      (isAdjust || isDerived || is.PAP(field)) && "🔄 Auto-Calculated",
     ];
   };
 
@@ -121,7 +113,7 @@ function Label({ label, field }) {
       <Tooltip
         data={getTitle()}
         isVisible={isVisible}
-        position={field.includes("Price") || field === "qty" ? "top" : "bottom"}
+        position={is.BSQ(field) ? "top" : "bottom"}
       />
     </div>
     // </RenderLogger>

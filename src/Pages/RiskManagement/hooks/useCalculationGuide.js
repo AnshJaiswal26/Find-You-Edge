@@ -1,12 +1,16 @@
 import { useMemo } from "react";
-import { useSettingsStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { fields } from "@RM/data";
 import { getFormulaMap } from "@RM/utils";
 
 export default function useCalculationGuide() {
-  const derivedInput = useSettingsStore((s) => s.derived.input);
-  const selectedField = useSettingsStore((s) => s.logicGuide.selectedField);
-  const selectedSection = useSettingsStore((s) => s.selectedSection);
+  const derivedInput = useRiskManagementStore((s) => s.settings.derived.input);
+  const selectedField = useRiskManagementStore(
+    (s) => s.settings.logicGuide.selectedField
+  );
+  const selectedSection = useRiskManagementStore(
+    (s) => s.settings.selectedSection
+  );
 
   const isAmountLock = useMemo(() => derivedInput === "amount", [derivedInput]);
   const isBuyLock = useMemo(() => derivedInput === "buyPrice", [derivedInput]);

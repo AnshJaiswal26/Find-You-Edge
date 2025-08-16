@@ -1,5 +1,5 @@
 import "./settings.css";
-import { useSettingsStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import {
   CalculationLogicGuide,
   CalculationModeSelector,
@@ -7,8 +7,8 @@ import {
 } from "./components";
 
 function Settings() {
-  const updateSettings = useSettingsStore((s) => s.updateSettings);
-  const show = useSettingsStore((s) => s.show);
+  const updateSettings = useRiskManagementStore((s) => s.update.settings);
+  const show = useRiskManagementStore((s) => s.settings.show);
 
   if (!show) return null;
 

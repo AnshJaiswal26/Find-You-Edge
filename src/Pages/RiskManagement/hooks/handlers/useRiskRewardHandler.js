@@ -1,14 +1,14 @@
 import { useCallback } from "react";
 import { useSyncOppositeSection } from "@RM/hooks";
-import { useCalculatorStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 
 export default function useRiskRewardHandler() {
-  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
+  const updateSection = useRiskManagementStore((s) => s.update.section);
 
   const syncOppositeSection = useSyncOppositeSection();
   const handleRiskRewardChange = useCallback(
     (section, field, val) => {
-      const stopLoss = useCalculatorStore.getState().stopLoss;
+      const stopLoss = useRiskManagementStore.getState().stopLoss;
 
       const updatedRR = Math.max(0, val);
 

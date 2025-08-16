@@ -1,24 +1,20 @@
 import { useMemo } from "react";
 import { debounce } from "lodash";
-import { Button, ValidationTooltip } from "@components";
+import { Button } from "@components";
 import { Input } from "@RM/components";
-import {
-  useCalculatorStore,
-  useSettingsStore,
-  useTooltipStore,
-} from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useClearLogic } from "@RM/hooks";
 import { CalculatorGridBox } from "@RM/layout";
 import { fieldLabels, fields, sectionColor, sectionLabels } from "@RM/data";
 import RenderLogger from "@Profiler";
 
 export default function CalculatorSection({ sectionName }) {
-  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
+  const updateSection = useRiskManagementStore((s) => s.update.section);
 
   const debouncedsetHoveredSection = useMemo(() => {
     const handler = debounce((name) => {
       const currentTransaction =
-        useCalculatorStore.getState().currentTransaction;
+        useRiskManagementStore.getState().currentTransaction;
       if (currentTransaction === name) return;
       updateSection("currentTransaction", name);
     }, 100);
@@ -73,29 +69,6 @@ function InputRow({ sectionName }) {
       ))}
     </CalculatorGridBox>
     // </RenderLogger>
-  );
-}
-
-function MapValidationTooltips({ sectionName, key, message, type, position }) {
-  const isVisible = useTooltipStore((s) => s[sectionName]?.[key]);
-  const derivedInput = useSettingsStore((s) => s.derived.input);
-  const msg =
-    message +
-    (derivedInput === "amount"
-      ? "adjust Pts or Amount or Pnl(%) to rebalance the calculation."
-      : "");
-
-  return (
-    <>
-      <ValidationTooltip
-        type={type ?? "error"}
-        message={msg}
-        position={position}
-        isVisible={isVisible}
-        autoHide={false}
-        showCloseButton={false}
-      />
-    </>
   );
 }
 

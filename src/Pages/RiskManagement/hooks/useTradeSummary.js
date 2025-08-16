@@ -1,12 +1,12 @@
-import { useCalculatorStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { calculateCharges } from "@RM/utils";
 
 export default function useTradeSummary() {
-  const transaction = useCalculatorStore((cxt) => cxt.currentTransaction);
+  const transaction = useRiskManagementStore((s) => s.currentTransaction);
 
-  const buyPrice = useCalculatorStore((cxt) => cxt[transaction].buyPrice);
-  const sellPrice = useCalculatorStore((cxt) => cxt[transaction].sellPrice);
-  const qty = useCalculatorStore((cxt) => cxt[transaction].qty);
+  const buyPrice = useRiskManagementStore((s) => s[transaction].buyPrice);
+  const sellPrice = useRiskManagementStore((s) => s[transaction].sellPrice);
+  const qty = useRiskManagementStore((s) => s[transaction].qty);
 
   const buyVal = buyPrice * qty;
   const sellVal = sellPrice * qty;

@@ -16,13 +16,25 @@ export default function ValidationTooltip({
 
   useEffect(() => {
     if (isVisible) {
-      setIsAnimating(true);
+      // Mount first without animation
+      setIsAnimating(false);
+
+      // Next frame → trigger animation
+      const raf = requestAnimationFrame(() => {
+        setIsAnimating(true);
+      });
+
       if (autoHide) {
         const timer = setTimeout(() => {
           handleClose();
         }, duration);
-        return () => clearTimeout(timer);
+        return () => {
+          cancelAnimationFrame(raf);
+          clearTimeout(timer);
+        };
       }
+
+      return () => cancelAnimationFrame(raf);
     } else {
       setIsAnimating(false);
     }

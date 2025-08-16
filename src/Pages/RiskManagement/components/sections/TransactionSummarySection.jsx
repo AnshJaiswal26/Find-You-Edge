@@ -1,5 +1,5 @@
 import RenderLogger from "@Profiler";
-import { useCalculatorStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { sectionColor, sectionLabels } from "@RM/data";
 import { useTradeSummary } from "@RM/hooks";
 import { formatINR, safe } from "@RM/utils";
@@ -14,7 +14,7 @@ export default function TransactionSummarySection() {
 }
 
 function TransactionSummaryTitle() {
-  const transaction = useCalculatorStore((cxt) => cxt.currentTransaction);
+  const transaction = useRiskManagementStore((s) => s.currentTransaction);
 
   return (
     <RenderLogger id={"TransactionSummaryTitle"} why={transaction}>

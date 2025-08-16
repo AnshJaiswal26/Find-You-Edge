@@ -1,4 +1,4 @@
-import { fieldLabels } from "../../../../../../data/fieldData";
+import { fieldLabels } from "@RM/data";
 
 export default function Summary({
   affected,

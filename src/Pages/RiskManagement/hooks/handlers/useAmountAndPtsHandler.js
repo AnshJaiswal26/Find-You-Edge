@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useCalculatorStore, useSettingsStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useValidateAndNotify, useSyncOppositeSection } from "@RM/hooks";
 import { getValBySecName, safe } from "@RM/utils";
 
@@ -9,10 +9,10 @@ export default function useAmountAndPtsHandler() {
 
   const handleAmountOrPtsChange = useCallback(
     (section, field, val, sync = true) => {
-      const capital = useCalculatorStore.getState().capital.current;
-      const state = useSettingsStore.getState();
-      const mode = state.derived.input;
-      const adjust = state.derived.adjust;
+      const state = useRiskManagementStore.getState();
+      const capital = state.capital.current;
+      const mode = state.settings.derived.input;
+      const adjust = state.settings.derived.adjust;
 
       const isBuyLock = mode === "buyPrice";
       const isAmountLock = mode === "amount";

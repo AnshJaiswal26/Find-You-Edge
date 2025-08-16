@@ -6,7 +6,7 @@ import {
   usePriceHandler,
   useQtyHandler,
   useRiskRewardHandler,
-} from "./";
+} from ".";
 
 export default function useFieldHandler() {
   const handlePriceChange = usePriceHandler();
