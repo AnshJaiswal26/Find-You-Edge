@@ -1,8 +1,6 @@
-import { useTab } from "../../../../../../context/TabContext";
-import { fieldLabels } from "../../../../../../data/fieldData";
+import { fieldLabels } from "@RM/data";
 
 export default function Arrow({ selectedField }) {
-  
   return (
     <>
       <div className="arrow-icon-wrapper">

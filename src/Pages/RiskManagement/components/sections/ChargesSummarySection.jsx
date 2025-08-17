@@ -1,5 +1,5 @@
 import { Button } from "@components";
-import { useTooltipStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useTradeSummary, useChargesLogic } from "@RM/hooks";
 import { formatINR, safe } from "@RM/utils";
 
@@ -23,7 +23,7 @@ export default function ChargesSummarySection() {
 }
 
 function ToggleChargesButtons() {
-  const active = useTooltipStore((s) => s.anyActive);
+  const active = useRiskManagementStore((s) => s.tooltip.anyActive);
 
   const { charges } = useChargesLogic();
   return (

@@ -1,11 +1,6 @@
-import { fieldLabels } from "../../../../../../data/fieldData";
+import { fields, fieldLabels } from "@RM/data";
 
-export default function Summary({
-  affected,
-  fields,
-  selectedField,
-  currentSection,
-}) {
+export default function Summary({ affected, selectedField, currentSection }) {
   const isTargetOrSl =
     currentSection === "Target" || currentSection === "Stop-Loss";
   const oppositeSection = currentSection === "Target" ? "Stop-Loss" : "Target";

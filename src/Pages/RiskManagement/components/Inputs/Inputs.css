@@ -14,7 +14,7 @@
 
 .dark-theme .risk-input {
   border: 1px solid #424f5e;
-  background: #242d37;
+  background: linear-gradient(to right, #222a33, #27313b);
   color: #ffffff;
 }
 
@@ -40,26 +40,20 @@
   font-weight: bold;
 }
 
-.qty,
 .input-neutral {
   color: #5d5d5d;
 }
 
-.dark-theme .qty,
 .dark-theme .input-neutral {
   color: #ffffff;
 }
 
-.dark-theme .sellPrice,
 .dark-theme .input-red,
-.sellPrice,
 .input-red {
   color: #fe5a5a;
 }
 
 .dark-theme .input-green,
-.dark-theme .buyPrice,
-.buyPrice,
 .input-green {
   color: #05ab72;
 }
@@ -80,4 +74,17 @@
 .info {
   box-shadow: 0 0px 4px rgb(0, 100, 206, 0.8);
   border: 1px solid #0064ce;
+}
+
+.flashing {
+  box-shadow: 0px 0px 4px rgba(0, 118, 202, 0.6);
+}
+
+.dark-theme .flashing {
+  box-shadow: 0px 0px 4px rgb(112, 196, 255, 0.5);
+}
+
+.dark-theme .readOnly {
+  background: inherit;
+  border: 1px solid #354456;
 }

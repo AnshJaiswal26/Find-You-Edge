@@ -1,24 +1,20 @@
 import { useMemo } from "react";
 import { debounce } from "lodash";
-import { Button, ValidationTooltip } from "@components";
+import { Button } from "@components";
 import { Input } from "@RM/components";
-import {
-  useCalculatorStore,
-  useSettingsStore,
-  useTooltipStore,
-} from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useClearLogic } from "@RM/hooks";
-import { CalculatorGridBox } from "@RM/layout";
+import { CalcualtorSectionLayout } from "@RM/layout";
 import { fieldLabels, fields, sectionColor, sectionLabels } from "@RM/data";
 import RenderLogger from "@Profiler";
 
 export default function CalculatorSection({ sectionName }) {
-  const updateSection = useCalculatorStore((cxt) => cxt.updateSection);
+  const updateSection = useRiskManagementStore((s) => s.update.section);
 
   const debouncedsetHoveredSection = useMemo(() => {
     const handler = debounce((name) => {
       const currentTransaction =
-        useCalculatorStore.getState().currentTransaction;
+        useRiskManagementStore.getState().currentTransaction;
       if (currentTransaction === name) return;
       updateSection("currentTransaction", name);
     }, 100);
@@ -30,16 +26,11 @@ export default function CalculatorSection({ sectionName }) {
 
   return (
     // <RenderLogger id={"CalculatorSection"} why={sectionName}>
-    <div
-      key={sectionName}
-      className="calculator-sections"
-      onMouseEnter={() => debouncedsetHoveredSection(sectionName)}
-    >
-      <div className="section-heading flex justify">
-        <span className={sectionColor[sectionName]}>
-          {sectionLabels[sectionName]}
-        </span>
-        {isTargetOrSL && (
+    <CalcualtorSectionLayout
+      name={sectionName}
+      onMouseEnter={debouncedsetHoveredSection}
+      headerElement={
+        isTargetOrSL && (
           <Button
             text={`Place ${sectionName}`}
             color="#05ab72"
@@ -49,20 +40,9 @@ export default function CalculatorSection({ sectionName }) {
               disabled: true,
             }}
           />
-        )}
-      </div>
-      <InputRow sectionName={sectionName} />
-      {!isTargetOrSL && <FooterButtons sectionName={sectionName} />}
-    </div>
-    // </RenderLogger>
-  );
-}
-
-function InputRow({ sectionName }) {
-  return (
-    // <RenderLogger id={"InputRow"} why={sectionName}>
-    <CalculatorGridBox>
-      {fields.map((field) => (
+        )
+      }
+      inputGrid={fields.map((field) => (
         <div className="relative" key={field}>
           <Input
             label={fieldLabels[field]}
@@ -71,31 +51,10 @@ function InputRow({ sectionName }) {
           />
         </div>
       ))}
-    </CalculatorGridBox>
+    >
+      {!isTargetOrSL && <FooterButtons sectionName={sectionName} />}
+    </CalcualtorSectionLayout>
     // </RenderLogger>
-  );
-}
-
-function MapValidationTooltips({ sectionName, key, message, type, position }) {
-  const isVisible = useTooltipStore((s) => s[sectionName]?.[key]);
-  const derivedInput = useSettingsStore((s) => s.derived.input);
-  const msg =
-    message +
-    (derivedInput === "amount"
-      ? "adjust Pts or Amount or Pnl(%) to rebalance the calculation."
-      : "");
-
-  return (
-    <>
-      <ValidationTooltip
-        type={type ?? "error"}
-        message={msg}
-        position={position}
-        isVisible={isVisible}
-        autoHide={false}
-        showCloseButton={false}
-      />
-    </>
   );
 }
 

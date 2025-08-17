@@ -1,9 +1,11 @@
 import { ToggleButton, ButtonSelector, Overview } from "@components";
-import { useSettingsStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { calculationPoints } from "@RM/data";
 
 export default function CalculationModeSelector({ updateSettings }) {
-  const autoRound = useSettingsStore((s) => s.calculation.autoRound);
+  const autoRound = useRiskManagementStore(
+    (s) => s.settings.calculation.autoRound
+  );
 
   return (
     <>
@@ -24,7 +26,7 @@ export default function CalculationModeSelector({ updateSettings }) {
 }
 
 function SelectorAndOverview({ updateSettings }) {
-  const calcMode = useSettingsStore((s) => s.calculation.mode);
+  const calcMode = useRiskManagementStore((s) => s.settings.calculation.mode);
 
   return (
     <>

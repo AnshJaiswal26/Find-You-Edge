@@ -9,13 +9,15 @@ import {
 import { useCalculationGuide } from "@RM/hooks";
 import { fields } from "@RM/data";
 import { useMemo } from "react";
-import { useSettingsStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 
 export default function CalculationLogicGuide({ updateSettings }) {
   const { selectedField, affected, userDefined, mainFields, formulaMap } =
     useCalculationGuide();
 
-  const selectedSection = useSettingsStore((s) => s.selectedSection);
+  const selectedSection = useRiskManagementStore(
+    (s) => s.settings.selectedSection
+  );
 
   const isTargetOrSl = useMemo(
     () => selectedSection === "Target" || selectedSection === "Stop-Loss",
@@ -58,7 +60,6 @@ export default function CalculationLogicGuide({ updateSettings }) {
 
       <Summary
         affected={affected}
-        fields={fields}
         selectedField={selectedField}
         currentSection={selectedSection}
       />

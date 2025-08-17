@@ -4,7 +4,7 @@ import {
   CurrentPositionsContainer,
   NormalCalculatorContainer,
 } from "@RM/components";
-import { useTab, useNotification } from "@RM/context";
+import { useNotification, useRiskManagementStore } from "@RM/stores";
 
 export function CalculatorAndPositionsContainer() {
   console.log("CalculatorAndPositionsContainer...");
@@ -60,7 +60,8 @@ function getSelectedCalculator(current) {
 }
 
 function TabContainer() {
-  const { currentTab, setCurrentTab } = useTab();
+  const updateTab = useRiskManagementStore((s) => s.update.tab);
+  const currentTab = useRiskManagementStore((s) => s.currentTab);
 
   const tabs = [
     { key: "normal", label: "Position Sizing" },
@@ -73,7 +74,7 @@ function TabContainer() {
       <TabSwitcher
         tabs={tabs}
         currentTab={currentTab}
-        onClick={(key) => setCurrentTab(key)}
+        onClick={(tab) => updateTab(tab)}
       />
       {getSelectedCalculator(currentTab)}
     </>

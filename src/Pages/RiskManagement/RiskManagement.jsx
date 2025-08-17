@@ -6,7 +6,7 @@ import {
   CalculatorAndPositionsContainer,
   Settings,
 } from "@RM/components";
-import { TabContextProvider, NotificationContextProvider } from "@RM/context";
+import { NotificationContextProvider } from "@RM/stores";
 
 function RiskManagementWithoutContext() {
   return (
@@ -25,11 +25,9 @@ function RiskManagementWithoutContext() {
 
 function RiskManagement() {
   return (
-    <TabContextProvider>
-      <NotificationContextProvider>
-        <RiskManagementWithoutContext />
-      </NotificationContextProvider>
-    </TabContextProvider>
+    <NotificationContextProvider>
+      <RiskManagementWithoutContext />
+    </NotificationContextProvider>
   );
 }
 

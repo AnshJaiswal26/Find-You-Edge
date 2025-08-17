@@ -2,10 +2,10 @@ import { IconButton } from "@components";
 import { Container } from "@layout";
 import RenderLogger from "@Profiler";
 import { Input } from "@RM/components";
-import { useSettingsStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 
 export function CapitalInputContainer() {
-  const updateSettings = useSettingsStore((s) => s.updateSettings);
+  const updateSettings = useRiskManagementStore((s) => s.update.settings);
 
   return (
     // <RenderLogger id={"CapitalInputContainer"} why={"updateSettings"}>

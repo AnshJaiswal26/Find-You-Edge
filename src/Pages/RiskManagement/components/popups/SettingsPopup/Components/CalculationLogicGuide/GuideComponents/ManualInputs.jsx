@@ -1,10 +1,6 @@
-import { useTab } from "../../../../../../context/TabContext";
-import { fieldLabels } from "../../../../../../data/fieldData";
+import { fieldLabels } from "@RM/data";
 
 export default function ManualInputs({ userDefined }) {
-  const { currentTab } = useTab();
-  const isRR = currentTab === "risk-management";
-
   return (
     <div>
       <div className="section-title input-title">

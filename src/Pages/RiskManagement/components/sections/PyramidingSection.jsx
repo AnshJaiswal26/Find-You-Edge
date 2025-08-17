@@ -1,16 +1,18 @@
 import React from "react";
 import { Button } from "@components";
-import { useCalculatorStore, useTooltipStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useInputChange, useSpecialCaseHandler } from "@RM/hooks";
 
 export default function PyramidingSection() {
   console.log("Pyramiding...");
-  const { stopLoss, pyramiding, updateSection } = useCalculatorStore((cxt) => ({
-    stopLoss: cxt.stopLoss,
-    pyramiding: cxt.pyramiding,
-    updateSection: cxt.updateSection,
-  }));
-  const note = useTooltipStore((s) => s.pyramiding);
+  const { stopLoss, pyramiding, updateSection } = useRiskManagementStore(
+    (s) => ({
+      stopLoss: s.stopLoss,
+      pyramiding: s.pyramiding,
+      updateSection: s.updateSection,
+    })
+  );
+  const note = useRiskManagementStore((s) => s.pyramiding);
 
   const handleChange = useInputChange();
   const handleSpecialCases = useSpecialCaseHandler();

@@ -1,7 +1,7 @@
 import { Button, ValidationTooltip } from "@components";
 import { Container } from "@layout";
 import { Input, CalculatorSection, PyramidingSection } from "@RM/components";
-import { useCalculatorStore, useTooltipStore } from "@RM/context";
+import { useRiskManagementStore } from "@RM/stores";
 import { useClearLogic, useFormatterLogic } from "@RM/hooks";
 import { logInfo } from "@RM/utils";
 
@@ -11,7 +11,7 @@ export function RiskRewardCalculatorContainer() {
   return (
     <Container
       title={"Pyramiding & Risk Management Calculator"}
-      className="container radius-top-0"
+      className="radius-top-0"
     >
       <div className="flex justify a-flex-end">
         <RiskRewardInput />
@@ -20,37 +20,38 @@ export function RiskRewardCalculatorContainer() {
           <ClearSectionButton />
         </div>
       </div>
-      <TargetAndStopLossSection />
+      <CalculatorSection sectionName={"target"} />
+      <CalculatorSection sectionName={"stopLoss"} />
       {/* <PyramidingSection /> */}
     </Container>
   );
 }
 
 function RiskRewardInput() {
-  const tooltip = useTooltipStore((s) => s.riskReward.ratio);
-  const showNote = useTooltipStore((s) => s.showNote);
+  const tooltip = useRiskManagementStore((s) => s.tooltip.riskReward.ratio);
+  const showTooltip = useRiskManagementStore((s) => s.update.tooltip);
 
-  const riskReward = useCalculatorStore((s) => s.riskReward);
+  const riskReward = useRiskManagementStore((s) => s.riskReward);
 
   return (
     <div className="relative">
       <Input
+        className={tooltip ? "info" : ""}
         label="Risk/Reward"
         sectionName={"riskReward"}
         field={"ratio"}
-        value={"1 : " + riskReward.ratio}
+        enableTooltip={false}
       />
-      {tooltip && (
-        <ValidationTooltip
-          message={`To actually earn 1: ${riskReward.prevRatio} after charges, plan for a slightly wider target: around 1: ${riskReward.ratio}.`}
-          position="top"
-          type="info"
-          isVisible={true}
-          onClose={() => showNote("riskReward", "increaseRatio")}
-          autoHide={false}
-          showCloseButton={true}
-        />
-      )}
+      <ValidationTooltip
+        message={`To actually earn 1: ${riskReward.prevRatio} after charges, plan for a slightly wider target: around 1: ${riskReward.ratio}.`}
+        position="top"
+        type="info"
+        isVisible={tooltip}
+        onClose={() => showTooltip("riskReward", false)}
+        duration={7000}
+        autoHide={true}
+        showCloseButton={true}
+      />
     </div>
   );
 }
@@ -85,18 +86,6 @@ function ClearSectionButton() {
           fontSize: "12px",
         }}
       />
-    </>
-  );
-}
-
-function TargetAndStopLossSection() {
-  // const target = useCalculatorStore((cxt) => cxt.target);
-  // const stopLoss = useCalculatorStore((cxt) => cxt.stopLoss);
-
-  return (
-    <>
-      <CalculatorSection sectionName={"target"} />
-      <CalculatorSection sectionName={"stopLoss"} />
     </>
   );
 }

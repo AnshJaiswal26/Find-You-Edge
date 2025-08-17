@@ -32,10 +32,12 @@ A settings panel that includes broker connection via API keys and an automatic k
 
 Tracking ongoing development progress and architectural decisions.
 
+🗓️ August 17, 2025
+- 📈 Implemented Position Sizing Calculator with dynamic input handling.
+
 🗓️ August 15, 2025
 - 🧠 Optimized the Risk Management system by merging multiple stores (useCalculatorStore, useTooltipStore, useSettingsStore) into a single useRiskManagementStore.
-- ⚡ Refactored store architecture using slices (create...()), reducing re-renders and improving performance across the calculator and related components.
-- 🛠️ Centralized state management, making tooltip handling, settings, and calculator logic more efficient and maintainable.
+- ⚡ Refactored store architecture and centralized state management, using slices (create...()), reducing re-renders and improving performance across the calculator and related components.
 
 🗓️ August 14, 2025
 - 🧠 Refactored tooltip system on the Risk Management Calculator using semantic keys and hybrid message resolution.

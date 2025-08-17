@@ -2,3 +2,4 @@ export { default as TransactionSummarySection } from "./TransactionSummarySectio
 export { default as ChargesSummarySection } from "./ChargesSummarySection";
 export { default as PyramidingSection } from "./PyramidingSection";
 export { default as CalculatorSection } from "./CalculatorSection";
+export { default as PositionSizingSection } from "./PositionSizingSection";

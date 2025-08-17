@@ -1,8 +1,9 @@
 import { Container } from "@layout";
-import { useCalculatorStore } from "@RM/context";
 import CalculatorSection from "../sections/CalculatorSection";
 import { useFormatterLogic } from "@RM/hooks";
 import { Button } from "@components";
+import { CalcualtorSectionLayout } from "@RM/layout";
+import { PositionSizingSection } from "..";
 
 export function NormalCalculatorContainer() {
   console.log("NormalCalculatorContainer...");
@@ -12,19 +13,9 @@ export function NormalCalculatorContainer() {
       className="radius-top-0"
     >
       <FormatButton />
-      <NormalAndPositionSizingSections />
-    </Container>
-  );
-}
-
-function NormalAndPositionSizingSections() {
-  console.log("NormalAndPositionSizingSections....");
-
-  return (
-    <>
       <CalculatorSection sectionName={"calculator"} />
-      {/* <CalculatorSection section={calculator} /> */}
-    </>
+      <PositionSizingSection />
+    </Container>
   );
 }
 

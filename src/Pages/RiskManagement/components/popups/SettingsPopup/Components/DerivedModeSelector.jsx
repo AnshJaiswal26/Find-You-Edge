@@ -1,17 +1,13 @@
 import { useCallback } from "react";
 import { ButtonSelector, Overview } from "@components";
-import { fieldLabels } from "../../../../data/fieldData";
-import {
-  useCalculatorStore,
-  useSettingsStore,
-  useTooltipStore,
-} from "@RM/context";
+import { fieldLabels } from "../../../../data/calculatorsData";
+import { useRiskManagementStore } from "@RM/stores";
 import { derivedInputPoints } from "@RM/data/settingsData";
 import { generateTooltip, logResult, logStart } from "@RM/utils";
 
 export default function DerivedModeSelector({ updateSettings }) {
-  const derived = useSettingsStore((s) => s.derived);
-  const showNote = useTooltipStore((s) => s.showNote);
+  const derived = useRiskManagementStore((s) => s.settings.derived);
+  const showTooltip = useRiskManagementStore((s) => s.update.tooltip);
   const derivedInput = derived.input;
   const adjust = derived.adjust;
 
@@ -31,15 +27,15 @@ export default function DerivedModeSelector({ updateSettings }) {
         return acc;
       }, {});
 
-      if (Object.keys(updates).length > 0) showNote(sec.name, updates);
+      if (Object.keys(updates).length > 0) showTooltip(sec.name, updates);
     },
-    [showNote, adjust]
+    [showTooltip, adjust]
   );
 
   const handleDependencyChange = useCallback(
     (mode, track) => {
       logStart("handleDependencyChange", mode);
-      const sections = useCalculatorStore.getState();
+      const sections = useRiskManagementStore.getState();
       const invalids = ["calculator", "target", "stopLoss"]
         .map((sec) => sections[sec])
         .filter((sec) => sec.buyPrice < 0 || sec.sellPrice < 0);
