@@ -5,7 +5,7 @@
   opacity: 0;
   justify-content: center;
   visibility: hidden;
-  z-index: 100;
+  z-index: 10;
 }
 
 .container.visible {

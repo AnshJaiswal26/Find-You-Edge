@@ -1,4 +1,4 @@
-export const createRiskManagementSettingsSlice = (set) => ({
+export const createRiskManagementSettingsSlice = () => ({
   settings: {
     show: false,
 

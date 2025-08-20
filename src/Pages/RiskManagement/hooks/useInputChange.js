@@ -3,26 +3,24 @@ import { useRiskManagementStore } from "@RM/stores";
 import { useFieldHandler, useSpecialCaseHandler } from "@RM/hooks";
 import { generateTooltip, logInfo, logResult, logStart } from "@RM/utils";
 
+const checkValues = (field, val) => {
+  let Max_Val = 100 * 10000000,
+    isValid;
+  if (field === "pts" || field === "percent") isValid = val <= 10000;
+  else if (field === "amount" || field === "capital") isValid = val <= Max_Val;
+  else if (field === "ratio") isValid = val <= 100;
+  else val <= 100000;
+};
+
 export default function useInputChange() {
   const handleSpecialCases = useSpecialCaseHandler();
   const handlers = useFieldHandler();
 
-  const updateSection = useRiskManagementStore((s) => s.update.section);
+  const updateSections = useRiskManagementStore((s) => s.update.sections);
   const showTooltip = useRiskManagementStore((s) => s.update.tooltip);
-
-  const checkValues = (field, val) => {
-    let Max_Val = 100 * 10000000,
-      isValid;
-    if (field === "pts" || field === "percent") isValid = val <= 10000;
-    else if (field === "amount" || field === "capital")
-      isValid = val <= Max_Val;
-    else if (field === "ratio") isValid = val <= 100;
-    else val <= 100000;
-  };
 
   const handleChange = useCallback(
     (sectionName, field, val) => {
-      // console.time("handleInputChange");
       const state = useRiskManagementStore.getState();
       const capital = state.capital.current;
       const section = state[sectionName];
@@ -36,7 +34,6 @@ export default function useInputChange() {
 
       if (isSpecialCaseFound) {
         logResult("handleInputChange", "Special Case Found.");
-        // console.timeEnd("handleInputChange");
         return;
       }
 
@@ -45,35 +42,22 @@ export default function useInputChange() {
 
       if (prev === numericValue) {
         logResult("handleInputChange", "No Change Found - skipping update.");
-        // console.timeEnd("handleInputChange");
-
         return;
       }
 
-      if (capital === 0 && field === "percent") {
+      if ((capital === 0 && field === "percent") || field === "riskPercent") {
         const tooltip = generateTooltip(field, "zeroCapital");
-        showTooltip("capital", { current: tooltip });
-        // console.timeEnd("handleInputChange");
-        logResult(
-          "handleInputChange",
-          "Capital is Zero - skipping update and showing note."
-        );
-
+        showTooltip("capitalTooltip", { current: tooltip });
+        logResult("handleInputChange", "Capital is Zero");
         return;
       }
 
-      const sectionUpdates = handlers[field]({
-        section,
-        field,
-        val: numericValue,
-      });
-
-      if (sectionUpdates) updateSection(section.name, sectionUpdates);
+      const updates = handlers[field]({ section, field, val: numericValue });
+      if (updates) updateSections(updates);
 
       logResult("handleInputChange", `Process Done for ${section.name}.`);
-      // console.timeEnd("handleInputChange");
     },
-    [handlers, handleSpecialCases, updateSection, showTooltip]
+    [handlers, handleSpecialCases, updateSections, showTooltip]
   );
 
   return handleChange;

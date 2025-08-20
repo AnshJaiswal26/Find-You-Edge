@@ -28,9 +28,8 @@ export function RiskRewardCalculatorContainer() {
 }
 
 function RiskRewardInput() {
-  const tooltip = useRiskManagementStore((s) => s.tooltip.riskReward.ratio);
+  const tooltip = useRiskManagementStore((s) => s["riskRewardTooltip"].ratio);
   const showTooltip = useRiskManagementStore((s) => s.update.tooltip);
-
   const riskReward = useRiskManagementStore((s) => s.riskReward);
 
   return (
@@ -73,14 +72,14 @@ function FormatButton() {
 }
 
 function ClearSectionButton() {
-  const { clearTargetAndStopLoss } = useClearLogic();
+  const clearSection = useClearLogic();
 
   return (
     <>
       <Button
         text="Clear All"
         color="#fe5a5a"
-        onClick={clearTargetAndStopLoss}
+        onClick={() => clearSection("target")}
         style={{
           padding: "5px 10px",
           fontSize: "12px",

@@ -5,7 +5,7 @@ import { Input } from "@RM/components";
 import { useRiskManagementStore } from "@RM/stores";
 import { useClearLogic } from "@RM/hooks";
 import { CalcualtorSectionLayout } from "@RM/layout";
-import { fieldLabels, fields, sectionColor, sectionLabels } from "@RM/data";
+import { fieldLabels, fields } from "@RM/data";
 import RenderLogger from "@Profiler";
 
 export default function CalculatorSection({ sectionName }) {
@@ -42,7 +42,7 @@ export default function CalculatorSection({ sectionName }) {
           />
         )
       }
-      inputGrid={fields.map((field) => (
+      inputGrid={fields[sectionName].map((field) => (
         <div className="relative" key={field}>
           <Input
             label={fieldLabels[field]}
@@ -59,7 +59,7 @@ export default function CalculatorSection({ sectionName }) {
 }
 
 function FooterButtons({ sectionName }) {
-  const { clearSection } = useClearLogic();
+  const clearSection = useClearLogic();
 
   return (
     <div className="footer-buttons">

@@ -12,7 +12,7 @@ const calculateLockFields = (amt, slPts, lotSize) => {
 
 export default function usePositionSizingHandler() {
   const handlePositionSizingChange = ({ section, field, val }) => {
-    const { lotSize, slPts, riskAmount } = section;
+    const { name, lotSize, slPts, riskAmount } = section;
     const capital = useRiskManagementStore.getState().capital.current;
 
     const num = Math.abs(val);
@@ -34,7 +34,7 @@ export default function usePositionSizingHandler() {
       updated.lotSize ?? lotSize
     );
 
-    return { ...updated, ...readOnlyFields };
+    return { [name]: { ...updated, ...readOnlyFields } };
   };
 
   return handlePositionSizingChange;

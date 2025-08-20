@@ -1,3 +1,4 @@
+import { fields } from "@RM/data";
 import { logEnd, logObj, logResult, logStart } from ".";
 
 export function formatINR(num) {
@@ -83,4 +84,22 @@ export const roundKeys = (updates) => {
 
   logResult("roundKeys", preciseKeys);
   return preciseKeys;
+};
+
+export const shouldFormat = (sec, mode) => {
+  if (sec.pts === 0) return false;
+
+  const format = (acc, key) => (acc[key] = formatValue(sec[key], { mode }));
+  const regex1 = /^-?\d+(?:\.(?:\d{1}|(?:\d{1}[05])))?$/;
+  const regex2 = /^-?\d+(?:\.\d{2})?$/;
+
+  const formatedKeys = fields.reduce((acc, key) => {
+    const val = sec[key].toString();
+
+    if (mode !== "Approx" && !regex1.test(val)) acc[key] = sec[key];
+    else if (mode === "Approx" && !regex2.test(val)) format(acc, key);
+    return acc;
+  }, {});
+
+  return Object.keys(formatedKeys).length !== 0 ? formatedKeys : false;
 };

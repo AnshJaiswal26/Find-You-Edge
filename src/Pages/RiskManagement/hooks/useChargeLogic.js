@@ -83,5 +83,5 @@ export default function useChargesLogic() {
     [toggleCharges, showTooltip, updateSection]
   );
 
-  return { charges };
+  return charges;
 }

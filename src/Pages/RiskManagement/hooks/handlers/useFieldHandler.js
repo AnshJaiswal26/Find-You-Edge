@@ -1,21 +1,19 @@
 import { useMemo } from "react";
 import {
-  useAmountAndPtsHandler,
   useCapitalHandler,
-  usePercentHandler,
   usePositionSizingHandler,
   usePriceHandler,
+  usePtsAmountAndPercentHandler,
   useQtyHandler,
   useRiskRewardHandler,
 } from ".";
 
 export default function useFieldHandler() {
   const handlePriceChange = usePriceHandler();
-  const handleAmountOrPtsChange = useAmountAndPtsHandler();
+  const handlePtsAmountAndPercentChange = usePtsAmountAndPercentHandler();
   const capitalHandler = useCapitalHandler();
   const riskRewardHandler = useRiskRewardHandler();
   const qtyHandler = useQtyHandler();
-  const percentHandler = usePercentHandler();
   const handlePositionSizingChange = usePositionSizingHandler();
 
   const fieldHandlers = useMemo(
@@ -25,9 +23,9 @@ export default function useFieldHandler() {
       buyPrice: handlePriceChange,
       sellPrice: handlePriceChange,
       qty: qtyHandler,
-      pts: handleAmountOrPtsChange,
-      amount: handleAmountOrPtsChange,
-      percent: percentHandler,
+      pts: handlePtsAmountAndPercentChange,
+      amount: handlePtsAmountAndPercentChange,
+      percent: handlePtsAmountAndPercentChange,
       lotSize: handlePositionSizingChange,
       slPts: handlePositionSizingChange,
       riskAmount: handlePositionSizingChange,
@@ -37,9 +35,8 @@ export default function useFieldHandler() {
       capitalHandler,
       riskRewardHandler,
       handlePriceChange,
-      handleAmountOrPtsChange,
+      handlePtsAmountAndPercentChange,
       qtyHandler,
-      percentHandler,
       handlePositionSizingChange,
     ]
   );

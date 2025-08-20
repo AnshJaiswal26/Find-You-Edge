@@ -1,4 +1,4 @@
-export const fields = [
+export const commonfields = [
   "buyPrice",
   "sellPrice",
   "qty",
@@ -15,6 +15,13 @@ export const postitionSizingFields = [
   "riskAmount",
   "riskPercent",
 ];
+
+export const fields = {
+  calculator: commonfields,
+  target: commonfields,
+  stopLoss: commonfields,
+  positionSizing: postitionSizingFields,
+};
 
 export const sectionLabels = {
   calculator: "Calculator",

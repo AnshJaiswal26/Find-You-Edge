@@ -7,53 +7,35 @@ export default function useSpecialCaseHandler() {
 
   const handleSpecialCases = useCallback(
     (section, field, val, onBlur = false) => {
-      logStart("handleSpecialCases", {
-        section,
-        field,
-        val,
-        onBlur,
-      });
+      const { name, prevVal } = section;
+      logStart("handleSpecialCases");
 
-      const specialCases = {
-        isOnlyDot: val === ".",
-        isOnlyDash: val === "-",
-        isOnlyDotAtEnd: /^-?\d+\.$/.test(val),
-        hasOnlyTrailingZeros: /\d+\.(?:0+)$/.test(val),
-        isNegSignWithDotOrZero: val.startsWith("-.") || val.startsWith("0-"),
-        isNegField:
-          section.name === "calculator" &&
-          ["pts", "amount", "percent"].includes(field),
-      };
+      const isOnlyDot = val === ".";
+      const isOnlyDash = val === "-";
+      const isOnlyDotAtEnd = /^-?\d+\.$/.test(val);
+      const hasOnlyTrailingZeros = /\d+\.(?:0+)$/.test(val);
+      const isNegSignWithDotOrZero =
+        val.startsWith("-.") || val.startsWith("0-");
+      const isValidNumeric = /^-?\d*\.?\d*$/.test(val);
 
-      const {
-        isOnlyDot,
-        isOnlyDash,
-        isOnlyDotAtEnd,
-        hasOnlyTrailingZeros,
-        isNegSignWithDotOrZero,
-        isNegField,
-      } = specialCases;
+      const isNegField =
+        name === "calculator" && ["pts", "amount", "percent"].includes(field);
 
       const update = (newValue, isPrevVal = false) => {
-        logStart("update", { newValue, isPrevVal });
         logSuccess("Valid Special Case Found ", `'${val}'`);
 
-        if (section.name !== "pyramiding") {
-          updateSection(
-            section.name,
-            {
-              [field]: newValue,
-              ...(isPrevVal && {
-                prevVal: hasOnlyTrailingZeros
-                  ? section.prevVal
-                  : section[field],
+        updateSection(
+          name,
+          {
+            [field]: newValue,
+            ...(isPrevVal &&
+              !hasOnlyTrailingZeros && {
+                prevVal: section[field],
               }),
-            },
-            { round: false }
-          );
-        }
+          },
+          { round: false }
+        );
 
-        logResult("update", true);
         logResult("handleSpecialCases", true);
         return true;
       };
@@ -61,7 +43,7 @@ export default function useSpecialCaseHandler() {
       if (onBlur) {
         if (isOnlyDot) return update(0);
         if (val.endsWith(".") || hasOnlyTrailingZeros || isOnlyDash)
-          return update(section.prevVal);
+          return update(prevVal);
       }
 
       if (isNegField && isNegSignWithDotOrZero) return update("-");
@@ -69,10 +51,8 @@ export default function useSpecialCaseHandler() {
       if (isOnlyDotAtEnd || hasOnlyTrailingZeros || isOnlyDash)
         return update(val, true);
 
-      const isValidNumeric = /^-?\d*\.?\d*$/.test(val);
-
       if (!isValidNumeric && val !== "") {
-        logInfo("Invalid Special Case Found ", `'${val}'`);
+        logInfo("Invalid Special Case Found ", `${val}`);
         logResult("handleSpecialCases", true);
         return true;
       }

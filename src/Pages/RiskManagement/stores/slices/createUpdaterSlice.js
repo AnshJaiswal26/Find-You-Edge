@@ -1,8 +1,20 @@
-import { calculatorUpdater, toolTipUpdater } from "@RM/utils/updaterUtils";
+import { calculatorUpdater, logObj, toolTipUpdater } from "@RM/utils";
+
+const defaultCfg = { flashing: true, duration: 100, round: true };
 
 const updater = (name, prev, update) => ({
   [name]: { ...prev[name], ...update },
 });
+
+function applySectionUpdate(set, prev, sectionUpdates, cfg) {
+  return Object.entries(sectionUpdates).reduce((acc, [name, updates]) => {
+    if (name.includes("Tooltip")) {
+      return { ...acc, ...toolTipUpdater(name, updates, prev[name]) };
+    }
+    logObj("sec", name);
+    return { ...acc, ...calculatorUpdater(set, prev, name, updates, cfg) };
+  }, {});
+}
 
 export const createUpdaterSlice = (set) => ({
   update: {
@@ -11,14 +23,15 @@ export const createUpdaterSlice = (set) => ({
     transaction: (updates) => set({ currentTransaction: updates }),
     tooltip: (section, updates) => {
       set((prev) => {
-        if (section === "riskReward")
-          return updater("tooltip", prev, {
-            [section]: { ratio: updates },
-          });
-        const data = toolTipUpdater(section, updates, prev.tooltip[section]);
-        return updater("tooltip", prev, data);
+        const data = toolTipUpdater(
+          section,
+          updates,
+          prev[section + "Tooltip"]
+        );
+        return data;
       });
     },
+
     settings: (section, updates) => {
       set((prev) => {
         if (section === "show")
@@ -30,7 +43,19 @@ export const createUpdaterSlice = (set) => ({
         });
       });
     },
-    section: (section, updates, cfg) =>
-      calculatorUpdater(set, section, updates, cfg),
+
+    section: (sec, updates, inputCfg) => {
+      const cfg = { ...defaultCfg, ...inputCfg };
+      set((prev) => {
+        return calculatorUpdater(set, prev, sec, updates, cfg);
+      });
+    },
+
+    sections: (sectionUpdates, inputCfg) => {
+      const cfg = { ...defaultCfg, ...inputCfg };
+      set((prev) => {
+        return applySectionUpdate(set, prev, sectionUpdates, cfg) || prev;
+      });
+    },
   },
 });

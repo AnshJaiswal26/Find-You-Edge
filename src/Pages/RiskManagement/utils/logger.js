@@ -118,7 +118,7 @@ const formatValue = (value) => {
   }
 };
 
-export const logTimer = (label) => {
+export const logTimer = () => {
   if (!ENABLE_LOGGING)
     return {
       end: () => null,
@@ -269,7 +269,7 @@ export const logMsg = (msg, type = "info") => {
 };
 
 // State update logging - clean and consistent
-export const logStateUpdate = (msg, changes, timer, end = true) => {
+export const logStateUpdate = (msg, changes) => {
   if (!ENABLE_LOGGING) return;
   const isPrimitive =
     ["string", "number", "boolean"].includes(typeof changes) ||
@@ -300,8 +300,6 @@ export const logStateUpdate = (msg, changes, timer, end = true) => {
       changes
     );
   }
-  if (timer) timer.end();
-  if (end) console.groupEnd();
 };
 
 // Enhanced result logging - clean and professional
@@ -353,7 +351,6 @@ export const logResult = (label, result) => {
     );
     console.log(result);
   }
-
   console.groupEnd();
 };
 
@@ -391,25 +388,3 @@ export const logData = (label, data, options = {}) => {
     console.groupEnd();
   }
 };
-
-// Performance timing utility
-
-// Batch logging for multiple related items
-export const logBatch = (title, items) => {
-  if (!ENABLE_LOGGING) return;
-
-  console.groupCollapsed(`%c📦 ${title}:`, logStyles.handler[0]);
-  items.forEach(({ label, data, options = {} }) => {
-    logData(label, data, options);
-  });
-  console.groupEnd();
-};
-
-// // Toggle logging on/off
-// export const toggleLogging = (enabled) => {
-//   ENABLE_LOGGING = enabled;
-//   console.log(
-//     `%cLogging ${enabled ? "enabled" : "disabled"}`,
-//     enabled ? logStyles.success : logStyles.warning
-//   );
-// };

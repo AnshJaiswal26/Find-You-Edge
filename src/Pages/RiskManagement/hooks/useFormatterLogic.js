@@ -1,15 +1,12 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useRiskManagementStore } from "@RM/stores";
-import { useAmountAndPtsHandler } from ".";
-import { formatValue, logEnd, logResult, logStart } from "@RM/utils";
-import { shouldFormat } from "@RM/utils/derivedUtils";
-
-const getArray = (t) =>
-  t === "normal" ? ["calculator"] : ["target", "stopLoss"];
+import { usePtsAmountAndPercentHandler } from ".";
+import { formatValue, logResult, logStart } from "@RM/utils";
+import { shouldFormat } from "@RM/utils";
 
 export default function useFormatterLogic() {
   const updateSection = useRiskManagementStore((s) => s.update.section);
-  const handleAmountOrPtsChange = useAmountAndPtsHandler();
+  const handlePtsAmountAndPercentChange = usePtsAmountAndPercentHandler();
 
   const formatAndUpdate = useCallback(
     (sec, formatedKeys, mode) => {
@@ -21,32 +18,30 @@ export default function useFormatterLogic() {
         return;
       }
 
-      const correctMode = mode === "Buffer" ? "Market" : mode;
-
-      const formated = {
-        buyPrice: formatValue(buyPrice, { mode: correctMode }),
-        sellPrice: formatValue(sellPrice, { mode: correctMode }),
-        qty: qty,
-      };
-      const adjustedPts = formatValue(sec.pts, { mode: mode });
-
-      const section = handleAmountOrPtsChange({
-        section: { name, ...formated },
+      const section = handlePtsAmountAndPercentChange({
+        section: {
+          name,
+          buyPrice: formatValue(buyPrice, { mode: mode }),
+          sellPrice: formatValue(sellPrice, { mode: mode }),
+          qty,
+        },
         field: "pts",
-        val: adjustedPts,
-        sync: false,
+        val: formatValue(sec.pts, { mode: mode }),
+        isFormatting: true,
       });
 
-      updateSection(name, { ...section, ...formated });
-      logResult("formatAndUpdate", { ...section, ...formated });
+      updateSection(name, section);
+      logResult("formatAndUpdate", `formating done for ${sec.name}`);
     },
-    [handleAmountOrPtsChange, updateSection]
+    [handlePtsAmountAndPercentChange, updateSection]
   );
 
   const format = useCallback(() => {
     const sections = useRiskManagementStore.getState();
-    const sectionArray = getArray(sections.currentTab);
-    const mode = sections.settings.calculation.mode;
+    const { settings, currentTab } = sections;
+    const sectionArray =
+      currentTab === "normal" ? ["calculator"] : ["target", "stopLoss"];
+    const mode = settings.calculation.mode;
 
     sectionArray.forEach((k) => {
       const sec = sections[k];

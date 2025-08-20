@@ -1,35 +1,50 @@
 import { useRef } from "react";
 import { useRiskManagementStore } from "@RM/stores";
+import { is, resetAllToZero } from "@RM/utils";
+import { fields } from "@RM/data";
+
+const resetAllTooltips = (tooltips) => {
+  return Object.entries(tooltips).reduce((acc, [key, val]) => {
+    if (val !== null) acc[key] = null;
+    return acc;
+  }, {});
+};
 
 export default function useClearLogic() {
   const clearTimers = useRef({});
-  const updateSection = useRiskManagementStore((s) => s.update.section);
-  const showTooltip = useRiskManagementStore((s) => s.update.tooltip);
+  const updateSectionInBatch = useRiskManagementStore((s) => s.update.sections);
 
   const clearSection = (secName) => {
     if (clearTimers.current[secName]) return;
+    const isTargetOrSL = is.TOrSl(secName);
+    const oppositeSec = is.oSL(secName);
 
-    if (secName !== "calculator") {
-      const field = secName === "target" ? "greater" : "less";
+    const tooltipKey = secName + "Tooltip";
+    const oppoTooltipkey = oppositeSec + "Tooltip";
 
-      updateSection("riskReward", {
-        ratio: 0,
-      });
+    const state = useRiskManagementStore.getState();
+    const sectionTooltips = state[tooltipKey];
+    const isAnyActive = state.anyTooltipActive;
 
-      // showTooltip(secName, field, false);
+    const keysReset = resetAllToZero(fields[secName]);
+
+    const updates = {};
+    if (isTargetOrSL) {
+      updates["riskReward"] = { ratio: 0 };
+      updates[oppositeSec] = keysReset;
+      isAnyActive &&
+        (updates[oppoTooltipkey] = resetAllTooltips(state[oppoTooltipkey]));
     }
 
-    updateSection(secName, 0);
+    updates[secName] = keysReset;
+    isAnyActive && (updates[tooltipKey] = resetAllTooltips(sectionTooltips));
+
+    updateSectionInBatch(updates);
 
     clearTimers.current[secName] = setTimeout(() => {
       delete clearTimers.current[secName];
     }, 1000);
   };
 
-  const clearTargetAndStopLoss = () => {
-    clearSection("target");
-    clearSection("stopLoss");
-  };
-
-  return { clearSection, clearTargetAndStopLoss };
+  return clearSection;
 }

@@ -23,9 +23,10 @@ export default function ChargesSummarySection() {
 }
 
 function ToggleChargesButtons() {
-  const active = useRiskManagementStore((s) => s.tooltip.anyActive);
+  const active = useRiskManagementStore((s) => s.anyTooltipActive);
 
-  const { charges } = useChargesLogic();
+  const charges = useChargesLogic();
+
   return (
     <div className="flex gap10">
       <Button

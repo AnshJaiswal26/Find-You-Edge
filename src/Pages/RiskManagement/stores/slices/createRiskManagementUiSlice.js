@@ -4,30 +4,24 @@ export const createRiskManagementUiSlice = () => ({
   currentTab: "normal",
   currentTransaction: "calculator",
   hoveredInput: "",
+  inputPrev: 0,
 
-  flash: {
-    capital: { current: false },
-    calculator: createFlash(),
-    riskReward: { ratio: false },
-    target: createFlash(),
-    stopLoss: createFlash(),
+  capitalFlash: { current: false },
+  riskrewardFlash: { ratio: false },
+  calculatorFlash: {
+    ...createFlash(),
+  },
+  targetFlash: {
+    ...createFlash(),
+  },
+  stopLossFlash: {
+    ...createFlash(),
   },
 
-  tooltip: {
-    capital: { current: null },
-    riskReward: { ratio: null },
-    calculator: {
-      buyPrice: null,
-      sellPrice: null,
-    },
-    target: {
-      buyPrice: null,
-      sellPrice: null,
-    },
-    stopLoss: {
-      buyPrice: null,
-      sellPrice: null,
-    },
-    anyActive: false,
-  },
+  capitalTooltip: { current: null },
+  riskRewardTooltip: { ratio: null },
+  calculatorTooltip: { buyPrice: null, sellPrice: null },
+  targetTooltip: { buyPrice: null, sellPrice: null },
+  stopLossTooltip: { buyPrice: null, sellPrice: null },
+  anyTooltipActive: null,
 });

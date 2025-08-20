@@ -2,7 +2,6 @@ import { Container } from "@layout";
 import CalculatorSection from "../sections/CalculatorSection";
 import { useFormatterLogic } from "@RM/hooks";
 import { Button } from "@components";
-import { CalcualtorSectionLayout } from "@RM/layout";
 import { PositionSizingSection } from "..";
 
 export function NormalCalculatorContainer() {

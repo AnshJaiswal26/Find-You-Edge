@@ -1,11 +1,10 @@
 import { useRiskManagementStore } from "@RM/stores";
-import { useSyncOppositeSection, useValidateAndNotify } from "@RM/hooks";
+import { useValidateAndSync } from "@RM/hooks";
 import { safe } from "@RM/utils";
 import { useCallback } from "react";
 
 export default function useQtyHandler() {
-  const syncOppositeSection = useSyncOppositeSection();
-  const validateAndNotify = useValidateAndNotify();
+  const validateAndSync = useValidateAndSync();
 
   const handleQtyChange = useCallback(
     ({ section, field, val }) => {
@@ -17,35 +16,30 @@ export default function useQtyHandler() {
       const isBuyLock = derivedInput === "buyPrice";
 
       const { name, buyPrice, sellPrice, pts, amount } = section;
-      const updatedQty = Math.abs(parseInt(val));
-      const updated = { qty: updatedQty };
+      const newQty = Math.abs(parseInt(val));
+      const updated = { qty: newQty };
 
       if (isAmountLock) {
-        updated.amount = pts * updatedQty;
+        updated.amount = pts * newQty;
         updated.percent = safe(updated.amount / capital) * 100;
       } else {
-        updated.pts = safe(amount / updatedQty);
+        updated.pts = safe(amount / newQty);
         if (isBuyLock) updated.buyPrice = sellPrice - updated.pts;
         else updated.sellPrice = buyPrice + updated.pts;
       }
 
-      const isAnyInvalid = validateAndNotify(name, field, {
+      const syncUpdates = validateAndSync({
+        name,
+        field,
         buyPrice: updated.buyPrice ?? buyPrice,
         sellPrice: updated.sellPrice ?? sellPrice,
+        pts,
+        qty: newQty,
       });
 
-      if (name !== "calculator" && !isAnyInvalid)
-        syncOppositeSection({
-          name: name,
-          field: field,
-          buyPrice: updated.buyPrice ?? buyPrice,
-          pts: updated.pts ?? pts,
-          qty: updatedQty,
-        });
-
-      return updated;
+      return { [name]: updated, ...syncUpdates };
     },
-    [syncOppositeSection, validateAndNotify]
+    [validateAndSync]
   );
   return handleQtyChange;
 }

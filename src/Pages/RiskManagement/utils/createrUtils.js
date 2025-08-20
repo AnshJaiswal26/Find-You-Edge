@@ -3,6 +3,8 @@ import { is } from "./derivedUtils";
 import { logInfo } from ".";
 import { useRiskManagementStore } from "@RM/stores";
 
+export const getKey = (s, f) => `${s}_${f}`;
+
 export const generateTooltip = (field, key, mode) => {
   if (!key) return null;
 
