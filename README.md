@@ -1,4 +1,4 @@
-# Find-You-Edge
+# Find-My-Edge
 
 ## 📦 Features
 
